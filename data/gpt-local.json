@@ -3,7 +3,7 @@
   "lane": "LOCAL",
   "updatedAt": null,
   "curator": "GPT BUSQ LOCAL",
-  "writeContract": "Editar updatedAt y findings. No cambiar schemaVersion/lane. La web consume findings automáticamente.",
+  "writeContract": "CANONICAL WRITE TARGET: GitHub main. Leer primero este JSON, reverificar findings, actualizar updatedAt/findings y guardar EN GITHUB. GitLab es espejo read-only operativo; no usarlo como autoridad.",
   "findingSchema": {
     "id": "string único y estable",
     "title": "string",
@@ -43,5 +43,8 @@
     "rank.score debe ser 0-100 y estar justificado en rank.reason.",
     "No inventar salario: si no está publicado usar null y conservar salary.raw."
   ],
-  "findings": []
+  "findings": [],
+  "canonicalEditUrl": "https://github.com/simondalmasso/jobas/edit/main/data/gpt-local.json",
+  "canonicalRawUrl": "https://raw.githubusercontent.com/simondalmasso/jobas/main/data/gpt-local.json",
+  "gitlabMirrorUrl": "https://gitlab.com/simondalmasso/jobas/-/blob/main/data/gpt-local.json"
 }
