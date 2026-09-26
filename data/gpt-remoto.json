@@ -3,7 +3,7 @@
   "lane": "REMOTO",
   "updatedAt": "2026-09-25T21:39:00-03:00",
   "curator": "GPT BUSQ REMOTO",
-  "writeContract": "Editar updatedAt y findings. No cambiar schemaVersion/lane. La web consume findings automáticamente.",
+  "writeContract": "CANONICAL WRITE TARGET: GitHub main. Leer primero este JSON, reverificar findings, actualizar updatedAt/findings y guardar EN GITHUB. GitLab es espejo read-only operativo; no usarlo como autoridad.",
   "findingSchema": {
     "id": "string único y estable",
     "title": "string",
@@ -595,5 +595,8 @@
         "https://www.linkedin.com/jobs/view/4461391448/"
       ]
     }
-  ]
+  ],
+  "canonicalEditUrl": "https://github.com/simondalmasso/jobas/edit/main/data/gpt-remoto.json",
+  "canonicalRawUrl": "https://raw.githubusercontent.com/simondalmasso/jobas/main/data/gpt-remoto.json",
+  "gitlabMirrorUrl": "https://gitlab.com/simondalmasso/jobas/-/blob/main/data/gpt-remoto.json"
 }
