@@ -12,3 +12,9 @@ Rules:
 - JOBAS production reads GPT radar findings from GitHub Raw.
 - Mirror verification must compare the complete tracked tree, including deletes.
 - Generated folders (node_modules, dist, evidence, .wrangler) are not canonical.
+
+Mirror automation:
+
+- A recurring one-way sync checks GitHub main against GitLab main every hour.
+- GitHub always wins on create/update/delete conflicts.
+- Successful/no-op runs stay silent; only unreconciled drift should surface.
