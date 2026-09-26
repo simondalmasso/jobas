@@ -18,3 +18,11 @@ Mirror automation:
 - A recurring one-way sync checks GitHub main against GitLab main every hour.
 - GitHub always wins on create/update/delete conflicts.
 - Successful/no-op runs stay silent; only unreconciled drift should surface.
+
+Setup único requerido para el mirror nativo:
+
+1. Crear en GitLab un token para `simondalmasso/jobas` con alcance `write_repository`.
+2. En GitHub, Settings → Secrets and variables → Actions, crear el secret `GITLAB_PUSH_TOKEN` con ese valor.
+3. Ejecutar manualmente el workflow `mirror-gitlab` una vez o esperar el próximo push/cron.
+
+Desde ese momento el espejo corre dentro de GitHub Actions y no depende de ChatGPT, Remote Desktop, MCP ni ningún conector.
