@@ -1,0 +1,51 @@
+name: mirror-gitlab
+
+on:
+  push:
+    branches: [main]
+    tags: ["*"]
+  workflow_dispatch:
+  schedule:
+    - cron: "17 * * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mirror-gitlab
+  cancel-in-progress: true
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    env:
+      GITLAB_REPOSITORY: gitlab.com/simondalmasso/jobas.git
+      GITLAB_PUSH_TOKEN: ${{ secrets.GITLAB_PUSH_TOKEN }}
+    steps:
+      - name: Require GitLab token
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -z "${GITLAB_PUSH_TOKEN}" ]; then
+            echo "::error::Missing repository secret GITLAB_PUSH_TOKEN (GitLab token with write_repository)."
+            exit 1
+          fi
+
+      - name: Mirror GitHub to GitLab
+        shell: bash
+        run: |
+          set -euo pipefail
+          git clone --mirror "https://github.com/${GITHUB_REPOSITORY}.git" repo.git
+          cd repo.git
+          git remote add gitlab "https://oauth2:${GITLAB_PUSH_TOKEN}@${GITLAB_REPOSITORY}"
+          git push --mirror --force gitlab
+
+      - name: Verify main
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh_sha="$(git ls-remote "https://github.com/${GITHUB_REPOSITORY}.git" refs/heads/main | awk '{print $1}')"
+          gl_sha="$(git ls-remote "https://oauth2:${GITLAB_PUSH_TOKEN}@${GITLAB_REPOSITORY}" refs/heads/main | awk '{print $1}')"
+          test -n "${gh_sha}"
+          test "${gh_sha}" = "${gl_sha}"
+          echo "GitLab main mirrors GitHub main: ${gh_sha}"
