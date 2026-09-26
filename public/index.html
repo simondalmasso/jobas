@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#bdbdbd">
+  <meta name="description" content="JOBAS: feed de trabajo remoto y local priorizado para Argentina.">
+  <title>JOBAS Shell — oportunidades</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="dos-shell">
+    <header class="top">
+      <div class="titlebar">
+        <span class="title-cap">■</span>
+        <h1>JOBAS Shell</h1>
+      </div>
+      <div class="menubar" aria-label="Menú">
+        <span>File</span><span>Options</span><span>View</span><span>Tree</span><span>Help</span>
+        <span class="fresh" id="fresh">cargando…</span>
+      </div>
+      <div class="pathbar">
+        <strong>C:\</strong>
+        <span class="drive-icons">▣ A&nbsp;&nbsp;▣ B&nbsp;&nbsp;▣ C</span>
+        <span class="path-current">C:\JOBAS\*.*</span>
+      </div>
+    </header>
+
+    <main>
+      <section class="pane-grid">
+        <aside class="dos-pane tree-pane">
+          <div class="pane-title">Directory Tree</div>
+          <div class="tree-root">▰ C:\JOBAS</div>
+          <nav class="feed-modes" id="feedModes" aria-label="Tipo de oportunidades">
+            <button class="feed-mode active" data-mode="remote">REMOTO</button>
+            <button class="feed-mode" data-mode="local">LOCAL</button>
+            <button class="feed-mode" data-mode="progress">EN CURSO <span id="progressCount">0</span></button>
+          </nav>
+          <div class="tree-divider"></div>
+          <nav class="categories" id="categories" aria-label="Categorías"></nav>
+        </aside>
+
+        <section class="dos-pane main-pane">
+          <div class="pane-title">Main</div>
+          <section class="feed" id="feed"><div class="empty">Cargando oportunidades…</div></section>
+        </section>
+      </section>
+
+      <section class="dos-pane command-pane">
+        <div class="pane-title">Command Prompt</div>
+        <section class="controls" aria-label="Filtros">
+          <label class="dos-prompt" for="q">C:\JOBAS&gt;</label>
+          <input id="q" type="search" placeholder="buscar cargo, empresa o palabra..." autocomplete="off">
+          <button id="knownPay" class="toggle" type="button" aria-pressed="false">$ pago publicado</button>
+          <button id="argOnly" class="toggle" type="button" aria-pressed="true">Argentina compatible</button>
+        </section>
+        <section class="summary" id="summary"></section>
+      </section>
+
+      <details class="sources dos-pane">
+        <summary>Fuentes y estado</summary>
+        <div id="sourceHealth"></div>
+        <h3>Radar adicional</h3>
+        <div id="discovery"></div>
+      </details>
+    </main>
+
+    <footer class="statusbar">
+      <span>F10=Actions</span>
+      <span>Shift+F9=Command Prompt</span>
+      <span class="status-clock">JOBAS</span>
+    </footer>
+  </div>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
