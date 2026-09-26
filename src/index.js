@@ -1,6 +1,6 @@
 import { buildFeed, SOURCE_REGISTRY, DISCOVERY_SOURCES } from "./sources.js";
 const FEED_KEY="feed:v2";
-const GPT_KEY="gpt-findings:v1";
+const GPT_KEY="gpt-findings:v2";
 const GPT_TTL_MS=5*60*1000;
 const LOCAL_VERIFIED_SEED=[
   {
@@ -157,3 +157,4 @@ export default{
   },
   async scheduled(_controller,env,ctx){ctx.waitUntil(Promise.all([refresh(env),loadGptFindings(env)]));}
 };
+
