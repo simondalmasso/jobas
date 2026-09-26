@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "lane": "LOCAL",
+  "updatedAt": null,
+  "curator": "GPT BUSQ LOCAL",
+  "writeContract": "Editar updatedAt y findings. No cambiar schemaVersion/lane. La web consume findings automáticamente.",
+  "findingSchema": {
+    "id": "string único y estable",
+    "title": "string",
+    "company": "string",
+    "location": "string",
+    "description": "string breve y factual",
+    "category": "customer-success | support | travel | admin-va | operations | sales | marketing | ecommerce-crm | content-social | data-ai | tech | finance | other",
+    "sourceName": "string",
+    "sourceUrl": "https://...",
+    "applyUrl": "https://... enlace directo a postulación/trabajo",
+    "publishedAt": "ISO-8601 o null",
+    "verifiedAt": "ISO-8601",
+    "active": "boolean",
+    "argentinaEligible": "boolean | null",
+    "workerFee": "false para no-pay-to-apply; true si exige pago; null si no se pudo verificar",
+    "salary": {
+      "raw": "texto salarial original o No publicado",
+      "monthlyMin": "number | null",
+      "monthlyMax": "number | null",
+      "currency": "USD | ARS | otra"
+    },
+    "scamRisk": "low | medium | high",
+    "rank": {
+      "score": "0-100",
+      "reason": "justificación factual y breve"
+    },
+    "evidence": [
+      "URLs primarias o evidencias de verificación"
+    ]
+  },
+  "rules": [
+    "Solo oportunidades reales y verificadas.",
+    "Priorizar Santa Fe capital y área cercana; luego Paraná o híbridas razonables.",
+    "No incluir pay-to-apply ni fuentes con señales fuertes de scam.",
+    "Verificar que la vacante siga activa antes de agregarla.",
+    "Usar applyUrl directo cuando exista.",
+    "rank.score debe ser 0-100 y estar justificado en rank.reason.",
+    "No inventar salario: si no está publicado usar null y conservar salary.raw."
+  ],
+  "findings": []
+}
