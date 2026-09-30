@@ -15,7 +15,8 @@
     "Nunca persistir cookies, localStorage, session storage, tokens, auth keys, contraseñas ni otros secretos aunque aparezcan dentro de un mensaje.",
     "rank.score debe ser 0-100 y rank.reason debe explicar por qué parece una oportunidad real.",
     "Si un mensaje es ambiguo, no incluirlo.",
-    "Marcar applicationMode=direct para microjobs/contacto por Telegram salvo que la oportunidad exija explícitamente un CV/ATS."
+    "Marcar applicationMode=direct para microjobs/contacto por Telegram salvo que la oportunidad exija explícitamente un CV/ATS.",
+    "Guardar directUrl con el webUrl de telegram-sources.json para que los pendientes abran LINK DIRECTO al chat."
   ],
   "sourceState": {
     "laravel-es": {
@@ -68,6 +69,7 @@
     "sourceName": "Telegram · nombre del chat",
     "sourceUrl": "https://t.me/<chat>",
     "applyUrl": "URL de contacto/postulación si existe; si no messageUrl",
+    "directUrl": "webUrl del chat en Telegram Web, por ejemplo https://web.telegram.org/a/#-100...",
     "messageUrl": "URL estable del mensaje",
     "messageId": "string o number",
     "messageDate": "ISO-8601",
