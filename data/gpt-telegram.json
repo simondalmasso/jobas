@@ -14,7 +14,8 @@
     "Revalidar que el mensaje siga accesible en cada pasada.",
     "Nunca persistir cookies, localStorage, session storage, tokens, auth keys, contraseñas ni otros secretos aunque aparezcan dentro de un mensaje.",
     "rank.score debe ser 0-100 y rank.reason debe explicar por qué parece una oportunidad real.",
-    "Si un mensaje es ambiguo, no incluirlo."
+    "Si un mensaje es ambiguo, no incluirlo.",
+    "Marcar applicationMode=direct para microjobs/contacto por Telegram salvo que la oportunidad exija explícitamente un CV/ATS."
   ],
   "sourceState": {
     "laravel-es": {
@@ -63,6 +64,7 @@
     "location": "ubicación publicada o Remote/A verificar",
     "description": "resumen factual del mensaje",
     "category": "customer-success | support | travel | admin-va | operations | sales | marketing | ecommerce-crm | content-social | data-ai | tech | finance | other",
+    "applicationMode": "direct | platform | cv; Telegram normalmente direct",
     "sourceName": "Telegram · nombre del chat",
     "sourceUrl": "https://t.me/<chat>",
     "applyUrl": "URL de contacto/postulación si existe; si no messageUrl",

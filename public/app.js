@@ -1,3 +1,5 @@
+import { applicationWorkflow } from "./workflow.js";
+
 const $=s=>document.querySelector(s);
 
 const state={
@@ -170,6 +172,17 @@ function launchCvAdapt(job){
   window.open(`${JOBAS_PROJECT_URL}?q=${encodeURIComponent(prompt)}`,"_blank","noopener,noreferrer");
 }
 
+function renderJobActions(job){
+  const inProgress=progressHas(job);
+  const flow=applicationWorkflow(job,inProgress);
+  const progressButton=`<button class="progress-action${inProgress?" active":""}" type="button" data-action="progress">${esc(flow.progressLabel)}</button>`;
+  if(!job.url)return progressButton+`<span class="manual-status">SEGUIMIENTO</span>`;
+  if(flow.requiresCv){
+    return progressButton+`<button class="adapt" type="button" data-action="adapt">ADAPTAR CV</button><a class="apply" href="${esc(job.url)}" target="_blank" rel="noopener noreferrer">${esc(flow.linkLabel)}</a>`;
+  }
+  return progressButton+`<a class="apply" href="${esc(job.url)}" target="_blank" rel="noopener noreferrer">${esc(flow.linkLabel)}</a>`;
+}
+
 function render(){
   const jobs=filtered();
   const label=state.mode==="remote"?"remotas":state.mode==="local"?"locales":"en curso";
@@ -194,10 +207,7 @@ function render(){
         </div>
         <div class="source-row">Fuente: ${j.sourceDetail||j.sourceUrl?`<a href="${esc(j.sourceDetail||j.sourceUrl)}" target="_blank" rel="noopener">${esc(j.sourceName)}</a>`:esc(j.sourceName||"Manual")} · ${j.publishedAt?new Date(j.publishedAt).toLocaleDateString("es-AR"):"seguimiento manual"}</div>
       </div>
-      <div class="actions">
-        <button class="progress-action${progressHas(j)?" active":""}" type="button" data-action="progress">${progressHas(j)?"EN CURSO ✓":"EN CURSO"}</button>
-        ${j.url?`<button class="adapt" type="button" data-action="adapt">ADAPTAR CV</button><a class="apply" href="${esc(j.url)}" target="_blank" rel="noopener noreferrer">Aplicar ↗</a>`:`<span class="manual-status">SEGUIMIENTO</span>`}
-      </div>
+      <div class="actions">${renderJobActions(j)}</div>
     </article>
   `).join(""):`<div class="empty">${state.mode==="local"?"Todavía no hay ofertas locales cargadas.":state.mode==="progress"?"No marcaste ninguna oportunidad como en curso.":"No hay resultados con estos filtros."}</div>`;
 }

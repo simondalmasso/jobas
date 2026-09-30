@@ -1,4 +1,5 @@
 import { buildFeed, SOURCE_REGISTRY, DISCOVERY_SOURCES } from "./sources.js";
+import { resolveApplicationMode } from "../public/workflow.js";
 const FEED_KEY="feed:v2";
 const GPT_KEY="gpt-findings:v3";
 const GPT_TTL_MS=5*60*1000;
@@ -120,7 +121,7 @@ function normalizeFinding(x,meta){
     lane,curated:true,source:"gpt-"+sourceId,sourceName:x.sourceName||meta.name,sourceTrust:95,
     workerFee:x.workerFee===false?false:(x.workerFee===true?true:null),sourceUrl:x.sourceUrl||applyUrl,sourceDetail:x.messageUrl||x.sourceUrl||applyUrl,
     title:String(x.title),company:String(x.company),location:String(x.location||(lane==="LOCAL"?"Santa Fe":"Remote / A verificar")),
-    description:String(x.description||x.summary||x.rank?.reason||"").slice(0,1600),url:applyUrl,publishedAt:x.publishedAt||x.messageDate||null,verifiedAt:x.verifiedAt||null,
+    description:String(x.description||x.summary||x.rank?.reason||"").slice(0,1600),url:applyUrl,applicationMode:resolveApplicationMode({...x,source:"gpt-"+sourceId,sourceName:x.sourceName||meta.name,sourceUrl:x.sourceUrl||applyUrl,sourceDetail:x.messageUrl||x.sourceUrl||applyUrl,url:applyUrl}),publishedAt:x.publishedAt||x.messageDate||null,verifiedAt:x.verifiedAt||null,
     tags:Array.isArray(x.tags)?x.tags:[],category:x.category||"other",pay:normalizePay(x),priority:score,rankReason:x.rank?.reason||"",
     argentina:{score:Number(argentinaScore),label:lane==="LOCAL"?"Local":(x.argentina?.label||(x.argentinaEligible===true?"Argentina/LatAm":"A verificar")),reason:x.argentina?.reason||""},
     scam:{score:Number(scamScore),label:Number(scamScore)>=80?"Verificada":Number(scamScore)>=50?"Revisada":"Riesgo",reasons:x.scam?.reasons||[]}
