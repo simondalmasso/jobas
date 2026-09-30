@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { applicationWorkflow, resolveApplicationMode } from "../public/workflow.js";
+import { applicationHref, applicationWorkflow, resolveApplicationMode } from "../public/workflow.js";
 
 test("Telegram y microjobs directos no piden CV",()=>{
   const job={source:"gpt-telegram",sourceName:"Telegram · Drop Shipping Group",url:"https://t.me/example/123"};
@@ -15,8 +15,12 @@ test("Telegram y microjobs directos no piden CV",()=>{
     mode:"direct",
     requiresCv:false,
     progressLabel:"ESPERANDO RESPUESTA ✓",
-    linkLabel:"CHEQUEAR RESPUESTA ↗"
+    linkLabel:"LINK DIRECTO ↗"
   });
+  assert.equal(
+    applicationHref({...job,directUrl:"https://web.telegram.org/a/#-1001374899921"},true),
+    "https://web.telegram.org/a/#-1001374899921"
+  );
 });
 
 test("Workana y Upwork usan flujo de plataforma sin adaptar CV",()=>{
@@ -27,6 +31,8 @@ test("Workana y Upwork usan flujo de plataforma sin adaptar CV",()=>{
     assert.equal(resolveApplicationMode(job),"platform");
     assert.equal(applicationWorkflow(job,false).requiresCv,false);
     assert.equal(applicationWorkflow(job,true).progressLabel,"ESPERANDO RESPUESTA ✓");
+    assert.equal(applicationWorkflow(job,true).linkLabel,"LINK DIRECTO ↗");
+    assert.equal(applicationHref(job,true),job.url);
   }
 });
 
