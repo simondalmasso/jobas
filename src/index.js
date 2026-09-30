@@ -1,4 +1,5 @@
 import { buildFeed, SOURCE_REGISTRY, DISCOVERY_SOURCES } from "./sources.js";
+import { resolveApplicationMode } from "../public/workflow.js";
 const FEED_KEY="feed:v2";
 const GPT_KEY="gpt-findings:v3";
 const GPT_TTL_MS=5*60*1000;
@@ -107,15 +108,6 @@ async function readFeed(env){const raw=await env.JOBAS_FEED.get(FEED_KEY);if(!ra
 async function refresh(env){const limit=Math.max(40,Math.min(500,Number(env.FEED_LIMIT||320))),feed=await buildFeed(limit);await env.JOBAS_FEED.put(FEED_KEY,JSON.stringify(feed));return feed;}
 function num(v){const n=Number(v);return Number.isFinite(n)?n:null}
 function normalizePay(x){const p=x.pay||x.salary||{};return{raw:p.raw||p.text||x.salaryText||"No publicado",monthlyMin:num(p.monthlyMin??p.minMonthly),monthlyMax:num(p.monthlyMax??p.maxMonthly),currency:p.currency||"USD",period:p.period||null};}
-function inferApplicationMode(x,meta,applyUrl){
-  const explicit=String(x.applicationMode||x.application?.mode||"").trim().toLowerCase();
-  if(["cv","direct","platform"].includes(explicit))return explicit;
-  if(meta.id==="telegram")return"direct";
-  const text=[x.sourceName,x.sourceUrl,x.messageUrl,applyUrl].filter(Boolean).join(" ").toLowerCase();
-  if(/\\btelegram\\b|(?:^|\\W)t\\.me\\/|web\\.telegram\\.org/.test(text))return"direct";
-  if(/\\bworkana\\b|\\bupwork\\b|freelancer\\.com|\\bfiverr\\b|peopleperhour|contra\\.com|guru\\.com/.test(text))return"platform";
-  return"cv";
-}
 function normalizeFinding(x,meta){
   if(!x||!x.title||!x.company)return null;
   const lane=meta.lane||x.lane||"REMOTO";
@@ -129,7 +121,7 @@ function normalizeFinding(x,meta){
     lane,curated:true,source:"gpt-"+sourceId,sourceName:x.sourceName||meta.name,sourceTrust:95,
     workerFee:x.workerFee===false?false:(x.workerFee===true?true:null),sourceUrl:x.sourceUrl||applyUrl,sourceDetail:x.messageUrl||x.sourceUrl||applyUrl,
     title:String(x.title),company:String(x.company),location:String(x.location||(lane==="LOCAL"?"Santa Fe":"Remote / A verificar")),
-    description:String(x.description||x.summary||x.rank?.reason||"").slice(0,1600),url:applyUrl,applicationMode:inferApplicationMode(x,meta,applyUrl),publishedAt:x.publishedAt||x.messageDate||null,verifiedAt:x.verifiedAt||null,
+    description:String(x.description||x.summary||x.rank?.reason||"").slice(0,1600),url:applyUrl,applicationMode:resolveApplicationMode({...x,source:"gpt-"+sourceId,sourceName:x.sourceName||meta.name,sourceUrl:x.sourceUrl||applyUrl,sourceDetail:x.messageUrl||x.sourceUrl||applyUrl,url:applyUrl}),publishedAt:x.publishedAt||x.messageDate||null,verifiedAt:x.verifiedAt||null,
     tags:Array.isArray(x.tags)?x.tags:[],category:x.category||"other",pay:normalizePay(x),priority:score,rankReason:x.rank?.reason||"",
     argentina:{score:Number(argentinaScore),label:lane==="LOCAL"?"Local":(x.argentina?.label||(x.argentinaEligible===true?"Argentina/LatAm":"A verificar")),reason:x.argentina?.reason||""},
     scam:{score:Number(scamScore),label:Number(scamScore)>=80?"Verificada":Number(scamScore)>=50?"Revisada":"Riesgo",reasons:x.scam?.reasons||[]}
