@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "lane": "TELEGRAM",
+  "updatedAt": null,
+  "curator": "GPT TELEGRAM RADAR",
+  "writeContract": "Leer telegram-sources.json. Revisar mensajes nuevos de cada chat. Guardar aquí solamente oportunidades laborales reales o pedidos concretos de contratación. JOBAS consume findings automáticamente.",
+  "rules": [
+    "No considerar charla técnica, networking genérico ni pedidos de ayuda como trabajo.",
+    "Aceptar ofertas, búsquedas de freelance, contratos, proyectos pagos y pedidos explícitos de contratación.",
+    "Inferir REMOTO o LOCAL sólo cuando el mensaje o contexto lo permita; si no, usar REMOTO con argentinaEligible=null y aclararlo.",
+    "No inventar empresa, salario, modalidad ni ubicación.",
+    "Conservar sourceChat, messageUrl, messageId, messageDate y un excerpt factual.",
+    "Deduplicar por chat + messageId o messageUrl.",
+    "Revalidar que el mensaje siga accesible en cada pasada.",
+    "rank.score debe ser 0-100 y rank.reason debe explicar por qué parece una oportunidad real.",
+    "Si un mensaje es ambiguo, no incluirlo."
+  ],
+  "findingSchema": {
+    "id": "telegram:<chat>:<messageId>",
+    "lane": "REMOTO | LOCAL",
+    "title": "puesto/proyecto inferido de forma conservadora",
+    "company": "empresa o autor; si no existe usar Comunidad Telegram",
+    "location": "ubicación publicada o Remote/A verificar",
+    "description": "resumen factual del mensaje",
+    "category": "customer-success | support | travel | admin-va | operations | sales | marketing | ecommerce-crm | content-social | data-ai | tech | finance | other",
+    "sourceName": "Telegram · nombre del chat",
+    "sourceUrl": "https://t.me/<chat>",
+    "applyUrl": "URL de contacto/postulación si existe; si no messageUrl",
+    "messageUrl": "URL estable del mensaje",
+    "messageId": "string o number",
+    "messageDate": "ISO-8601",
+    "verifiedAt": "ISO-8601",
+    "active": "boolean",
+    "argentinaEligible": "boolean | null",
+    "workerFee": false,
+    "salary": {
+      "raw": "texto salarial original o No publicado",
+      "monthlyMin": null,
+      "monthlyMax": null,
+      "currency": "USD | ARS | otra"
+    },
+    "scamRisk": "low | medium | high",
+    "rank": {
+      "score": "0-100",
+      "reason": "justificación factual y breve"
+    },
+    "evidence": ["messageUrl y cualquier link incluido en el mensaje"]
+  },
+  "findings": []
+}
