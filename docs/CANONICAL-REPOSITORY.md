@@ -13,16 +13,15 @@ Rules:
 - Mirror verification must compare the complete tracked tree, including deletes.
 - Generated folders (node_modules, dist, evidence, .wrangler) are not canonical.
 
-Mirror automation:
+Mirror status (2026-09-30):
 
-- A recurring one-way sync checks GitHub main against GitLab main every hour.
-- GitHub always wins on create/update/delete conflicts.
-- Successful/no-op runs stay silent; only unreconciled drift should surface.
+- No personal access token, deploy token, GitHub secret, ChatGPT automation, SentinelX host, or Remote Desktop dependency is authorized for the permanent mirror.
+- The repository contains a GitLab CI self-mirror job that reads public GitHub and writes GitLab with CI_JOB_TOKEN, so it needs no user-managed secret.
+- GitLab.com scheduled pipelines are currently blocked before a runner starts with failure_reason=ci_quota_exceeded. Therefore this path is not an active automatic mirror today.
+- GitLab native pull mirroring would satisfy the architecture without a runner or personal secret, but GitLab documents pull mirroring as Premium/Ultimate; the current project is on the Free plan.
+- Until either GitLab CI compute quota becomes available or the GitLab project gains pull-mirroring capability, syncs performed through an interactive connector are reconciliation only, not the permanent automation.
 
-Setup único requerido para el mirror nativo:
+Acceptance gate:
 
-1. Crear en GitLab un token para `simondalmasso/jobas` con alcance `write_repository`.
-2. En GitHub, Settings → Secrets and variables → Actions, crear el secret `GITLAB_PUSH_TOKEN` con ese valor.
-3. Ejecutar manualmente el workflow `mirror-gitlab` una vez o esperar el próximo push/cron.
-
-Desde ese momento el espejo corre dentro de GitHub Actions y no depende de ChatGPT, Remote Desktop, MCP ni ningún conector.
+- Do not call the mirror healthy merely because the trees match once.
+- Healthy requires both: complete tracked-tree diff = 0 and a verified autonomous GitHub -> GitLab update path that does not depend on a personal secret, ChatGPT, SentinelX, or Remote Desktop.
