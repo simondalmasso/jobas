@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Chats públicos de Telegram monitoreados por GPT TELEGRAM RADAR para detectar oportunidades laborales reales.",
+  "sources": [
+    {
+      "id": "laravel-es",
+      "name": "Laravel (ES)",
+      "username": "LaravelEnEspagnol",
+      "url": "https://t.me/LaravelEnEspagnol",
+      "enabled": true
+    },
+    {
+      "id": "prestashop-es",
+      "name": "Prestashop en Español",
+      "username": "PrestashopEsp",
+      "url": "https://t.me/PrestashopEsp",
+      "enabled": true
+    },
+    {
+      "id": "php-es",
+      "name": "PHP - Comunidad española",
+      "username": "php_es",
+      "url": "https://t.me/php_es",
+      "enabled": true
+    }
+  ]
+}
