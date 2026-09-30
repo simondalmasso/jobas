@@ -1,4 +1,4 @@
-import { applicationWorkflow } from "./workflow.js";
+import { applicationHref, applicationWorkflow } from "./workflow.js";
 
 const $=s=>document.querySelector(s);
 
@@ -16,6 +16,9 @@ const HERFASA_SEED_KEY="jobas:seed:herfasa:v1";
 const HERFASA_SEED={id:"manual-herfasa",lane:"LOCAL",curated:true,title:"ABERTURA HERFASA",company:"ABERTURA HERFASA",location:"Santa Fe",description:"Postulación en curso.",url:"",sourceName:"Seguimiento manual",sourceUrl:"",sourceDetail:"",category:"other",pay:{raw:"No publicado",monthlyMin:null,monthlyMax:null,currency:"ARS"},priority:100,argentina:{score:100,label:"Local"},scam:{score:100,label:"Seguimiento"},workerFee:false};
 const JOBAS_PROJECT_URL="https://chatgpt.com/g/g-p-6a8c77fe091081918b6fe7a55ee58c30-jobas/project";
 const CV_BASE_FOLDER="https://drive.google.com/drive/folders/1kBzaRZkGI0YK38SF4s2eTe_1eHaSAsn8?hl=es-419";
+const DIRECT_LINK_OVERRIDES={
+  "telegram · drop shipping group":"https://web.telegram.org/a/#-1001374899921"
+};
 
 const labels={
   "customer-success":"Customer Success",
@@ -37,10 +40,16 @@ const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({
   "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
 }[c]));
 
+function enrichProgressJob(job){
+  if(job?.directUrl)return job;
+  const directUrl=DIRECT_LINK_OVERRIDES[String(job?.sourceName||"").trim().toLowerCase()];
+  return directUrl?{...job,directUrl}:job;
+}
+
 function getProgressJobs(){
   try{
     const value=JSON.parse(localStorage.getItem(PROGRESS_KEY)||"[]");
-    const jobs=Array.isArray(value)?value:[];
+    const jobs=(Array.isArray(value)?value:[]).map(enrichProgressJob);
     if(!jobs.some(x=>x.id===HERFASA_SEED.id||String(x.company||"").toUpperCase()==="ABERTURA HERFASA")){
       jobs.unshift(HERFASA_SEED);
       localStorage.setItem(PROGRESS_KEY,JSON.stringify(jobs));
@@ -177,10 +186,11 @@ function renderJobActions(job){
   const flow=applicationWorkflow(job,inProgress);
   const progressButton=`<button class="progress-action${inProgress?" active":""}" type="button" data-action="progress">${esc(flow.progressLabel)}</button>`;
   if(!job.url)return progressButton+`<span class="manual-status">SEGUIMIENTO</span>`;
+  const href=applicationHref(job,inProgress);
   if(flow.requiresCv){
-    return progressButton+`<button class="adapt" type="button" data-action="adapt">ADAPTAR CV</button><a class="apply" href="${esc(job.url)}" target="_blank" rel="noopener noreferrer">${esc(flow.linkLabel)}</a>`;
+    return progressButton+`<button class="adapt" type="button" data-action="adapt">ADAPTAR CV</button><a class="apply" href="${esc(href)}" target="_blank" rel="noopener noreferrer">${esc(flow.linkLabel)}</a>`;
   }
-  return progressButton+`<a class="apply" href="${esc(job.url)}" target="_blank" rel="noopener noreferrer">${esc(flow.linkLabel)}</a>`;
+  return progressButton+`<a class="apply" href="${esc(href)}" target="_blank" rel="noopener noreferrer">${esc(flow.linkLabel)}</a>`;
 }
 
 function render(){
