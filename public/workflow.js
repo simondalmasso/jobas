@@ -29,6 +29,12 @@ export function resolveApplicationMode(job){
   return"cv";
 }
 
+export function applicationHref(job,inProgress=false){
+  const mode=resolveApplicationMode(job);
+  if(mode==="cv"||!inProgress)return job?.url||job?.applyUrl||job?.sourceDetail||job?.sourceUrl||"";
+  return job?.directUrl||job?.followUpUrl||job?.messageUrl||job?.sourceDetail||job?.sourceUrl||job?.url||job?.applyUrl||"";
+}
+
 export function applicationWorkflow(job,inProgress=false){
   const mode=resolveApplicationMode(job);
   if(mode==="cv"){
@@ -43,6 +49,6 @@ export function applicationWorkflow(job,inProgress=false){
     mode,
     requiresCv:false,
     progressLabel:inProgress?"ESPERANDO RESPUESTA ✓":"POSTULÉ / CONTACTÉ",
-    linkLabel:inProgress?"CHEQUEAR RESPUESTA ↗":"POSTULAR / CONTACTAR ↗"
+    linkLabel:inProgress?"LINK DIRECTO ↗":"POSTULAR / CONTACTAR ↗"
   };
 }
