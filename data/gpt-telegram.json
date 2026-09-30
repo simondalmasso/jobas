@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "lane": "TELEGRAM",
-  "updatedAt": null,
+  "updatedAt": "2026-09-30T18:11:06-03:00",
   "curator": "GPT TELEGRAM RADAR",
   "writeContract": "Leer telegram-sources.json. Revisar mensajes nuevos de cada chat. Guardar aquí solamente oportunidades laborales reales o pedidos concretos de contratación. JOBAS consume findings automáticamente.",
   "rules": [
@@ -12,9 +12,49 @@
     "Conservar sourceChat, messageUrl, messageId, messageDate y un excerpt factual.",
     "Deduplicar por chat + messageId o messageUrl.",
     "Revalidar que el mensaje siga accesible en cada pasada.",
+    "Nunca persistir cookies, localStorage, session storage, tokens, auth keys, contraseñas ni otros secretos aunque aparezcan dentro de un mensaje.",
     "rank.score debe ser 0-100 y rank.reason debe explicar por qué parece una oportunidad real.",
     "Si un mensaje es ambiguo, no incluirlo."
   ],
+  "sourceState": {
+    "laravel-es": {
+      "status": "loading",
+      "lastSeenMessageId": null,
+      "scannedAt": "2026-09-30T18:11:06-03:00",
+      "note": "La pestaña abrió por chatId pero Telegram Web quedó en Updating; no se avanzó cursor."
+    },
+    "prestashop-es": {
+      "status": "ok",
+      "lastSeenMessageId": "284416",
+      "scannedAt": "2026-09-30T18:11:06-03:00"
+    },
+    "php-es": {
+      "status": "ok",
+      "lastSeenMessageId": "51312",
+      "scannedAt": "2026-09-30T18:11:06-03:00"
+    },
+    "angular-es": {
+      "status": "ok",
+      "lastSeenMessageId": "14236",
+      "scannedAt": "2026-09-30T18:11:06-03:00"
+    },
+    "vue-es": {
+      "status": "ok",
+      "lastSeenMessageId": "1334",
+      "scannedAt": "2026-09-30T18:11:06-03:00",
+      "note": "Las ofertas visibles encontradas eran de 2024/2025 y no se trataron como activas en septiembre de 2026."
+    },
+    "java-es": {
+      "status": "ok",
+      "lastSeenMessageId": "4256",
+      "scannedAt": "2026-09-30T18:11:06-03:00"
+    },
+    "kotlin-devs": {
+      "status": "ok",
+      "lastSeenMessageId": "12439",
+      "scannedAt": "2026-09-30T18:11:06-03:00"
+    }
+  },
   "findingSchema": {
     "id": "telegram:<chat>:<messageId>",
     "lane": "REMOTO | LOCAL",
@@ -44,7 +84,9 @@
       "score": "0-100",
       "reason": "justificación factual y breve"
     },
-    "evidence": ["messageUrl y cualquier link incluido en el mensaje"]
+    "evidence": [
+      "messageUrl y cualquier link incluido en el mensaje"
+    ]
   },
   "findings": []
 }
