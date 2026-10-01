@@ -298,6 +298,47 @@
         "message": "For what you need, I wouldn’t overbuild this. A clean site with past work, service area and a quote form is enough — the important part is owning the domain and keeping the setup easy to move later. What kind of work does the business do?",
         "contactedAt": null
       }
+    },
+    {
+      "id": "fb-diego-antonio-wordpress-refresh-2478645066214466",
+      "prospectType": "microjob",
+      "title": "Actualización de sitio WordPress inmobiliario existente",
+      "company": "Loy & Ferraresi Propiedades",
+      "buyer": "Diego Antonio",
+      "location": "Chile",
+      "description": "Tiene un WordPress existente que considera demasiado básico. Su perfil público lo vincula como asesor inmobiliario de Loy & Ferraresi, cuyo sitio ya posee catálogo amplio, buscador por propiedades, fichas y contacto. El ángulo es modernizar experiencia, fichas y conversión sin rehacer innecesariamente ni romper SEO/inventario.",
+      "category": "tech",
+      "sourceName": "Facebook",
+      "sourceUrl": "https://www.facebook.com/groups/1178185956260390/posts/2478645066214466/",
+      "directUrl": "https://www.facebook.com/diego.a.arevalo.35/",
+      "publishedAt": "2026-09-30T16:57:24-03:00",
+      "verifiedAt": "2026-10-01T03:04:00-03:00",
+      "active": true,
+      "argentinaEligible": true,
+      "applicationMode": "direct",
+      "workerFee": false,
+      "salary": {
+        "raw": "No publicado",
+        "monthlyMin": null,
+        "monthlyMax": null,
+        "currency": "otra"
+      },
+      "scamRisk": "low",
+      "rank": {
+        "score": 88,
+        "reason": "Comprador identificable, sitio y negocio públicos, pedido fresco y concreto. Competencia muy alta en comentarios, pero casi toda genérica; permite diferenciarse auditando el sitio existente."
+      },
+      "evidence": [
+        "https://www.facebook.com/groups/1178185956260390/posts/2478645066214466/",
+        "https://www.facebook.com/diego.a.arevalo.35/",
+        "https://www.loyferraresi.cl/"
+      ],
+      "outreach": {
+        "status": "prepared",
+        "channel": "messenger",
+        "message": "Diego, vi que estás en Loy & Ferraresi y la web ya tiene bastante catálogo. Yo no la rehacería de cero: tocaría primero fichas, buscador y contacto para que se sienta más actual sin romper lo que ya funciona. Si esa es la web que querés actualizar, te marco 3 cambios concretos?",
+        "contactedAt": null
+      }
     }
   ],
   "canonicalEditUrl": "https://github.com/simondalmasso/jobas/edit/main/data/gpt-prospectos.json",
