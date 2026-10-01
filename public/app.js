@@ -84,6 +84,15 @@ function updateProgressCount(){
   if(el)el.textContent=getProgressJobs().length;
 }
 
+function updateProspectCount(){
+  const el=$("#prospectCount");
+  if(el)el.textContent=state.jobs.filter(isProspect).length;
+}
+
+function isProspect(job){
+  return job?.prospectType==="microjob"||job?.lane==="PROSPECTOS"||job?.source==="gpt-prospectos";
+}
+
 function isLocalJob(job){
   if(job.lane==="LOCAL")return true;
   if(job.lane==="REMOTO")return false;
@@ -107,17 +116,19 @@ function monthly(job){
 
 function baseForMode(){
   if(state.mode==="progress")return getProgressJobs();
-  if(state.mode==="local")return state.jobs.filter(isLocalJob);
-  return state.jobs.filter(j=>!isLocalJob(j));
+  if(state.mode==="prospects")return state.jobs.filter(isProspect);
+  if(state.mode==="local")return state.jobs.filter(j=>!isProspect(j)&&isLocalJob(j));
+  return state.jobs.filter(j=>!isProspect(j)&&!isLocalJob(j));
 }
 
 function filtered(){
   const q=$("#q").value.trim().toLowerCase();
+  const argentinaFilterApplies=state.mode==="remote"||state.mode==="local";
   return baseForMode().filter(j=>
-    (!q||`${j.title} ${j.company} ${j.description||""}`.toLowerCase().includes(q)) &&
+    (!q||`${j.title} ${j.company} ${j.buyer||""} ${j.description||""}`.toLowerCase().includes(q)) &&
     (!state.category||j.category===state.category) &&
     (!state.knownPay||(j.pay?.monthlyMin||j.pay?.monthlyMax)) &&
-    (!state.argOnly||j.argentina?.score>=80)
+    (!state.argOnly||!argentinaFilterApplies||j.argentina?.score>=80)
   );
 }
 
@@ -195,8 +206,9 @@ function renderJobActions(job){
 
 function render(){
   const jobs=filtered();
-  const label=state.mode==="remote"?"remotas":state.mode==="local"?"locales":"en curso";
-  $("#summary").innerHTML=`<span class="pill">${jobs.length} ${label}</span><span class="pill">${state.mode==="progress"?"guardadas en este navegador":"orden: Argentina + fuente + pago + frescura"}</span>`;
+  const label=state.mode==="remote"?"remotas":state.mode==="local"?"locales":state.mode==="prospects"?"prospectos microjobs":"en curso";
+  const note=state.mode==="progress"?"guardadas en este navegador":state.mode==="prospects"?"demanda directa verificada · link directo":"orden: Argentina + fuente + pago + frescura";
+  $("#summary").innerHTML=`<span class="pill">${jobs.length} ${label}</span><span class="pill">${note}</span>`;
   $("#feed").innerHTML=jobs.length?jobs.map(j=>`
     <article class="job" data-job-id="${esc(j.id||j.url)}">
       <div>
@@ -219,7 +231,7 @@ function render(){
       </div>
       <div class="actions">${renderJobActions(j)}</div>
     </article>
-  `).join(""):`<div class="empty">${state.mode==="local"?"Todavía no hay ofertas locales cargadas.":state.mode==="progress"?"No marcaste ninguna oportunidad como en curso.":"No hay resultados con estos filtros."}</div>`;
+  `).join(""):`<div class="empty">${state.mode==="local"?"Todavía no hay ofertas locales cargadas.":state.mode==="progress"?"No marcaste ninguna oportunidad como en curso.":state.mode==="prospects"?"Todavía no hay prospectos microjobs verificados.":"No hay resultados con estos filtros."}</div>`;
 }
 
 function renderCategories(){
@@ -240,6 +252,7 @@ async function boot(){
   state.jobs=feed.jobs||[];
   $("#fresh").textContent=feed.generatedAt?`actualizado ${new Date(feed.generatedAt).toLocaleString("es-AR")}`:"sin actualización";
   updateProgressCount();
+  updateProspectCount();
   renderCategories();
   $("#sourceHealth").innerHTML='<div class="source-grid">'+(feed.health||[]).map(s=>`<a class="source-card" href="${esc(s.url)}" target="_blank" rel="noopener"><strong>${esc(s.name)}</strong><br>${esc(s.state)} · ${s.jobs} jobs</a>`).join("")+'</div>';
   $("#discovery").innerHTML='<div class="source-grid">'+(feed.discoverySources||[]).map(s=>`<a class="source-card" href="${esc(s.url)}" target="_blank" rel="noopener"><strong>${esc(s.name)}</strong><br>${esc(s.note)}</a>`).join("")+'</div>';

@@ -19,8 +19,9 @@ Los radares GPT escriben en:
 - data/gpt-local.json
 - data/gpt-remoto.json
 - data/gpt-telegram.json
+- data/gpt-prospectos.json
 
-JOBAS consume esos archivos desde GitHub Raw.
+JOBAS consume esos archivos desde GitHub Raw. `gpt-prospectos.json` queda reservado para demanda directa/microjobs con permalink y contacto verificables, separado de las vacantes tradicionales.
 
 ## Runtime
 
@@ -49,6 +50,7 @@ Crawl4AI, Scrapling, Firecrawl, browser-use, Stagehand, Playwright, Laya/Lev y s
 - REMOTO
 - LOCAL
 - EN CURSO
+- PROSPECTOS MICROJOBS
 
 El ranking pondera elegibilidad Argentina/LatAm, fuente/riesgo, pago conocido, ausencia de pay-to-apply, frescura y afinidad de categoría.
 
