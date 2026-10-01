@@ -384,5 +384,129 @@
   ],
   "canonicalEditUrl": "https://github.com/simondalmasso/jobas/edit/main/data/gpt-prospectos.json",
   "canonicalRawUrl": "https://raw.githubusercontent.com/simondalmasso/jobas/main/data/gpt-prospectos.json",
-  "gitlabMirrorUrl": "https://gitlab.com/simondalmasso/jobas/-/blob/main/data/gpt-prospectos.json"
+  "gitlabMirrorUrl": "https://gitlab.com/simondalmasso/jobas/-/blob/main/data/gpt-prospectos.json",
+  "platformLearnings": {
+    "facebook": {
+      "lastUpdated": "2026-10-01",
+      "confidence": "medium-high",
+      "sampleNote": "Aprendizajes derivados de búsquedas y validaciones reales realizadas en la sesión actual. No equivalen a tasas de conversión ni a resultados comerciales cerrados.",
+      "observations": [
+        {
+          "finding": "Los grupos habitados por compradores o dueños de negocio producen mejores señales que los grupos dominados por desarrolladores ofreciendo servicios.",
+          "evidence": [
+            "GoHighLevel Users Funnels Automation & Hiring Support produjo un caso real de troubleshooting de Gmail/HighLevel.",
+            "Shopify/WooCommerce/Small Business muestran dolor operativo más útil que grupos genéricos de developers."
+          ],
+          "action": "Priorizar GHL/CRM, Shopify/WooCommerce, small business, ecommerce y automation antes que grupos de developers/jobs."
+        },
+        {
+          "finding": "La búsqueda global de Facebook genera falsos frescos: un resultado puede parecer reciente por actividad/comentarios aunque el post original sea viejo.",
+          "evidence": [
+            "Karinee Del Castillo apareció como candidata reciente y al abrir el post resultó ser de hace 42 semanas.",
+            "Pablo Almanza parecía reciente y terminó siendo viejo.",
+            "NeXA 11 AI apareció con señal reciente pero el timestamp interno real correspondía a junio."
+          ],
+          "action": "Nunca aceptar la fecha del resultado de búsqueda. Abrir el post individual y validar `creation_time` o timestamp equivalente."
+        },
+        {
+          "finding": "El permalink individual y la accesibilidad desde la sesión son parte del filtro de calidad.",
+          "evidence": [
+            "Algunos posts indexados externamente devolvieron 'contenido no disponible' en la sesión de Facebook.",
+            "Los leads inaccesibles no permiten revisar cierre, comentarios ni contactar con certeza."
+          ],
+          "action": "No persistir como accionable si el permalink no abre en la sesión o no existe una vía concreta de contacto."
+        },
+        {
+          "finding": "Los posts genéricos de 'I need a developer' concentran muchísima competencia y poca información útil.",
+          "evidence": [
+            "Tony recibió decenas de respuestas genéricas.",
+            "Ali Ahmad tenía decenas de comentarios tipo 'I can help / let's connect'."
+          ],
+          "action": "Evitar competir con experiencia/portfolio. Buscar una observación específica del problema y cerrar con una pregunta diagnóstica."
+        },
+        {
+          "finding": "Un mensaje diagnóstico y corto distingue más que un pitch comercial.",
+          "evidence": [
+            "Jhosep fue abordado explicando que el cuello de botella era el editor tipo Canva y la salida de producción.",
+            "Kayleigh fue abordada por posible problema de mapping/thread IDs en lugar de vender 'GHL expertise'.",
+            "Jules fue abordado por el trade-off entre cuotas recurrentes y mantenimiento de un stack custom."
+          ],
+          "action": "Mantener secuencia: dolor -> observación útil -> bajar riesgo -> una pregunta concreta."
+        },
+        {
+          "finding": "El perfil personal funciona como capa de credibilidad después de un buen comentario o DM.",
+          "evidence": [
+            "Se optimizó el perfil de Facebook para que muestre identidad real, GitHub y una bio no comercial."
+          ],
+          "action": "Mantener perfil humano y verificable; evitar convertirlo en un perfil de vendedor/freelancer genérico."
+        },
+        {
+          "finding": "Los posts anónimos pueden tener presupuesto y dolor real, pero fallan el criterio de comprador identificable.",
+          "evidence": [
+            "El ecommerce de ropa con presupuesto de USD 750 tenía permalink y timestamp exactos, pero autor anónimo."
+          ],
+          "action": "No contar como prospecto validado bajo el filtro duro, salvo que aparezca una vía de contacto identificable."
+        }
+      ]
+    },
+    "telegram": {
+      "lastUpdated": "2026-10-01",
+      "confidence": "medium",
+      "sampleNote": "Aprendizajes derivados de varias comunidades técnicas y comerciales revisadas con sesión iniciada. La muestra es limitada y no implica tasa de conversión estable.",
+      "observations": [
+        {
+          "finding": "Las comunidades técnicas con problemas concretos producen mejores microjobs que los canales de empleo genéricos.",
+          "evidence": [
+            "WordPress Hispano produjo el caso de Fabián RS con login bloqueado.",
+            "PHP - Comunidad española produjo el caso de Elio Navarro con envíos Telegram desde PHP.",
+            "Los grupos genéricos de empleo aportaron menos dolor accionable."
+          ],
+          "action": "Priorizar WordPress/PHP/Laravel/PrestaShop y comunidades donde la gente pide ayuda concreta."
+        },
+        {
+          "finding": "Los grupos comerciales amplios tienen más volumen pero también mucho más ruido y riesgo.",
+          "evidence": [
+            "Drop Shipping Group produjo a Rajat como excepción útil, pero la mayoría del feed era spam, autopromoción o señales de scam."
+          ],
+          "action": "Usar grupos comerciales como fuente secundaria y filtrar agresivamente."
+        },
+        {
+          "finding": "La ficha pública de t.me no alcanza para prospectar mensajes históricos.",
+          "evidence": [
+            "Los enlaces públicos permitían verificar grupo/tamaño, pero no leer el historial necesario para evaluar dolor y fecha."
+          ],
+          "action": "Usar la sesión de Telegram Web para historial y validar cada mensaje individual."
+        },
+        {
+          "finding": "La navegación por IDs/hashes de Telegram Web puede abrir a la persona equivocada.",
+          "evidence": [
+            "Un hash numérico de WebK abrió un perfil incorrecto al intentar llegar a Fabián."
+          ],
+          "action": "Antes de escribir, verificar visualmente nombre/header del chat. No confiar en hashes numéricos crudos."
+        },
+        {
+          "finding": "Los intentos repetidos de JOIN pueden activar controles anti-bot o cooldowns.",
+          "evidence": [
+            "WordPress Brasil pidió verificación y el ingreso falló."
+          ],
+          "action": "No repetir JOIN ni intentar evasiones. Priorizar grupos ya unidos o accesibles."
+        },
+        {
+          "finding": "El formato de outreach que mejor encaja es extremadamente corto y humano.",
+          "evidence": [
+            "Fabián: diagnóstico de conflicto/bloqueo de seguridad.",
+            "Elio: pedir el error devuelto por Telegram y señalar chat_id/respuesta como primera línea de investigación."
+          ],
+          "action": "No mencionar IA, no vender experiencia y no mandar portfolio de entrada."
+        },
+        {
+          "finding": "Sin permalink individual verificable no debe entrar al CANON como prospecto duro.",
+          "evidence": [
+            "Fabián, Elio y Rajat fueron contactados, pero todavía no se capturó un `t.me/<grupo>/<message_id>` individual verificable para cada pedido."
+          ],
+          "action": "En futuras revisiones, capturar primero link individual del mensaje antes de persistirlo como finding."
+        }
+      ]
+    }
+  }
 }
