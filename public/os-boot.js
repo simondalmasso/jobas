@@ -26,6 +26,7 @@ export function initBoot({audio,onDone=()=>{},doc=globalThis.document,win=global
   root.addEventListener("click",e=>{const b=e.target.closest("[data-boot-mode]");run(b?.dataset.bootMode||null);});
   doc.addEventListener("keydown",e=>{
     if(root.hidden)return;
+    e.stopPropagation();
     if(e.ctrlKey||e.metaKey||e.altKey||e.repeat)return;
     if(running){finish();e.preventDefault();return;}
     const map={"1":"remote","2":"local","3":"progress","4":"prospects"};
