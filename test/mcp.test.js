@@ -56,7 +56,7 @@ test("tools/list exposes public read-only JOBAS tools",async()=>{
   const r=await post({jsonrpc:"2.0",id:3,method:"tools/list",params:{}});
   const body=await r.json();
   const names=body.result.tools.map(x=>x.name);
-  for(const name of ["jobas_status","list_jobs","search_jobs","inspect_job","rank_jobs","list_microjobs","list_sources","research_zero_cost_catalog","research_github_readme","research_github_file","skill_list","skill_route","skill_get","mcp_status"]){
+  for(const name of ["agent_bootstrap","jobas_status","list_jobs","search_jobs","inspect_job","rank_jobs","list_microjobs","list_sources","research_zero_cost_catalog","research_github_readme","research_github_file","skill_list","skill_route","skill_get","mcp_status"]){
     assert.ok(names.includes(name),name);
   }
 });
