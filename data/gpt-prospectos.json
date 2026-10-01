@@ -272,8 +272,8 @@
       "sourceUrl": "https://www.reddit.com/r/smallbusiness/comments/1wt2fvt/where_to_build_a_website_for_a_small_business/",
       "directUrl": "https://www.reddit.com/r/smallbusiness/comments/1wt2fvt/where_to_build_a_website_for_a_small_business/",
       "publishedAt": "2026-09-29T03:14:12-03:00",
-      "verifiedAt": "2026-10-01T03:04:00-03:00",
-      "active": true,
+      "verifiedAt": "2026-10-01T05:26-03:00",
+      "active": false,
       "argentinaEligible": true,
       "applicationMode": "direct",
       "workerFee": false,
@@ -286,7 +286,7 @@
       "scamRisk": "medium",
       "rank": {
         "score": 79,
-        "reason": "Dolor real y muy fresco, cuenta Reddit de 5 años con historial; no pide contratación explícita todavía, pero el negocio existe y la necesidad de web está definida."
+        "reason": "Dolor real y comprador identificable, pero al reverificar el 2026-10-01 ya superó el filtro duro de frescura de 48 h; queda fuera del radar accionable."
       },
       "evidence": [
         "https://www.reddit.com/r/smallbusiness/comments/1wt2fvt/where_to_build_a_website_for_a_small_business/",
