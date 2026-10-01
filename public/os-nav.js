@@ -15,7 +15,7 @@ export function createNav({doc=globalThis.document,audio}={}){
     if(e.key==="Home"){e.preventDefault();mark(0);}
     if(e.key==="End"){e.preventDefault();mark(cards().length-1);}
     if(e.key==="Enter"&&selected>=0){
-      const card=cards()[selected]; const action=card?.querySelector(".apply,.adapt,[data-action='progress']");
+      const card=cards()[selected]; const action=card?.querySelector(".apply")||card?.querySelector(".adapt")||card?.querySelector("[data-action='progress']");
       if(action){e.preventDefault();action.click();}
     }
   });
