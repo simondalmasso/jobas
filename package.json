@@ -1,1 +1,18 @@
-{"name":"jobas-feed","private":true,"version":"1.0.0","type":"module","scripts":{"test":"node --test test/*.test.js","dev":"wrangler dev --test-scheduled","dry-run":"wrangler deploy --dry-run --outdir dist/worker","deploy":"wrangler deploy","verify":"npm test && npm run dry-run"},"devDependencies":{"wrangler":"^4.136.2"}}
+{
+  "name": "jobas-feed",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "dev": "wrangler dev --test-scheduled",
+    "dry-run": "wrangler deploy --dry-run --outdir dist/worker",
+    "deploy": "wrangler deploy",
+    "verify": "npm test && npm run dry-run",
+    "firebase:sites": "npx --yes firebase-tools hosting:sites:list --project jobas-d3c12",
+    "firebase:deploy:redirect": "npx --yes firebase-tools deploy --only hosting --project jobas-d3c12"
+  },
+  "devDependencies": {
+    "wrangler": "^4.136.2"
+  }
+}
