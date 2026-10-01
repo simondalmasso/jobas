@@ -339,6 +339,47 @@
         "message": "Diego, vi que estás en Loy & Ferraresi y la web ya tiene bastante catálogo. Yo no la rehacería de cero: tocaría primero fichas, buscador y contacto para que se sienta más actual sin romper lo que ya funciona. Si esa es la web que querés actualizar, te marco 3 cambios concretos?",
         "contactedAt": "2026-10-01T03:19:36-03:00"
       }
+    },
+    {
+      "id": "fb-jaylyn-san-pedro-whop-ghl-1766807894600217",
+      "prospectType": "microjob",
+      "title": "Whop → GHL payment automation troubleshooting",
+      "company": "No publicado",
+      "buyer": "Jaylyn San Pedro",
+      "location": "A verificar",
+      "description": "Tiene un flujo GHL opt-in → pago en Whop → Zapier → GHL nurturing. El test de pago existe, pero Zapier recibe nombre y no email; Find Member devuelve unauthorized incluso tras renovar API key. Antes de seguir parcheando Zapier conviene evaluar la integración nativa Whop como payment provider dentro de GHL, que puede eliminar esa capa si el checkout encaja en el flujo nativo.",
+      "category": "ecommerce-crm",
+      "sourceName": "Facebook",
+      "sourceUrl": "https://www.facebook.com/groups/997316161549398/posts/1766807894600217/",
+      "directUrl": "https://www.facebook.com/profile.php?id=100000821612172",
+      "publishedAt": "2026-09-30T20:11:09-03:00",
+      "verifiedAt": "2026-10-01T03:25:00-03:00",
+      "active": true,
+      "argentinaEligible": true,
+      "applicationMode": "direct",
+      "workerFee": false,
+      "salary": {
+        "raw": "No publicado",
+        "monthlyMin": null,
+        "monthlyMax": null,
+        "currency": "otra"
+      },
+      "scamRisk": "low",
+      "rank": {
+        "score": 92,
+        "reason": "Dolor técnico muy concreto y fresco, comprador identificable, flujo reproducible y contacto directo. Hay competencia, pero la documentación oficial de Whop permite un ángulo distinto al troubleshooting genérico."
+      },
+      "evidence": [
+        "https://www.facebook.com/groups/997316161549398/posts/1766807894600217/",
+        "https://docs.whop.com/third-party-integrations/gohighlevel",
+        "https://www.facebook.com/profile.php?id=100000821612172"
+      ],
+      "outreach": {
+        "status": "prepared",
+        "channel": "messenger",
+        "message": "Jaylyn, antes de seguir peleando con el email/API key, miraría una cosa: Whop ya tiene integración nativa como payment provider dentro de GHL. Si tu checkout puede pasar por esa ruta, te sacás Zapier del medio y evitás justo este mapping. Querés que te marque cómo quedaría el flujo sin tocar el nurturing?",
+        "contactedAt": null
+      }
     }
   ],
   "canonicalEditUrl": "https://github.com/simondalmasso/jobas/edit/main/data/gpt-prospectos.json",
