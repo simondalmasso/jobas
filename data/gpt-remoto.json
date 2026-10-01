@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "lane": "REMOTO",
-  "updatedAt": "2026-09-25T21:39:00-03:00",
+  "updatedAt": "2026-10-01",
   "curator": "GPT BUSQ REMOTO",
   "writeContract": "CANONICAL WRITE TARGET: GitHub main. Leer primero este JSON, reverificar findings, actualizar updatedAt/findings y guardar EN GITHUB. GitLab es espejo read-only operativo; no usarlo como autoridad.",
   "findingSchema": {
@@ -41,7 +41,12 @@
     "Verificar que la vacante siga activa antes de agregarla.",
     "Usar applyUrl directo cuando exista.",
     "rank.score debe ser 0-100 y estar justificado en rank.reason.",
-    "No inventar salario: si no está publicado usar null y conservar salary.raw."
+    "No inventar salario: si no está publicado usar null y conservar salary.raw.",
+    "MODO PROSPECTOR ESPADA: priorizar demanda directa del comprador y microjobs concretos; no confundir con ofertas laborales genéricas ni autopromoción de proveedores.",
+    "Antes de contactar, investigar solo información pública/profesional relevante del solicitante, negocio y proyecto; identificar el dolor real y cualquier contexto verificable que permita una respuesta específica.",
+    "OUTREACH: no vender años de experiencia ni tirar portfolio/WhatsApp de entrada. Abrir demostrando comprensión del problema, aportar una observación o diagnóstico útil, bajar riesgo y terminar con un próximo paso o pregunta concreta.",
+    "OUTREACH: 1-4 frases cuando sea posible, humano, específico, sin corporate fluff, sin mencionar IA, sin afirmaciones inventadas y sin regalar precio antes de entender alcance.",
+    "RADAR MICROJOBS: aceptar como fresco solo pedido real + comprador + timestamp individual verificable <=48h + enlace directo + contacto posible; si no cumple, marcarlo como no verificado o descartarlo."
   ],
   "findings": [
     {
