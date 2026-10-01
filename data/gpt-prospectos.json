@@ -420,6 +420,45 @@
         "message": "At four locations, I’d separate the system from the ordering method: standardize one SKU/unit list and par levels first, then use POS sales plus receiving/waste to pre-fill the expected order so managers only correct exceptions. Are all four locations on the same POS and supplier list?",
         "contactedAt": null
       }
+    },
+    {
+      "id": "reddit-amateurtech-shopify-catalogue-sites-1wu6sfw",
+      "prospectType": "microjob",
+      "title": "Alternativa reusable a Shopify para sitios catálogo con solicitudes de presupuesto",
+      "company": "Small business en Irlanda (nombre no publicado)",
+      "buyer": "u/AmatuerTech",
+      "location": "Irlanda",
+      "description": "Su Shopify actual genera consultas que luego convierte en pedidos offline, pero no usa checkout. Quiere lanzar varios sitios adicionales con catálogo, fichas, formularios y solicitudes de presupuesto evitando pagar más de €300/año por Shopify en cada uno.",
+      "category": "tech",
+      "sourceName": "Reddit",
+      "sourceUrl": "https://www.reddit.com/r/smallbusiness/comments/1wu6sfw/best_alternative_to_shopify_for_a_small_business/",
+      "directUrl": "https://www.reddit.com/r/smallbusiness/comments/1wu6sfw/best_alternative_to_shopify_for_a_small_business/",
+      "publishedAt": "2026-09-30T11:43:26-03:00",
+      "verifiedAt": "2026-10-01T05:48:39-03:00",
+      "active": true,
+      "argentinaEligible": true,
+      "applicationMode": "direct",
+      "workerFee": false,
+      "salary": {
+        "raw": "No publica presupuesto de proyecto; quiere reducir el costo recurrente de €300+/año por sitio",
+        "monthlyMin": null,
+        "monthlyMax": null,
+        "currency": "EUR"
+      },
+      "scamRisk": "low",
+      "rank": {
+        "score": 83,
+        "reason": "Dueño de negocio con necesidad concreta, varios sitios potenciales, costo actual explícito, contacto directo y timestamp <48 h. No pide contratar todavía y ya recibió recomendaciones de WordPress; la oportunidad diferencial está en diseñar una arquitectura reusable de catálogo y cotización."
+      },
+      "evidence": [
+        "https://www.reddit.com/r/smallbusiness/comments/1wu6sfw/best_alternative_to_shopify_for_a_small_business/"
+      ],
+      "outreach": {
+        "status": "prepared",
+        "channel": "post-comment",
+        "message": "Since you’re planning several sites, I’d solve the repeatability before choosing the builder: one reusable product/content structure plus the same enquiry flow, then deploy each site separately so you’re not maintaining three different setups. Are the new sites basically the same catalogue/quote model or genuinely different businesses?",
+        "contactedAt": null
+      }
     }
   ],
   "canonicalEditUrl": "https://github.com/simondalmasso/jobas/edit/main/data/gpt-prospectos.json",
