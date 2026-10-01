@@ -1,8 +1,6 @@
 import { applicationHref, applicationWorkflow, safeExternalHref, sameJob } from "./workflow.js";
 import { createAudio, bindAudioUnlock } from "./os-audio.js";
 import { initBoot } from "./os-boot.js";
-import { createShell } from "./os-shell.js";
-import { createNav } from "./os-nav.js";
 
 const $=s=>document.querySelector(s);
 
@@ -18,7 +16,7 @@ const state={
 
 const MODES=["remote","local","progress","prospects"];
 const audio=createAudio();
-let os=null;
+let intro=null;
 
 const PROGRESS_KEY="jobas:in-progress:v1";
 const HERFASA_SEED={id:"manual-herfasa",lane:"LOCAL",curated:true,title:"ABERTURA HERFASA",company:"ABERTURA HERFASA",location:"Santa Fe",description:"Postulación en curso.",url:"",sourceName:"Seguimiento manual",sourceUrl:"",sourceDetail:"",category:"other",pay:{raw:"No publicado",monthlyMin:null,monthlyMax:null,currency:"ARS"},priority:100,argentina:{score:100,label:"Local"},scam:{score:100,label:"Seguimiento"},workerFee:false};
@@ -83,6 +81,7 @@ function toggleProgress(job){
   if(i>=0)jobs.splice(i,1);
   else jobs.unshift(job);
   setProgressJobs(jobs);
+  audio.play(i>=0?"key":"success");
   renderCategories();
   render();
 }
@@ -241,7 +240,6 @@ function render(){
       <div class="actions">${renderJobActions(j)}</div>
     </article>
   `).join(""):`<div class="empty">${state.mode==="local"?"Todavía no hay ofertas locales cargadas.":state.mode==="progress"?"No marcaste ninguna oportunidad como en curso.":state.mode==="prospects"?"Todavía no hay prospectos microjobs verificados.":"No hay resultados con estos filtros."}</div>`;
-  os?.shell?.sync();
 }
 
 function renderCategories(){
@@ -272,7 +270,9 @@ async function boot(){
 
 function selectMode(mode){
   if(!MODES.includes(mode))return;
+  const changed=state.mode!==mode;
   state.mode=mode;
+  if(changed)audio.play("key");
   state.category="";
   document.querySelectorAll(".feed-mode").forEach(x=>x.classList.toggle("active",x.dataset.mode===state.mode));
   renderCategories();
@@ -320,15 +320,15 @@ function clearFilters(){
 }
 
 function runCommand(command){
-  if(command==="toggle-pay"){state.knownPay=!state.knownPay;syncFilterButtons();render();}
-  if(command==="toggle-arg"){state.argOnly=!state.argOnly;syncFilterButtons();render();}
-  if(command==="clear-filters")clearFilters();
-  if(command==="toggle-tree")document.body.classList.toggle("tree-collapsed");
-  if(command==="toggle-sources"){$(".sources").open=!$(".sources").open;}
+  if(command==="toggle-pay"){state.knownPay=!state.knownPay;syncFilterButtons();render();audio.play("key");}
+  if(command==="toggle-arg"){state.argOnly=!state.argOnly;syncFilterButtons();render();audio.play("key");}
+  if(command==="clear-filters"){clearFilters();audio.play("key");}
+  if(command==="toggle-tree"){document.body.classList.toggle("tree-collapsed");audio.play("key");}
+  if(command==="toggle-sources"){const el=$(".sources-panel");if(el){el.open=!el.open;audio.play("key");}}
   if(command==="focus-search")$("#q").focus();
-  if(command==="focus-term")os?.shell?.focus();
-  if(command==="toggle-sound")audio.toggle();
-  if(command==="show-shortcuts")showToast("/ buscar · 1-4 vistas · T panel · S fuentes · : consola · ↑↓ seleccionar · Enter abrir");
+  if(command==="toggle-sound"){const on=audio.toggle();if(on)audio.play("success");}
+  if(command==="show-intro")intro?.open();
+  if(command==="show-shortcuts")showToast("/ buscar · 1–4 vistas · T directorio · S fuentes");
 }
 
 $(".menubar").addEventListener("click",e=>{
@@ -350,7 +350,6 @@ document.addEventListener("keydown",e=>{
   const typing=/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName||"");
   if(typing)return;
   if(e.key==="/"){e.preventDefault();$("#q").focus();return;}
-  if(e.key===":"){e.preventDefault();os?.shell?.focus();return;}
   if(e.key==="1")selectMode("remote");
   if(e.key==="2")selectMode("local");
   if(e.key==="3")selectMode("progress");
@@ -386,60 +385,30 @@ $("#feed").addEventListener("click",e=>{
 $("#q").addEventListener("input",render);
 $("#knownPay").onclick=()=>runCommand("toggle-pay");
 $("#argOnly").onclick=()=>runCommand("toggle-arg");
+$(".clear-button").onclick=()=>runCommand("clear-filters");
 $("#soundToggle").onclick=()=>runCommand("toggle-sound");
 
-function snapshot(){
-  return{
-    mode:state.mode,
-    query:$("#q").value.trim(),
-    category:state.category,
-    knownPay:state.knownPay,
-    argOnly:state.argOnly,
-    visible:filtered().length,
-    loaded:Boolean(state.feed),
-    error:state.error,
-    counts:Object.fromEntries(MODES.map(m=>[m,baseForMode(m).length])),
-    feed:state.feed?{generatedAt:state.feed.generatedAt,jobsCount:state.feed.jobsCount??state.jobs.length,version:state.feed.version,health:state.feed.health||[]}:null
-  };
-}
-
-const osContext={
-  sound:audio,
-  snapshot,
-  setMode:selectMode,
-  resetFilters:clearFilters,
-  openSources(){const el=$(".sources");if(el)el.open=true;},
-  find(text){$("#q").value=text;render();const others={};for(const m of MODES)if(m!==state.mode)others[m]=filtered(m,"").length;return{count:filtered().length,mode:state.mode,others};},
-  reboot(){os?.shell?.clear();os?.boot?.restart();}
-};
-
-function initOs(){
+function initExperience(){
   bindAudioUnlock(audio);
-  const shell=createShell({ctx:osContext,audio});
-  const nav=createNav({audio});
-  const bootCtl=initBoot({
-    audio,
+
+  intro=initBoot({
     onDone({choice}){
       if(choice)selectMode(choice);
-      $("#feed")?.focus({preventScroll:true});
-      nav.reset();
+      $("#q")?.focus({preventScroll:true});
     }
   });
+
   const syncSound=on=>{
     for(const el of document.querySelectorAll("[data-sound-state]"))el.textContent=on?"ON":"OFF";
     $("#soundToggle")?.setAttribute("aria-pressed",String(on));
-    $("#bootSound")?.setAttribute("aria-pressed",String(on));
   };
   audio.subscribe(syncSound);
   syncSound(audio.isEnabled());
-  os={shell,nav,boot:bootCtl};
-  shell.sync();
 }
 
-initOs();
+initExperience();
 
 boot().catch(e=>{
   state.error=e.message;
   $("#feed").innerHTML=`<div class="empty">No pude cargar el feed: ${esc(e.message)}</div>`;
-  os?.shell?.sync();
 });
