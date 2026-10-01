@@ -1,0 +1,23 @@
+{
+  "hosting": {
+    "site": "jobas",
+    "public": "firebase-public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "redirects": [
+      {
+        "source": "/",
+        "destination": "https://jobas.simondalmasso44.workers.dev/",
+        "type": 302
+      },
+      {
+        "source": "/:path*",
+        "destination": "https://jobas.simondalmasso44.workers.dev/:path",
+        "type": 302
+      }
+    ]
+  }
+}
