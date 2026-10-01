@@ -197,6 +197,7 @@ function renderJobActions(job){
   const progressButton=`<button class="progress-action${inProgress?" active":""}" type="button" data-action="progress">${esc(flow.progressLabel)}</button>`;
   if(!job.url)return progressButton+`<span class="manual-status">SEGUIMIENTO</span>`;
   const href=safeExternalHref(applicationHref(job,inProgress));
+  if(!href)return progressButton+`<span class="manual-status">LINK A VERIFICAR</span>`;
   if(flow.requiresCv){
     return progressButton+`<button class="adapt" type="button" data-action="adapt">ADAPTAR CV</button><a class="apply" href="${esc(href)}" target="_blank" rel="noopener noreferrer">${esc(flow.linkLabel)}</a>`;
   }
@@ -246,6 +247,7 @@ function renderCategories(){
 
 async function boot(){
   const r=await fetch("/api/feed",{cache:"no-store"});
+  if(!r.ok)throw new Error(`HTTP ${r.status}`);
   const feed=await r.json();
   state.feed=feed;
   state.jobs=feed.jobs||[];
