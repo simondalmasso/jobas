@@ -1,65 +1,94 @@
 # JOBAS
 
-Feed público sin login para oportunidades remotas y locales, priorizado para Argentina.
+Radar público de oportunidades para Argentina/LatAm: empleos remotos y locales, seguimiento de postulaciones, microjobs y prospectos accionables. Incluye un MCP público read-only para agentes.
 
-Producción: https://jobas.simondalmasso44.workers.dev
+## Acceso público
 
-MCP público: https://jobas.simondalmasso44.workers.dev/mcp
+- Aplicación / backend canónico: https://jobas.simondalmasso44.workers.dev
+- MCP público: https://jobas.simondalmasso44.workers.dev/mcp
+- Alias Firebase solicitado: https://jobas.web.app
 
-## Canon
+Cloudflare Workers sigue siendo el único runtime de JOBAS. Firebase Hosting se usa exclusivamente como alias de redirección HTTP hacia Cloudflare: no hay Functions, rewrites, base de datos ni backend duplicado en Firebase.
+
+La configuración de esa capa está en `firebase.json` y `.firebaserc`. El target previsto es el sitio Firebase Hosting `jobas` dentro del proyecto `jobas-d3c12`. El deploy del alias es manual; no existe cron ni workflow que lo ejecute periódicamente.
+
+## Canon y espejo
 
 Repositorio principal: https://github.com/simondalmasso/jobas
 
 Espejo: https://gitlab.com/simondalmasso/jobas
 
-GitHub main es la única autoridad de código, documentación y archivos de radar. GitLab es réplica unidireccional.
+`GitHub/main` es la única autoridad para código, documentación y archivos de radar. GitLab es una réplica unidireccional y nunca debe ganar conflictos.
 
-Los radares GPT escriben en:
+## Datos de radar
 
-- data/gpt-local.json
-- data/gpt-remoto.json
-- data/gpt-telegram.json
-- data/gpt-prospectos.json
+- `data/gpt-local.json`: vacantes locales/presenciales.
+- `data/gpt-remoto.json`: vacantes remotas.
+- `data/gpt-telegram.json`: oportunidades verificadas desde Telegram.
+- `data/gpt-prospectos.json`: demanda directa, microjobs y leads con permalink/contacto verificables.
+- `data/telegram-sources.json`: fuentes y cursores del radar Telegram.
 
-JOBAS consume esos archivos desde GitHub Raw. `gpt-prospectos.json` queda reservado para demanda directa/microjobs con permalink y contacto verificables, separado de las vacantes tradicionales.
+JOBAS consume estos archivos desde GitHub Raw y los normaliza en el feed público.
 
-## Runtime
+## Interfaz
 
-- Cloudflare Workers + Static Assets + KV.
-- Sin login, Gmail, CV/PDF, chat ni Workers AI.
-- Cron diario existente del feed: 15 10 * * *.
-- El MCP NO agrega cron horario, polling ni loop de background.
-- Ocho fuentes automáticas: WeRemoto, Freehire, Carryer Tech, Remote OK, Remotive, Himalayas, Jobicy y We Work Remotely.
-- Fuentes independientes y fail-isolated.
-- Los visitantes y agentes leen el snapshot; no disparan el radar completo.
-
-## MCP público
-
-`POST /mcp` implementa un MCP stateless/read-only inspirado en el transporte público de ATM. Un agente puede inicializar, listar tools y empezar por `agent_bootstrap` para obtener estado, oportunidades prioritarias, microjobs y siguientes acciones en una sola llamada.
-
-Tools nativas: `agent_bootstrap`, `jobas_status`, `list_jobs`, `search_jobs`, `inspect_job`, `rank_jobs`, `list_microjobs`, `list_sources` y `mcp_status`.
-
-También expone lectura pública acotada de GitHub y skills install-free bajo demanda: `research_github_readme`, `research_github_file`, `research_zero_cost_catalog`, `skill_list`, `skill_route` y `skill_get`.
-
-Curaduría liviana incluida: Superpowers, Addy Osmani Agent Skills y Cloudflare Security Audit. Los skills se leen desde sus repos públicos solamente cuando un agente los pide; no se instalan runtimes pesados dentro del Worker.
-
-Crawl4AI, Scrapling, Firecrawl, browser-use, Stagehand, Playwright, Laya/Lev y similares se clasifican como runtimes externos, no como dependencias del Worker. Exa, Parallel Search y Wolfram quedan como providers externos porque incrustarlos públicamente requeriría credenciales/cuenta/costo compartido.
-
-## Feed
+La web organiza el trabajo en cuatro vistas:
 
 - REMOTO
 - LOCAL
 - EN CURSO
 - PROSPECTOS MICROJOBS
 
-El ranking pondera elegibilidad Argentina/LatAm, fuente/riesgo, pago conocido, ausencia de pay-to-apply, frescura y afinidad de categoría.
+La navegación superior es funcional: permite cambiar vistas, limpiar/alternar filtros, ocultar el panel lateral, abrir fuentes, enfocar búsqueda y acceder a producción/MCP/CANON. Atajos: `/` busca, `1–4` cambia de vista, `T` muestra/oculta navegación y `S` abre/cierra fuentes.
 
-## Verificación
+Las postulaciones tradicionales conservan el flujo de CV. Telegram, microjobs y marketplaces usan contacto/propuesta directa y seguimiento con `LINK DIRECTO`.
 
+## Runtime
+
+- Cloudflare Workers + Static Assets + KV.
+- Sin login obligatorio.
+- Sin Gmail, CV/PDF, chat ni Workers AI en el runtime.
+- Cron diario existente del feed: `15 10 * * *`.
+- El MCP no agrega cron, polling ni loop de background.
+- Los visitantes y agentes leen el snapshot; no disparan el radar completo.
+- Ocho fuentes automáticas: WeRemoto, Freehire, Carryer Tech, Remote OK, Remotive, Himalayas, Jobicy y We Work Remotely.
+
+## MCP público
+
+`POST /mcp` expone un MCP stateless/read-only. La entrada recomendada para un agente es `agent_bootstrap`.
+
+Tools del feed: `agent_bootstrap`, `jobas_status`, `list_jobs`, `search_jobs`, `inspect_job`, `rank_jobs`, `list_microjobs`, `list_sources` y `mcp_status`.
+
+Tools de apoyo público: `research_github_readme`, `research_github_file`, `research_zero_cost_catalog`, `skill_list`, `skill_route` y `skill_get`.
+
+Los skills ligeros se cargan bajo demanda; crawlers, navegadores, modelos y providers externos no se ejecutan dentro del Worker.
+
+## Firebase: alias de redirección
+
+Prerequisito único: que Firebase Hosting permita crear/asignar el site ID `jobas` al proyecto `jobas-d3c12`.
+
+Comandos manuales:
+
+```bash
+npm run firebase:sites
+npx --yes firebase-tools hosting:sites:create jobas --project jobas-d3c12
+npm run firebase:deploy:redirect
+```
+
+La configuración responde con redirecciones temporales `302` hacia el Worker, incluyendo rutas. Se usa `302` durante la puesta en marcha para evitar cachear una asignación incorrecta; puede pasarse a `301` cuando el alias quede confirmado.
+
+## Desarrollo y verificación
+
+```bash
 npm ci
 npm test
 npm run dry-run
+```
 
-Deploy manual autorizado: npm run deploy
+Deploy Cloudflare manual autorizado:
 
-El workflow de GitHub Actions ejecuta tests + dry-run en main y pull requests.
+```bash
+npm run deploy
+```
+
+GitHub Actions ejecuta tests + dry-run sobre `main` y pull requests.
