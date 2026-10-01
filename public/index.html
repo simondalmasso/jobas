@@ -9,6 +9,37 @@
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
+  <noscript><style>.boot{display:none!important}</style></noscript>
+  <div class="boot" id="boot" data-state="splash" role="dialog" aria-modal="true" aria-labelledby="bootTitle">
+    <div class="boot-crt">
+      <div class="boot-splash">
+        <p class="boot-top" aria-hidden="true">C:\&gt;<span class="cursor"></span></p>
+        <div class="boot-frame">
+          <h2 class="boot-title" id="bootTitle">COMPUTER JOB ASSISTANT</h2>
+          <p class="boot-by">By SIMON DALMASSO COMPUTER SYSTEMS</p>
+          <p class="boot-ver" aria-hidden="true">JOBAS SYSTEM · PUBLIC RADAR · READY</p>
+        </div>
+        <div class="boot-menu" role="group" aria-label="Iniciar JOBAS en">
+          <p class="boot-menu-title" aria-hidden="true">──── MENU DE INICIO ────</p>
+          <div class="boot-items">
+            <button class="boot-btn" type="button" data-boot-mode="remote"><kbd>1</kbd> REMOTO</button>
+            <button class="boot-btn" type="button" data-boot-mode="local"><kbd>2</kbd> LOCAL</button>
+            <button class="boot-btn" type="button" data-boot-mode="progress"><kbd>3</kbd> EN CURSO</button>
+            <button class="boot-btn" type="button" data-boot-mode="prospects"><kbd>4</kbd> PROSPECTOS</button>
+            <button class="boot-btn" id="bootSound" type="button" data-boot-keep aria-pressed="true">SONIDO <span data-sound-state>ON</span></button>
+          </div>
+        </div>
+        <button class="boot-start" id="bootStart" type="button">
+          <span aria-hidden="true">C:\&gt;</span>
+          <span class="when-key">PRESS ANY KEY TO BOOT</span><span class="when-touch">TAP TO BOOT</span>
+          <span class="cursor" aria-hidden="true"></span>
+        </button>
+      </div>
+      <pre class="boot-log" id="bootLog" aria-hidden="true"></pre>
+    </div>
+  </div>
+  <p class="sr-only" id="bootStatus" role="status"></p>
+
   <div class="dos-shell">
     <header class="top">
       <div class="titlebar">
@@ -47,6 +78,8 @@
             <button type="button" data-command="toggle-tree">Mostrar/ocultar navegación</button>
             <button type="button" data-command="toggle-sources">Fuentes y estado</button>
             <button type="button" data-command="focus-search">Ir al buscador</button>
+            <button type="button" data-command="focus-term">Consola de comandos</button>
+            <button type="button" data-command="toggle-sound">Sonido ON/OFF</button>
           </div>
         </div>
         <div class="menu-group">
@@ -82,7 +115,7 @@
 
         <section class="dos-pane main-pane">
           <div class="pane-title">Resultados</div>
-          <section class="feed" id="feed"><div class="empty">Cargando oportunidades…</div></section>
+          <section class="feed" id="feed" tabindex="0" aria-label="Resultados"><div class="empty">Cargando oportunidades…</div></section>
         </section>
       </section>
 
@@ -106,10 +139,16 @@
     </main>
 
     <footer class="statusbar">
-      <span>/ Buscar</span>
-      <span>1–4 Vistas</span>
-      <span>T Panel</span>
-      <span>S Fuentes</span>
+      <section class="term-log" id="term" aria-label="Consola de JOBAS" hidden>
+        <div class="term-head"><span aria-hidden="true">■ CONSOLA</span><button class="term-close" id="termClose" type="button" aria-label="Cerrar consola">×</button></div>
+        <div class="term-out" id="termOut" role="log" aria-live="polite"></div>
+      </section>
+      <form class="term-prompt" id="termForm" autocomplete="off">
+        <span class="term-label" id="termLabel" aria-hidden="true">C:\JOBAS\REMOTO&gt;</span>
+        <input class="term-input" id="termInput" type="text" aria-label="Consola de comandos. Escribí HELP" placeholder="HELP" spellcheck="false" autocapitalize="off" autocorrect="off" enterkeyhint="go">
+      </form>
+      <span class="hints"><span>/ Buscar</span><span>1–4 Vistas</span><span>T Panel</span><span>S Fuentes</span><span>: Consola</span></span>
+      <button class="status-btn" id="soundToggle" type="button" data-command="toggle-sound" aria-pressed="true">SONIDO <span data-sound-state>ON</span></button>
       <span class="status-clock">JOBAS · público</span>
     </footer>
     <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
