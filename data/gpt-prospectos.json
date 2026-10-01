@@ -3,7 +3,7 @@
   "lane": "PROSPECTOS",
   "updatedAt": "2026-10-01",
   "curator": "GPT PROSPECTOR",
-  "writeContract": "CANONICAL WRITE TARGET: GitHub main. Leer primero este JSON, reverificar findings, actualizar updatedAt/findings y guardar EN GITHUB. GitLab es espejo read-only operativo; no usarlo como autoridad.",
+  "writeContract": "MIGRATED/READ-ONLY: este archivo en JOBAS ya no es autoridad. CANONICAL WRITE TARGET: https://github.com/simondalmasso/the-iAffice/blob/main/data/gpt-prospectos.json. Leer iAffice antes de actuar y escribir únicamente allí.",
   "findingSchema": {
     "id": "string único y estable",
     "prospectType": "microjob",
@@ -44,6 +44,7 @@
     }
   },
   "rules": [
+    "MIGRACIÓN ACTIVA: iAffice es el CANON. Si estás operando como setter, cambiar inmediatamente a simondalmasso/the-iAffice y continuar desde sus JSON; no resetear ni re-prospectar antes de revisar abiertos.",
     "EXCLUSIVO PROSPECTOS/MICROJOBS: demanda directa, comprador real, proyecto puntual o necesidad accionable. No guardar vacantes laborales genéricas en este archivo.",
     "FILTRO DURO DE FRESCURA: persistir solo pedido real + comprador + timestamp individual verificable <=48h + permalink directo + posibilidad real de contacto.",
     "sourceUrl debe ser el permalink EXACTO de la publicación individual. No usar home del grupo, resultados de búsqueda, perfiles genéricos ni URLs de navegación.",
@@ -461,8 +462,8 @@
       }
     }
   ],
-  "canonicalEditUrl": "https://github.com/simondalmasso/jobas/edit/main/data/gpt-prospectos.json",
-  "canonicalRawUrl": "https://raw.githubusercontent.com/simondalmasso/jobas/main/data/gpt-prospectos.json",
+  "canonicalEditUrl": "https://github.com/simondalmasso/the-iAffice/edit/main/data/gpt-prospectos.json",
+  "canonicalRawUrl": "https://raw.githubusercontent.com/simondalmasso/the-iAffice/main/data/gpt-prospectos.json",
   "gitlabMirrorUrl": "https://gitlab.com/simondalmasso/jobas/-/blob/main/data/gpt-prospectos.json",
   "platformLearnings": {
     "facebook": {
@@ -587,5 +588,12 @@
         }
       ]
     }
+  },
+  "migrationNotice": {
+    "status": "MOVED",
+    "movedAt": "2026-10-01",
+    "canonicalRepo": "https://github.com/simondalmasso/the-iAffice",
+    "canonicalFile": "https://github.com/simondalmasso/the-iAffice/blob/main/data/gpt-prospectos.json",
+    "instruction": "STOP WRITING JOBAS. Leer y continuar desde iAffice. Preservar prospectos abiertos y estado de outreach; no resetear."
   }
 }
