@@ -1,27 +1,44 @@
 # Canonical repository
 
-Authority: https://github.com/simondalmasso/jobas (main).
+Authority: https://github.com/simondalmasso/jobas (`main`).
 
 Replica: https://gitlab.com/simondalmasso/jobas.
 
-Rules:
+## Rules
 
-- GitHub main is the source of truth for code, docs and data/gpt-*.json.
+- GitHub `main` is the source of truth for code, docs and `data/gpt-*.json`.
 - GitLab is a one-way mirror only.
 - Never promote GitLab-only changes back to GitHub automatically.
 - JOBAS production reads GPT radar findings from GitHub Raw.
 - Mirror verification must compare the complete tracked tree, including deletes.
-- Generated folders (node_modules, dist, evidence, .wrangler) are not canonical.
+- Generated folders (`node_modules`, `dist`, `evidence`, `.wrangler`, `.firebase`) are not canonical.
+- Firebase Hosting is not a second runtime. It may only redirect a public alias to the Cloudflare Worker.
 
-Mirror status (2026-09-30):
+## Runtime authority
 
-- No personal access token, deploy token, GitHub secret, ChatGPT automation, SentinelX host, or Remote Desktop dependency is authorized for the permanent mirror.
-- The repository contains a GitLab CI self-mirror job that reads public GitHub and writes GitLab with CI_JOB_TOKEN, so it needs no user-managed secret.
-- GitLab.com scheduled pipelines are currently blocked before a runner starts with failure_reason=ci_quota_exceeded. Therefore this path is not an active automatic mirror today.
-- GitLab native pull mirroring would satisfy the architecture without a runner or personal secret, but GitLab documents pull mirroring as Premium/Ultimate; the current project is on the Free plan.
-- Until either GitLab CI compute quota becomes available or the GitLab project gains pull-mirroring capability, syncs performed through an interactive connector are reconciliation only, not the permanent automation.
+Primary public runtime: https://jobas.simondalmasso44.workers.dev
 
-Acceptance gate:
+Cloudflare Workers + KV remains the backend. The optional Firebase Hosting site `jobas` in project `jobas-d3c12` is configured only as an HTTP redirect layer; it must not contain Functions, rewrites to Firebase compute, databases, or duplicated application logic.
 
-- Do not call the mirror healthy merely because the trees match once.
-- Healthy requires both: complete tracked-tree diff = 0 and a verified autonomous GitHub -> GitLab update path that does not depend on a personal secret, ChatGPT, SentinelX, or Remote Desktop.
+## Mirror status (2026-10-01)
+
+The GitLab compute-minute blocker cleared after the monthly reset: scheduled pipelines now start on a shared runner.
+
+The autonomous mirror is still **not healthy**. The latest scheduled `mirror_github_to_gitlab` job inspected on 2026-10-01 started normally and then failed during:
+
+`git push --force --prune`
+
+GitLab rejected the push because `main` is protected and force-push is not allowed. The current operational blocker is therefore protected-branch policy, not compute quota.
+
+No personal access token, deploy token, GitHub secret, ChatGPT automation, SentinelX host, or Remote Desktop dependency is authorized for the permanent mirror. The intended path remains GitLab CI + `CI_JOB_TOKEN`, independent of interactive reconciliation.
+
+## Acceptance gate
+
+Do not call the mirror healthy merely because the trees match once.
+
+Healthy requires both:
+
+1. the scheduled GitLab CI mirror job actually completes successfully using the existing autonomous CI path; and
+2. GitLab `main` reflects current GitHub `main` with complete tracked-tree diff = 0.
+
+Until both conditions hold, GitLab is a stale/incomplete replica and GitHub remains the only authority.
