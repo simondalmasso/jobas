@@ -380,6 +380,46 @@
         "message": "Jaylyn, Whop has a native GoHighLevel integration. I'd test that before touching Zapier again: it removes the mapping layer where the email is disappearing. Want me to map the clean flow?",
         "contactedAt": null
       }
+    },
+    {
+      "id": "reddit-monowyrm-restaurant-produce-ordering-1wtmjgi",
+      "prospectType": "microjob",
+      "title": "Sistema de compras e inventario de produce para cuatro restaurantes",
+      "company": "Cuatro restaurantes (nombre no publicado)",
+      "buyer": "u/monowyrm (display: youdeservebetter)",
+      "location": "A verificar",
+      "description": "Creció de uno a cuatro restaurantes y necesita que nuevos managers puedan calcular y ejecutar pedidos de produce sin depender de los dueños. Pregunta por hojas, automatización y software para mantener stock suficiente.",
+      "category": "operations",
+      "sourceName": "Reddit",
+      "sourceUrl": "https://www.reddit.com/r/smallbusiness/comments/1wtmjgi/produce_ordering_from_suppliers/",
+      "directUrl": "https://www.reddit.com/r/smallbusiness/comments/1wtmjgi/produce_ordering_from_suppliers/",
+      "publishedAt": "2026-09-29T18:21:17-03:00",
+      "verifiedAt": "2026-10-01T05:48:39-03:00",
+      "active": true,
+      "argentinaEligible": true,
+      "applicationMode": "direct",
+      "workerFee": false,
+      "salary": {
+        "raw": "No publicado",
+        "monthlyMin": null,
+        "monthlyMax": null,
+        "currency": "otra"
+      },
+      "scamRisk": "medium",
+      "rank": {
+        "score": 78,
+        "reason": "Dolor operativo concreto, dueño de cuatro restaurantes y contacto directo dentro de <48 h. No pide contratar explícitamente y ya recibió varias respuestas sobre par levels; el ángulo diferencial es reducir trabajo manual conectando ventas, recepción y desperdicio. El historial público incluye intercambio de reseñas, por lo que conviene mantener riesgo medio."
+      },
+      "evidence": [
+        "https://www.reddit.com/r/smallbusiness/comments/1wtmjgi/produce_ordering_from_suppliers/",
+        "https://www.reddit.com/user/monowyrm/"
+      ],
+      "outreach": {
+        "status": "prepared",
+        "channel": "post-comment",
+        "message": "At four locations, I’d separate the system from the ordering method: standardize one SKU/unit list and par levels first, then use POS sales plus receiving/waste to pre-fill the expected order so managers only correct exceptions. Are all four locations on the same POS and supplier list?",
+        "contactedAt": null
+      }
     }
   ],
   "canonicalEditUrl": "https://github.com/simondalmasso/jobas/edit/main/data/gpt-prospectos.json",
