@@ -1,4 +1,4 @@
-import { applicationHref, applicationWorkflow } from "./workflow.js";
+import { applicationHref, applicationWorkflow, safeExternalHref, sameJob } from "./workflow.js";
 
 const $=s=>document.querySelector(s);
 
@@ -12,7 +12,6 @@ const state={
 };
 
 const PROGRESS_KEY="jobas:in-progress:v1";
-const HERFASA_SEED_KEY="jobas:seed:herfasa:v1";
 const HERFASA_SEED={id:"manual-herfasa",lane:"LOCAL",curated:true,title:"ABERTURA HERFASA",company:"ABERTURA HERFASA",location:"Santa Fe",description:"Postulación en curso.",url:"",sourceName:"Seguimiento manual",sourceUrl:"",sourceDetail:"",category:"other",pay:{raw:"No publicado",monthlyMin:null,monthlyMax:null,currency:"ARS"},priority:100,argentina:{score:100,label:"Local"},scam:{score:100,label:"Seguimiento"},workerFee:false};
 const JOBAS_PROJECT_URL="https://chatgpt.com/g/g-p-6a8c77fe091081918b6fe7a55ee58c30-jobas/project";
 const CV_BASE_FOLDER="https://drive.google.com/drive/folders/1kBzaRZkGI0YK38SF4s2eTe_1eHaSAsn8?hl=es-419";
@@ -66,12 +65,12 @@ function setProgressJobs(jobs){
 }
 
 function progressHas(job){
-  return getProgressJobs().some(x=>(x.id&&job.id&&x.id===job.id)||x.url===job.url);
+  return getProgressJobs().some(x=>sameJob(x,job));
 }
 
 function toggleProgress(job){
   const jobs=getProgressJobs();
-  const i=jobs.findIndex(x=>(x.id&&job.id&&x.id===job.id)||x.url===job.url);
+  const i=jobs.findIndex(x=>sameJob(x,job));
   if(i>=0)jobs.splice(i,1);
   else jobs.unshift(job);
   setProgressJobs(jobs);
@@ -197,7 +196,7 @@ function renderJobActions(job){
   const flow=applicationWorkflow(job,inProgress);
   const progressButton=`<button class="progress-action${inProgress?" active":""}" type="button" data-action="progress">${esc(flow.progressLabel)}</button>`;
   if(!job.url)return progressButton+`<span class="manual-status">SEGUIMIENTO</span>`;
-  const href=applicationHref(job,inProgress);
+  const href=safeExternalHref(applicationHref(job,inProgress));
   if(flow.requiresCv){
     return progressButton+`<button class="adapt" type="button" data-action="adapt">ADAPTAR CV</button><a class="apply" href="${esc(href)}" target="_blank" rel="noopener noreferrer">${esc(flow.linkLabel)}</a>`;
   }
@@ -227,7 +226,7 @@ function render(){
           <span>·</span>
           <span>${j.workerFee===false?"Sin cargo para postular":"Condiciones a verificar"}</span>
         </div>
-        <div class="source-row">Fuente: ${j.sourceDetail||j.sourceUrl?`<a href="${esc(j.sourceDetail||j.sourceUrl)}" target="_blank" rel="noopener">${esc(j.sourceName)}</a>`:esc(j.sourceName||"Manual")} · ${j.publishedAt?new Date(j.publishedAt).toLocaleDateString("es-AR"):"seguimiento manual"}</div>
+        <div class="source-row">Fuente: ${safeExternalHref(j.sourceDetail||j.sourceUrl)?`<a href="${esc(safeExternalHref(j.sourceDetail||j.sourceUrl))}" target="_blank" rel="noopener noreferrer">${esc(j.sourceName)}</a>`:esc(j.sourceName||"Manual")} · ${j.publishedAt?new Date(j.publishedAt).toLocaleDateString("es-AR"):"seguimiento manual"}</div>
       </div>
       <div class="actions">${renderJobActions(j)}</div>
     </article>
@@ -254,19 +253,98 @@ async function boot(){
   updateProgressCount();
   updateProspectCount();
   renderCategories();
-  $("#sourceHealth").innerHTML='<div class="source-grid">'+(feed.health||[]).map(s=>`<a class="source-card" href="${esc(s.url)}" target="_blank" rel="noopener"><strong>${esc(s.name)}</strong><br>${esc(s.state)} · ${s.jobs} jobs</a>`).join("")+'</div>';
-  $("#discovery").innerHTML='<div class="source-grid">'+(feed.discoverySources||[]).map(s=>`<a class="source-card" href="${esc(s.url)}" target="_blank" rel="noopener"><strong>${esc(s.name)}</strong><br>${esc(s.note)}</a>`).join("")+'</div>';
+  $("#sourceHealth").innerHTML='<div class="source-grid">'+(feed.health||[]).map(s=>safeExternalHref(s.url)?`<a class="source-card" href="${esc(safeExternalHref(s.url))}" target="_blank" rel="noopener noreferrer"><strong>${esc(s.name)}</strong><br>${esc(s.state)} · ${s.jobs} jobs</a>`:`<div class="source-card"><strong>${esc(s.name)}</strong><br>${esc(s.state)} · ${s.jobs} jobs</div>`).join("")+'</div>';
+  $("#discovery").innerHTML='<div class="source-grid">'+(feed.discoverySources||[]).map(s=>safeExternalHref(s.url)?`<a class="source-card" href="${esc(safeExternalHref(s.url))}" target="_blank" rel="noopener noreferrer"><strong>${esc(s.name)}</strong><br>${esc(s.note)}</a>`:`<div class="source-card"><strong>${esc(s.name)}</strong><br>${esc(s.note)}</div>`).join("")+'</div>';
   render();
 }
 
-$("#feedModes").addEventListener("click",e=>{
-  const b=e.target.closest("[data-mode]");
-  if(!b)return;
-  state.mode=b.dataset.mode;
+function selectMode(mode){
+  if(!["remote","local","progress","prospects"].includes(mode))return;
+  state.mode=mode;
   state.category="";
   document.querySelectorAll(".feed-mode").forEach(x=>x.classList.toggle("active",x.dataset.mode===state.mode));
   renderCategories();
   render();
+}
+
+function syncFilterButtons(){
+  $("#knownPay").setAttribute("aria-pressed",String(state.knownPay));
+  $("#argOnly").setAttribute("aria-pressed",String(state.argOnly));
+}
+
+function closeMenus(){
+  document.querySelectorAll("[data-menu]").forEach(x=>x.hidden=true);
+  document.querySelectorAll("[data-menu-trigger]").forEach(x=>x.setAttribute("aria-expanded","false"));
+}
+
+function toggleMenu(name){
+  const panel=document.querySelector(`[data-menu="${name}"]`);
+  const trigger=document.querySelector(`[data-menu-trigger="${name}"]`);
+  if(!panel||!trigger)return;
+  const opening=panel.hidden;
+  closeMenus();
+  panel.hidden=!opening;
+  trigger.setAttribute("aria-expanded",String(opening));
+}
+
+let toastTimer;
+function showToast(message){
+  const el=$("#toast");
+  if(!el)return;
+  clearTimeout(toastTimer);
+  el.textContent=message;
+  el.hidden=false;
+  toastTimer=setTimeout(()=>{el.hidden=true;},2600);
+}
+
+function runCommand(command){
+  if(command==="toggle-pay"){state.knownPay=!state.knownPay;syncFilterButtons();render();}
+  if(command==="toggle-arg"){state.argOnly=!state.argOnly;syncFilterButtons();render();}
+  if(command==="clear-filters"){
+    state.category="";
+    state.knownPay=false;
+    state.argOnly=true;
+    $("#q").value="";
+    syncFilterButtons();
+    renderCategories();
+    render();
+  }
+  if(command==="toggle-tree")document.body.classList.toggle("tree-collapsed");
+  if(command==="toggle-sources"){$(".sources").open=!$(".sources").open;}
+  if(command==="focus-search")$("#q").focus();
+  if(command==="show-shortcuts")showToast("/ buscar · 1-4 vistas · T panel · S fuentes · Esc cerrar menú");
+}
+
+$(".menubar").addEventListener("click",e=>{
+  const trigger=e.target.closest("[data-menu-trigger]");
+  if(trigger){toggleMenu(trigger.dataset.menuTrigger);return;}
+  const mode=e.target.closest("[data-mode-command]");
+  if(mode){selectMode(mode.dataset.modeCommand);closeMenus();return;}
+  const command=e.target.closest("[data-command]");
+  if(command){runCommand(command.dataset.command);closeMenus();}
+});
+
+document.addEventListener("click",e=>{
+  if(!e.target.closest(".menu-group"))closeMenus();
+});
+
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"){closeMenus();return;}
+  const typing=/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName||"");
+  if(typing)return;
+  if(e.key==="/"){e.preventDefault();$("#q").focus();return;}
+  if(e.key==="1")selectMode("remote");
+  if(e.key==="2")selectMode("local");
+  if(e.key==="3")selectMode("progress");
+  if(e.key==="4")selectMode("prospects");
+  if(e.key.toLowerCase()==="t")runCommand("toggle-tree");
+  if(e.key.toLowerCase()==="s")runCommand("toggle-sources");
+});
+
+$("#feedModes").addEventListener("click",e=>{
+  const b=e.target.closest("[data-mode]");
+  if(!b)return;
+  selectMode(b.dataset.mode);
 });
 
 $("#categories").addEventListener("click",e=>{
@@ -288,16 +366,8 @@ $("#feed").addEventListener("click",e=>{
 });
 
 $("#q").addEventListener("input",render);
-$("#knownPay").onclick=()=>{
-  state.knownPay=!state.knownPay;
-  $("#knownPay").setAttribute("aria-pressed",state.knownPay);
-  render();
-};
-$("#argOnly").onclick=()=>{
-  state.argOnly=!state.argOnly;
-  $("#argOnly").setAttribute("aria-pressed",state.argOnly);
-  render();
-};
+$("#knownPay").onclick=()=>runCommand("toggle-pay");
+$("#argOnly").onclick=()=>runCommand("toggle-arg");
 
 boot().catch(e=>{
   $("#feed").innerHTML=`<div class="empty">No pude cargar el feed: ${esc(e.message)}</div>`;
