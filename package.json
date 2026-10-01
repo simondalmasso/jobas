@@ -13,6 +13,6 @@
     "firebase:deploy:redirect": "npx --yes firebase-tools deploy --only hosting --project jobas-d3c12"
   },
   "devDependencies": {
-    "wrangler": "^4.136.2"
+    "wrangler": "^4.145.0"
   }
 }
