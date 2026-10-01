@@ -243,7 +243,7 @@ function safeRef(ref){
 }
 function safePath(path){
   const v=requireString(path).replace(/^\/+/, "");
-  if(v.includes("..")||!^[A-Za-z0-9._\/-]+$/.test(v))throw new Error("INVALID_PARAMS");
+  if(v.includes("..")||!/^[A-Za-z0-9._\/-]+$/.test(v))throw new Error("INVALID_PARAMS");
   return v;
 }
 async function fetchText(context,url,maxChars=20000){
