@@ -353,7 +353,7 @@
       "sourceUrl": "https://www.facebook.com/groups/997316161549398/posts/1766807894600217/",
       "directUrl": "https://www.facebook.com/profile.php?id=100000821612172",
       "publishedAt": "2026-09-30T20:11:09-03:00",
-      "verifiedAt": "2026-10-01T05:16:13-03:00",
+      "verifiedAt": "2026-10-01T06:16:51-03:00",
       "active": true,
       "argentinaEligible": true,
       "applicationMode": "direct",
@@ -375,10 +375,10 @@
         "https://www.facebook.com/profile.php?id=100000821612172"
       ],
       "outreach": {
-        "status": "prepared",
-        "channel": "messenger",
+        "status": "contacted",
+        "channel": "post-comment",
         "message": "Jaylyn, Whop has a native GoHighLevel integration. I'd test that before touching Zapier again: it removes the mapping layer where the email is disappearing. Want me to map the clean flow?",
-        "contactedAt": null
+        "contactedAt": "2026-10-01T06:16:51-03:00"
       }
     },
     {
