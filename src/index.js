@@ -2,7 +2,7 @@ import { buildFeed, SOURCE_REGISTRY, DISCOVERY_SOURCES } from "./sources.js";
 import { resolveApplicationMode } from "../public/workflow.js";
 import { handleMcpRequest } from "./mcp.js";
 const FEED_KEY="feed:v2";
-const GPT_KEY="gpt-findings:v3";
+const GPT_KEY="gpt-findings:v4";
 const GPT_TTL_MS=5*60*1000;
 const LOCAL_VERIFIED_SEED=[
   {
@@ -101,7 +101,8 @@ const LOCAL_VERIFIED_SEED=[
 const GPT_FILES=[
   {lane:"LOCAL",id:"local",name:"GPT BUSQ LOCAL",url:"https://raw.githubusercontent.com/simondalmasso/jobas/main/data/gpt-local.json"},
   {lane:"REMOTO",id:"remoto",name:"GPT BUSQ REMOTO",url:"https://raw.githubusercontent.com/simondalmasso/jobas/main/data/gpt-remoto.json"},
-  {lane:null,id:"telegram",name:"GPT TELEGRAM RADAR",url:"https://raw.githubusercontent.com/simondalmasso/jobas/main/data/gpt-telegram.json"}
+  {lane:null,id:"telegram",name:"GPT TELEGRAM RADAR",url:"https://raw.githubusercontent.com/simondalmasso/jobas/main/data/gpt-telegram.json"},
+  {lane:"PROSPECTOS",id:"prospectos",name:"GPT PROSPECTOR MICROJOBS",url:"https://raw.githubusercontent.com/simondalmasso/jobas/main/data/gpt-prospectos.json"}
 ];
 const headers={"content-type":"application/json; charset=utf-8","cache-control":"public, max-age=60, s-maxage=300","x-content-type-options":"nosniff","referrer-policy":"no-referrer"};
 const json=(body,status=200)=>new Response(JSON.stringify(body),{status,headers});
@@ -110,7 +111,8 @@ async function refresh(env){const limit=Math.max(40,Math.min(500,Number(env.FEED
 function num(v){const n=Number(v);return Number.isFinite(n)?n:null}
 function normalizePay(x){const p=x.pay||x.salary||{};return{raw:p.raw||p.text||x.salaryText||"No publicado",monthlyMin:num(p.monthlyMin??p.minMonthly),monthlyMax:num(p.monthlyMax??p.maxMonthly),currency:p.currency||"USD",period:p.period||null};}
 function normalizeFinding(x,meta){
-  if(!x||!x.title||!x.company)return null;
+  const companyName=x?.company||x?.buyer;
+  if(!x||!x.title||!companyName)return null;
   const lane=meta.lane||x.lane||"REMOTO";
   const sourceId=meta.id||String(lane).toLowerCase();
   const applyUrl=x.applyUrl||x.url||x.messageUrl||x.sourceUrl||"";
@@ -118,10 +120,10 @@ function normalizeFinding(x,meta){
   const argentinaScore=lane==="LOCAL"?100:(x.argentina?.score??(x.argentinaEligible===false?5:x.argentinaEligible===true?92:70));
   const scamScore=x.scam?.score??(x.scamRisk==="high"?25:x.scamRisk==="medium"?60:90);
   return{
-    id:x.id||("gpt-"+sourceId+"-"+String(x.company)+"-"+String(x.title)),
+    id:x.id||("gpt-"+sourceId+"-"+String(companyName)+"-"+String(x.title)),
     lane,curated:true,source:"gpt-"+sourceId,sourceName:x.sourceName||meta.name,sourceTrust:95,
     workerFee:x.workerFee===false?false:(x.workerFee===true?true:null),sourceUrl:x.sourceUrl||applyUrl,sourceDetail:x.messageUrl||x.sourceUrl||applyUrl,
-    title:String(x.title),company:String(x.company),location:String(x.location||(lane==="LOCAL"?"Santa Fe":"Remote / A verificar")),
+    title:String(x.title),company:String(companyName),buyer:x.buyer||null,prospectType:x.prospectType||(sourceId==="prospectos"?"microjob":null),location:String(x.location||(lane==="LOCAL"?"Santa Fe":lane==="PROSPECTOS"?"A verificar":"Remote / A verificar")),
     description:String(x.description||x.summary||x.rank?.reason||"").slice(0,1600),url:applyUrl,directUrl:x.directUrl||x.followUpUrl||null,applicationMode:resolveApplicationMode({...x,source:"gpt-"+sourceId,sourceName:x.sourceName||meta.name,sourceUrl:x.sourceUrl||applyUrl,sourceDetail:x.messageUrl||x.sourceUrl||applyUrl,url:applyUrl}),publishedAt:x.publishedAt||x.messageDate||null,verifiedAt:x.verifiedAt||null,
     tags:Array.isArray(x.tags)?x.tags:[],category:x.category||"other",pay:normalizePay(x),priority:score,rankReason:x.rank?.reason||"",
     argentina:{score:Number(argentinaScore),label:lane==="LOCAL"?"Local":(x.argentina?.label||(x.argentinaEligible===true?"Argentina/LatAm":"A verificar")),reason:x.argentina?.reason||""},
