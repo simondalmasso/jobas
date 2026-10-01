@@ -52,3 +52,20 @@ export function applicationWorkflow(job,inProgress=false){
     linkLabel:inProgress?"LINK DIRECTO ↗":"POSTULAR / CONTACTAR ↗"
   };
 }
+
+export function sameJob(a,b){
+  if(!a||!b)return false;
+  if(a.id&&b.id&&a.id===b.id)return true;
+  const aUrl=a.url||a.applyUrl||a.directUrl||a.sourceDetail||a.sourceUrl||"";
+  const bUrl=b.url||b.applyUrl||b.directUrl||b.sourceDetail||b.sourceUrl||"";
+  return Boolean(aUrl&&bUrl&&aUrl===bUrl);
+}
+
+export function safeExternalHref(value){
+  if(!value)return"";
+  try{
+    const url=new URL(String(value),"https://jobas.invalid");
+    if(!/^https?:$/.test(url.protocol))return"";
+    return url.href;
+  }catch{return"";}
+}
