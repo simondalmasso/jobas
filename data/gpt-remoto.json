@@ -3,7 +3,7 @@
   "lane": "REMOTO",
   "updatedAt": "2026-10-01",
   "curator": "GPT BUSQ REMOTO",
-  "writeContract": "CANONICAL WRITE TARGET: GitHub main. Leer primero este JSON, reverificar findings, actualizar updatedAt/findings y guardar EN GITHUB. GitLab es espejo read-only operativo; no usarlo como autoridad.",
+  "writeContract": "MIGRATED/READ-ONLY: este archivo en JOBAS ya no es autoridad. CANONICAL WRITE TARGET: https://github.com/simondalmasso/the-iAffice/blob/main/data/gpt-remoto.json. Leer iAffice antes de actuar y escribir únicamente allí.",
   "findingSchema": {
     "id": "string único y estable",
     "title": "string",
@@ -35,6 +35,7 @@
     ]
   },
   "rules": [
+    "MIGRACIÓN ACTIVA: iAffice es el CANON. Si estás operando como setter, cambiar inmediatamente a simondalmasso/the-iAffice y continuar desde sus JSON; no resetear ni re-prospectar antes de revisar abiertos.",
     "Solo oportunidades reales y verificadas.",
     "Priorizar Argentina / LATAM / worldwide con cobro real desde Argentina.",
     "No incluir pay-to-apply ni fuentes con señales fuertes de scam.",
@@ -601,7 +602,14 @@
       ]
     }
   ],
-  "canonicalEditUrl": "https://github.com/simondalmasso/jobas/edit/main/data/gpt-remoto.json",
-  "canonicalRawUrl": "https://raw.githubusercontent.com/simondalmasso/jobas/main/data/gpt-remoto.json",
-  "gitlabMirrorUrl": "https://gitlab.com/simondalmasso/jobas/-/blob/main/data/gpt-remoto.json"
+  "canonicalEditUrl": "https://github.com/simondalmasso/the-iAffice/edit/main/data/gpt-remoto.json",
+  "canonicalRawUrl": "https://raw.githubusercontent.com/simondalmasso/the-iAffice/main/data/gpt-remoto.json",
+  "gitlabMirrorUrl": "https://gitlab.com/simondalmasso/jobas/-/blob/main/data/gpt-remoto.json",
+  "migrationNotice": {
+    "status": "MOVED",
+    "movedAt": "2026-10-01",
+    "canonicalRepo": "https://github.com/simondalmasso/the-iAffice",
+    "canonicalFile": "https://github.com/simondalmasso/the-iAffice/blob/main/data/gpt-remoto.json",
+    "instruction": "STOP WRITING JOBAS. Leer y continuar desde iAffice. Preservar prospectos abiertos y estado de outreach; no resetear."
+  }
 }
