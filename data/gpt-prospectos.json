@@ -35,7 +35,13 @@
     },
     "evidence": [
       "URLs primarias o evidencias de verificación"
-    ]
+    ],
+    "outreach": {
+      "status": "prepared | contacted | replied | closed",
+      "channel": "post-comment | messenger | email | platform",
+      "message": "string | null",
+      "contactedAt": "ISO-8601 | null"
+    }
   },
   "rules": [
     "EXCLUSIVO PROSPECTOS/MICROJOBS: demanda directa, comprador real, proyecto puntual o necesidad accionable. No guardar vacantes laborales genéricas en este archivo.",
@@ -51,7 +57,209 @@
     "OUTREACH: diagnosticar el dolor, demostrar comprensión específica, bajar riesgo y cerrar con una pregunta concreta. No vender años de experiencia, no portfolio/WhatsApp de entrada, no corporate fluff, no mencionar IA.",
     "OUTREACH: 1-4 frases cuando alcance; humano, específico y sin regalar precio antes de entender alcance."
   ],
-  "findings": [],
+  "findings": [
+    {
+      "id": "fb-jhosep-salor-shirt-customizer-1745241856528553",
+      "prospectType": "microjob",
+      "title": "Personalizador web tipo Canva para estampados en camisetas",
+      "company": "Jhosep SalOr",
+      "buyer": "Jhosep SalOr",
+      "location": "Harderwijk, Países Bajos",
+      "description": "Necesita un configurador donde el cliente elija camiseta y color y pueda preparar visualmente un estampado; el cuello de botella es el editor y la salida útil para producción.",
+      "category": "ecommerce-crm",
+      "sourceName": "Facebook",
+      "sourceUrl": "https://www.facebook.com/groups/desarrolladorweb/posts/1745241856528553/",
+      "directUrl": "https://www.facebook.com/groups/desarrolladorweb/posts/1745241856528553/",
+      "publishedAt": "2026-09-30T10:03:22-03:00",
+      "verifiedAt": "2026-10-01T01:56:18-03:00",
+      "active": true,
+      "argentinaEligible": true,
+      "applicationMode": "direct",
+      "workerFee": false,
+      "salary": {
+        "raw": "No publicado",
+        "monthlyMin": null,
+        "monthlyMax": null,
+        "currency": "otra"
+      },
+      "scamRisk": "medium",
+      "rank": {
+        "score": 84,
+        "reason": "Pedido técnico concreto, comprador público y contacto directo; competencia alta en comentarios pero el dolor permite diferenciarse con diagnóstico."
+      },
+      "evidence": [
+        "https://www.facebook.com/groups/desarrolladorweb/posts/1745241856528553/",
+        "https://www.facebook.com/profile.php?id=100092644057390"
+      ],
+      "outreach": {
+        "status": "contacted",
+        "channel": "post-comment",
+        "message": "Jhosep, por lo que describís, el problema no es hacer una app: es resolver bien el editor tipo Canva. WooCommerce puede manejar catálogo/pago, pero necesitás que el cliente elija modelo/color, suba el diseño, lo mueva/escale dentro del área imprimible y que esa composición quede guardada/exportable para producción. Yo arrancaría con un prototipo corto sobre 2–3 camisetas para validar ese flujo antes de meterte en el desarrollo completo. Ya tenés los mockups y las medidas/áreas de impresión de cada modelo?",
+        "contactedAt": null
+      }
+    },
+    {
+      "id": "fb-tony-negro-wp-landing-1745371439848928",
+      "prospectType": "microjob",
+      "title": "Landing page WordPress freelance",
+      "company": "Tony Negro",
+      "buyer": "Tony Negro",
+      "location": "Ciudad de México, México",
+      "description": "Busca un programador freelance para una landing en WordPress y enfatiza honestidad y experiencia; todavía no publicó objetivo, tráfico, contenido ni alcance.",
+      "category": "tech",
+      "sourceName": "Facebook",
+      "sourceUrl": "https://www.facebook.com/groups/935153674204046/posts/1745371439848928/",
+      "directUrl": "https://www.facebook.com/groups/935153674204046/posts/1745371439848928/",
+      "publishedAt": "2026-09-30T12:47:28-03:00",
+      "verifiedAt": "2026-10-01T01:56:18-03:00",
+      "active": true,
+      "argentinaEligible": true,
+      "applicationMode": "direct",
+      "workerFee": false,
+      "salary": {
+        "raw": "No publicado",
+        "monthlyMin": null,
+        "monthlyMax": null,
+        "currency": "otra"
+      },
+      "scamRisk": "medium",
+      "rank": {
+        "score": 73,
+        "reason": "Demanda real y fresca con contacto directo, pero el alcance es todavía genérico y tiene mucha competencia visible."
+      },
+      "evidence": [
+        "https://www.facebook.com/groups/935153674204046/posts/1745371439848928/",
+        "https://www.facebook.com/profile.php?id=100000501998049"
+      ],
+      "outreach": {
+        "status": "prepared",
+        "channel": "messenger",
+        "message": "Tony, vi lo de la landing. Antes de cotizarla miraría una sola cosa: qué tiene que hacer la página y de dónde llega el tráfico, porque eso define estructura y medición. Ya tenés contenido y referencia visual?",
+        "contactedAt": null
+      }
+    },
+    {
+      "id": "fb-james-palacio-evolution-api-28780201864945507",
+      "prospectType": "microjob",
+      "title": "Automatización de reportes por WhatsApp con Evolution API",
+      "company": "James Palacio",
+      "buyer": "James Palacio",
+      "location": "Medellín, Colombia",
+      "description": "Quiere automatizar envío de reportes por WhatsApp y está evaluando Evolution API; el riesgo operativo es pérdida silenciosa de envíos ante caída de sesión, por lo que requiere cola, reintentos y trazabilidad.",
+      "category": "tech",
+      "sourceName": "Facebook",
+      "sourceUrl": "https://www.facebook.com/groups/desarrolladoresencolombia/posts/28780201864945507/",
+      "directUrl": "https://www.facebook.com/groups/desarrolladoresencolombia/posts/28780201864945507/",
+      "publishedAt": "2026-09-30T01:44:17-03:00",
+      "verifiedAt": "2026-10-01T01:56:18-03:00",
+      "active": true,
+      "argentinaEligible": true,
+      "applicationMode": "direct",
+      "workerFee": false,
+      "salary": {
+        "raw": "No publicado",
+        "monthlyMin": null,
+        "monthlyMax": null,
+        "currency": "otra"
+      },
+      "scamRisk": "medium",
+      "rank": {
+        "score": 88,
+        "reason": "Problema acotado, técnico y accionable, comprador identificable, baja competencia relativa y posibilidad de diagnosticar antes de vender."
+      },
+      "evidence": [
+        "https://www.facebook.com/groups/desarrolladoresencolombia/posts/28780201864945507/",
+        "https://www.facebook.com/james.palacio.376"
+      ],
+      "outreach": {
+        "status": "contacted",
+        "channel": "post-comment",
+        "message": "James, si son reportes salientes programados, el riesgo no es sólo que Evolution funcione: es perder envíos cuando cae una sesión y no enterarte. Yo lo armaría con cola, reintentos y log de entrega; según volumen, compararía Cloud API oficial vs Evolution. Cuántos reportes por día y a cuántos números?",
+        "contactedAt": null
+      }
+    },
+    {
+      "id": "fb-kayleigh-benton-ghl-email-sync-1766308701316803",
+      "prospectType": "microjob",
+      "title": "Diagnóstico y reparación de sincronización Gmail–GoHighLevel",
+      "company": "Crystal Digital Solutions",
+      "buyer": "Kayleigh Benton",
+      "location": "A verificar",
+      "description": "Un cliente concreto responde por email y Gmail recibe los mensajes, pero algunas respuestas no llegan a HighLevel Conversations/contact history. Pide diagnóstico e implementación, no sólo instrucciones.",
+      "category": "support",
+      "sourceName": "Facebook",
+      "sourceUrl": "https://www.facebook.com/groups/997316161549398/permalink/1766308701316803/",
+      "directUrl": "https://www.facebook.com/kayleigh.benton.75/",
+      "publishedAt": "2026-09-30T08:28:13-03:00",
+      "verifiedAt": "2026-10-01T01:56:18-03:00",
+      "active": true,
+      "argentinaEligible": true,
+      "applicationMode": "direct",
+      "workerFee": false,
+      "salary": {
+        "raw": "Pide rough quote; monto no publicado",
+        "monthlyMin": null,
+        "monthlyMax": null,
+        "currency": "otra"
+      },
+      "scamRisk": "low",
+      "rank": {
+        "score": 90,
+        "reason": "Dolor de producción muy específico, negocio público verificable, solicita implementación rápida y ofrece DM/email directo; competencia visible alta."
+      },
+      "evidence": [
+        "https://www.facebook.com/groups/997316161549398/permalink/1766308701316803/",
+        "https://crystaldigitalsolutions.co.uk/",
+        "https://crystaldigitalsolutions.co.uk/about-us"
+      ],
+      "outreach": {
+        "status": "contacted",
+        "channel": "messenger",
+        "message": "Kay, saw your GHL/Workspace issue. If Gmail gets the reply but GHL misses only that client, I’d check thread/message IDs and contact association before reconnecting anything — sounds more like mapping than delivery. Want me to help isolate it?",
+        "contactedAt": null
+      }
+    },
+    {
+      "id": "fb-jules-lam-fashion-ecommerce-1037037489383801",
+      "prospectType": "microjob",
+      "title": "Ecommerce custom para marca de ropa con menor costo recurrente",
+      "company": "Jules Lam",
+      "buyer": "Jules Lam",
+      "location": "A verificar",
+      "description": "Busca un ecommerce de moda como proyecto único, evitando plataformas por cuotas mensuales y buscando más control; el punto crítico es reducir recurrencia sin trasladar el costo a mantenimiento de un stack totalmente custom.",
+      "category": "ecommerce-crm",
+      "sourceName": "Facebook",
+      "sourceUrl": "https://www.facebook.com/groups/671788822575338/posts/1037037489383801/",
+      "directUrl": "https://www.facebook.com/fourthofjuliee/",
+      "publishedAt": "2026-09-30T22:44:02-03:00",
+      "verifiedAt": "2026-10-01T01:56:18-03:00",
+      "active": true,
+      "argentinaEligible": true,
+      "applicationMode": "direct",
+      "workerFee": false,
+      "salary": {
+        "raw": "Solicita one-time project rate; monto no publicado",
+        "monthlyMin": null,
+        "monthlyMax": null,
+        "currency": "otra"
+      },
+      "scamRisk": "medium",
+      "rank": {
+        "score": 82,
+        "reason": "Brief comercial claro, comprador identificable y muy fresco; alta competencia, pero el trade-off entre cuotas y mantenimiento permite una respuesta diferenciada."
+      },
+      "evidence": [
+        "https://www.facebook.com/groups/671788822575338/posts/1037037489383801/",
+        "https://www.facebook.com/fourthofjuliee/"
+      ],
+      "outreach": {
+        "status": "contacted",
+        "channel": "messenger",
+        "message": "Jules, if the goal is lower monthly fees and more control, I wouldn’t rebuild every ecommerce piece from zero. I’d keep the storefront custom but use a self-hosted commerce core, so you own it without turning maintenance into a second problem. What country and payment methods are you selling with?",
+        "contactedAt": null
+      }
+    }
+  ],
   "canonicalEditUrl": "https://github.com/simondalmasso/jobas/edit/main/data/gpt-prospectos.json",
   "canonicalRawUrl": "https://raw.githubusercontent.com/simondalmasso/jobas/main/data/gpt-prospectos.json",
   "gitlabMirrorUrl": "https://gitlab.com/simondalmasso/jobas/-/blob/main/data/gpt-prospectos.json"
