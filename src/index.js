@@ -1,5 +1,6 @@
 import { buildFeed, SOURCE_REGISTRY, DISCOVERY_SOURCES } from "./sources.js";
 import { resolveApplicationMode } from "../public/workflow.js";
+import { handleMcpRequest } from "./mcp.js";
 const FEED_KEY="feed:v2";
 const GPT_KEY="gpt-findings:v3";
 const GPT_TTL_MS=5*60*1000;
@@ -151,12 +152,34 @@ function mergeFeed(feed,gpt){
   const categories=Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(([id,count])=>({id,count}));
   return{...feed,version:"feed-v3",jobs,jobsCount:jobs.length,categories,health:[...(gpt.health||[]),...(feed.health||[])],gptFindingsCount:(gpt.jobs||[]).length};
 }
+async function currentFeed(env){
+  const base=await readFeed(env)||await refresh(env);
+  const gpt=await loadGptFindings(env);
+  return mergeFeed(base,gpt);
+}
+async function currentSources(env){
+  const feed=await readFeed(env);
+  const gpt=await loadGptFindings(env);
+  return{active:Object.values(SOURCE_REGISTRY),health:[...(gpt.health||[]),...(feed?.health||[])],discovery:DISCOVERY_SOURCES,gptFiles:GPT_FILES};
+}
+async function fetchPublicText(url){
+  const r=await fetch(url,{headers:{"user-agent":"JOBAS-MCP/1.0","accept":"text/plain, text/markdown, application/json"}});
+  if(!r.ok)throw new Error("FETCH_"+r.status);
+  return r.text();
+}
 export default{
   async fetch(request,env){
     const url=new URL(request.url);
     if(url.pathname==="/api/health"){const feed=await readFeed(env);return json({ok:true,service:"JOBAS",mode:"public-feed",auth:false,generatedAt:feed?.generatedAt||null,jobsCount:feed?.jobsCount||0,version:"feed-v3"});}
-    if(url.pathname==="/api/feed"){const base=await readFeed(env)||await refresh(env);const gpt=await loadGptFindings(env);return json(mergeFeed(base,gpt));}
-    if(url.pathname==="/api/sources"){const feed=await readFeed(env);const gpt=await loadGptFindings(env);return json({active:Object.values(SOURCE_REGISTRY),health:[...(gpt.health||[]),...(feed?.health||[])],discovery:DISCOVERY_SOURCES,gptFiles:GPT_FILES});}
+    if(url.pathname==="/api/feed")return json(await currentFeed(env));
+    if(url.pathname==="/api/sources")return json(await currentSources(env));
+    if(url.pathname==="/mcp"){
+      return handleMcpRequest(request,{
+        getFeed:()=>currentFeed(env),
+        getSources:()=>currentSources(env),
+        fetchText:fetchPublicText
+      });
+    }
     return env.ASSETS.fetch(request);
   },
   async scheduled(_controller,env,ctx){ctx.waitUntil(Promise.all([refresh(env),loadGptFindings(env)]));}
