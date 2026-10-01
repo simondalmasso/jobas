@@ -386,6 +386,7 @@ $("#feed").addEventListener("click",e=>{
 $("#q").addEventListener("input",render);
 $("#knownPay").onclick=()=>runCommand("toggle-pay");
 $("#argOnly").onclick=()=>runCommand("toggle-arg");
+$("#soundToggle").onclick=()=>runCommand("toggle-sound");
 
 function snapshot(){
   return{
@@ -424,10 +425,13 @@ function initOs(){
       nav.reset();
     }
   });
-  audio.subscribe(on=>{
+  const syncSound=on=>{
     for(const el of document.querySelectorAll("[data-sound-state]"))el.textContent=on?"ON":"OFF";
     $("#soundToggle")?.setAttribute("aria-pressed",String(on));
-  });
+    $("#bootSound")?.setAttribute("aria-pressed",String(on));
+  };
+  audio.subscribe(syncSound);
+  syncSound(audio.isEnabled());
   os={shell,nav,boot:bootCtl};
   shell.sync();
 }
