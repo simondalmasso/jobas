@@ -334,10 +334,10 @@
         "https://www.loyferraresi.cl/"
       ],
       "outreach": {
-        "status": "prepared",
+        "status": "contacted",
         "channel": "messenger",
         "message": "Diego, vi que estás en Loy & Ferraresi y la web ya tiene bastante catálogo. Yo no la rehacería de cero: tocaría primero fichas, buscador y contacto para que se sienta más actual sin romper lo que ya funciona. Si esa es la web que querés actualizar, te marco 3 cambios concretos?",
-        "contactedAt": null
+        "contactedAt": "2026-10-01T03:19:36-03:00"
       }
     }
   ],
