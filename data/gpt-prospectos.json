@@ -111,7 +111,7 @@
       "sourceUrl": "https://www.facebook.com/groups/935153674204046/posts/1745371439848928/",
       "directUrl": "https://www.facebook.com/profile.php?id=100000501998049",
       "publishedAt": "2026-09-30T12:47:28-03:00",
-      "verifiedAt": "2026-10-01T01:56:18-03:00",
+      "verifiedAt": "2026-10-01T05:16:13-03:00",
       "active": true,
       "argentinaEligible": true,
       "applicationMode": "direct",
@@ -232,7 +232,7 @@
       "sourceUrl": "https://www.facebook.com/groups/671788822575338/posts/1037037489383801/",
       "directUrl": "https://www.facebook.com/fourthofjuliee/",
       "publishedAt": "2026-09-30T22:44:02-03:00",
-      "verifiedAt": "2026-10-01T01:56:18-03:00",
+      "verifiedAt": "2026-10-01T05:16:13-03:00",
       "active": true,
       "argentinaEligible": true,
       "applicationMode": "direct",
@@ -253,7 +253,7 @@
         "https://www.facebook.com/fourthofjuliee/"
       ],
       "outreach": {
-        "status": "contacted",
+        "status": "replied",
         "channel": "messenger",
         "message": "Jules, if the goal is lower monthly fees and more control, I wouldn’t rebuild every ecommerce piece from zero. I’d keep the storefront custom but use a self-hosted commerce core, so you own it without turning maintenance into a second problem. What country and payment methods are you selling with?",
         "contactedAt": null
@@ -353,7 +353,7 @@
       "sourceUrl": "https://www.facebook.com/groups/997316161549398/posts/1766807894600217/",
       "directUrl": "https://www.facebook.com/profile.php?id=100000821612172",
       "publishedAt": "2026-09-30T20:11:09-03:00",
-      "verifiedAt": "2026-10-01T03:25:00-03:00",
+      "verifiedAt": "2026-10-01T05:16:13-03:00",
       "active": true,
       "argentinaEligible": true,
       "applicationMode": "direct",
@@ -377,7 +377,7 @@
       "outreach": {
         "status": "prepared",
         "channel": "messenger",
-        "message": "Jaylyn, antes de seguir peleando con el email/API key, miraría una cosa: Whop ya tiene integración nativa como payment provider dentro de GHL. Si tu checkout puede pasar por esa ruta, te sacás Zapier del medio y evitás justo este mapping. Querés que te marque cómo quedaría el flujo sin tocar el nurturing?",
+        "message": "Jaylyn, Whop has a native GoHighLevel integration. I'd test that before touching Zapier again: it removes the mapping layer where the email is disappearing. Want me to map the clean flow?",
         "contactedAt": null
       }
     }
