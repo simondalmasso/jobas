@@ -11,11 +11,11 @@ test("menu principal usa controles reales y no etiquetas decorativas",()=>{
   assert.doesNotMatch(html,/<span>File<\/span>|<span>Options<\/span>|<span>View<\/span>|<span>Tree<\/span>|<span>Help<\/span>/);
 });
 
-test("layout desktop usa sidebar angosta y ocupa el alto disponible",()=>{
+test("layout desktop usa directorio angosto y resultados ocupan la pantalla",()=>{
   const css=fs.readFileSync("public/styles.css","utf8");
-  assert.match(css,/grid-template-columns:clamp\(190px,22vw,230px\) minmax\(0,1fr\)/);
-  assert.match(css,/min-height:100dvh/);
-  assert.match(css,/grid-template-rows:auto minmax\(0,1fr\) auto/);
+  assert.match(css,/grid-template-columns:190px minmax\(0,1fr\)/);
+  assert.match(css,/height:100dvh/);
+  assert.match(css,/grid-template-rows:auto minmax\(0,1fr\) auto auto/);
 });
 
 test("trabajos sin id ni URL no colisionan entre sí",()=>{
