@@ -3,64 +3,56 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#111318">
-  <meta name="description" content="JOBAS: radar público de empleos, microjobs y prospectos accionables para Argentina/LatAm.">
-  <title>JOBAS Shell — oportunidades</title>
+  <meta name="theme-color" content="#23157f">
+  <meta name="description" content="JOBAS: radar público de empleos, microjobs y prospectos accionables.">
+  <title>JOBAS — Computer Job Assistant</title>
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-  <noscript><style>.boot{display:none!important}</style></noscript>
-  <div class="boot" id="boot" data-state="splash" role="dialog" aria-modal="true" aria-labelledby="bootTitle">
-    <div class="boot-crt">
-      <div class="boot-splash">
-        <p class="boot-top" aria-hidden="true">C:\&gt;<span class="cursor"></span></p>
-        <div class="boot-frame">
-          <h2 class="boot-title" id="bootTitle">COMPUTER JOB ASSISTANT</h2>
-          <p class="boot-by">By SIMON DALMASSO COMPUTER SYSTEMS</p>
-          <p class="boot-ver" aria-hidden="true">JOBAS SYSTEM · PUBLIC RADAR · READY</p>
+  <div class="intro" id="intro" role="dialog" aria-modal="true" aria-labelledby="introTitle">
+    <section class="intro-window">
+      <header class="intro-menubar">
+        <strong>JOBAS</strong>
+        <span>COMPUTER JOB ASSISTANT</span>
+        <span>v1.0</span>
+      </header>
+      <div class="intro-canvas">
+        <div class="intro-prompt" aria-hidden="true">
+          <span>JOBAS SYSTEM Version 1.0</span>
+          <span>C:\&gt;<i class="intro-cursor"></i></span>
         </div>
-        <div class="boot-menu" role="group" aria-label="Iniciar JOBAS en">
-          <p class="boot-menu-title" aria-hidden="true">──── MENU DE INICIO ────</p>
-          <div class="boot-items">
-            <button class="boot-btn" type="button" data-boot-mode="remote"><kbd>1</kbd> REMOTO</button>
-            <button class="boot-btn" type="button" data-boot-mode="local"><kbd>2</kbd> LOCAL</button>
-            <button class="boot-btn" type="button" data-boot-mode="progress"><kbd>3</kbd> EN CURSO</button>
-            <button class="boot-btn" type="button" data-boot-mode="prospects"><kbd>4</kbd> PROSPECTOS</button>
-            <button class="boot-btn" id="bootSound" type="button" data-boot-keep aria-pressed="true">SONIDO <span data-sound-state>ON</span></button>
-          </div>
-        </div>
-        <button class="boot-start" id="bootStart" type="button">
-          <span aria-hidden="true">C:\&gt;</span>
-          <span class="when-key">PRESS ANY KEY TO BOOT</span><span class="when-touch">TAP TO BOOT</span>
-          <span class="cursor" aria-hidden="true"></span>
-        </button>
-      </div>
-      <pre class="boot-log" id="bootLog" aria-hidden="true"></pre>
-    </div>
-  </div>
-  <p class="sr-only" id="bootStatus" role="status"></p>
 
-  <div class="dos-shell">
-    <header class="top">
-      <div class="titlebar">
-        <span class="title-cap">■</span>
-        <h1>JOBAS Shell</h1>
+        <section class="intro-frame">
+          <h1 id="introTitle">COMPUTER JOB ASSISTANT</h1>
+          <p class="intro-byline">By SIMON DALMASSO COMPUTER SYSTEMS<br>EST. 1993</p>
+          <div class="intro-rule"></div>
+
+          <div class="intro-actions" aria-label="Inicio rápido">
+            <button type="button" data-intro-mode="remote"><span>1.</span> Remoto</button>
+            <button type="button" data-intro-mode="local"><span>2.</span> Local / Presencial</button>
+            <button type="button" data-intro-mode="progress"><span>3.</span> En curso</button>
+            <button type="button" data-intro-mode="prospects"><span>4.</span> Prospectos microjobs</button>
+          </div>
+        </section>
+
+        <div class="intro-bottom">
+          <button class="intro-enter" id="introEnter" type="button">Entrar a JOBAS</button>
+          <label class="remember-intro"><input id="introRemember" type="checkbox" checked> No mostrar esta pantalla al volver</label>
+          <p class="intro-powered">Powered by GPT + GitHub + Cloudflare</p>
+        </div>
       </div>
-      <div class="menubar" aria-label="Acciones de JOBAS">
+    </section>
+  </div>
+
+  <div class="app-shell">
+    <header class="app-chrome">
+      <nav class="app-menubar" aria-label="Menú principal">
         <div class="menu-group">
           <button class="menu-trigger" type="button" data-menu-trigger="jobas" aria-expanded="false">JOBAS</button>
           <div class="menu-popover" data-menu="jobas" hidden>
-            <a href="https://jobas.simondalmasso44.workers.dev/" target="_blank" rel="noopener noreferrer">Abrir producción</a>
+            <a href="https://jobas.simondalmasso44.workers.dev/" target="_blank" rel="noopener noreferrer">Producción</a>
             <a href="https://jobas.simondalmasso44.workers.dev/mcp" target="_blank" rel="noopener noreferrer">MCP público</a>
             <a href="https://github.com/simondalmasso/jobas" target="_blank" rel="noopener noreferrer">Repositorio CANON</a>
-          </div>
-        </div>
-        <div class="menu-group">
-          <button class="menu-trigger" type="button" data-menu-trigger="filters" aria-expanded="false">Filtros</button>
-          <div class="menu-popover" data-menu="filters" hidden>
-            <button type="button" data-command="toggle-pay">Alternar pago publicado</button>
-            <button type="button" data-command="toggle-arg">Alternar Argentina compatible</button>
-            <button type="button" data-command="clear-filters">Limpiar filtros</button>
           </div>
         </div>
         <div class="menu-group">
@@ -73,86 +65,88 @@
           </div>
         </div>
         <div class="menu-group">
+          <button class="menu-trigger" type="button" data-menu-trigger="filters" aria-expanded="false">Filtros</button>
+          <div class="menu-popover" data-menu="filters" hidden>
+            <button type="button" data-command="toggle-pay">Alternar pago publicado</button>
+            <button type="button" data-command="toggle-arg">Alternar Argentina compatible</button>
+            <button type="button" data-command="clear-filters">Limpiar filtros</button>
+          </div>
+        </div>
+        <div class="menu-group">
           <button class="menu-trigger" type="button" data-menu-trigger="panel" aria-expanded="false">Panel</button>
           <div class="menu-popover" data-menu="panel" hidden>
-            <button type="button" data-command="toggle-tree">Mostrar/ocultar navegación</button>
+            <button type="button" data-command="toggle-tree">Mostrar/ocultar directorio</button>
             <button type="button" data-command="toggle-sources">Fuentes y estado</button>
-            <button type="button" data-command="focus-search">Ir al buscador</button>
-            <button type="button" data-command="focus-term">Consola de comandos</button>
-            <button type="button" data-command="toggle-sound">Sonido ON/OFF</button>
+            <button type="button" data-command="focus-search">Ir a búsqueda</button>
           </div>
         </div>
         <div class="menu-group">
           <button class="menu-trigger" type="button" data-menu-trigger="help" aria-expanded="false">Ayuda</button>
           <div class="menu-popover" data-menu="help" hidden>
-            <button type="button" data-command="show-shortcuts">Atajos de teclado</button>
+            <button type="button" data-command="show-shortcuts">Atajos</button>
+            <button type="button" data-command="show-intro">Mostrar pantalla inicial</button>
             <a href="https://github.com/simondalmasso/jobas#readme" target="_blank" rel="noopener noreferrer">Documentación</a>
           </div>
         </div>
         <span class="fresh" id="fresh">cargando…</span>
-      </div>
-      <div class="pathbar">
-        <strong>RADAR</strong>
-        <span class="path-copy">empleos · microjobs · prospectos</span>
-        <span class="path-current">lectura pública · sin login</span>
+      </nav>
+
+      <section class="tool-strip" aria-label="Buscar y filtrar">
+        <label for="q">Buscar:</label>
+        <input id="q" type="search" placeholder="cargo, empresa o palabra…" autocomplete="off">
+        <button id="knownPay" class="toggle" type="button" aria-pressed="false">$ Pago publicado</button>
+        <button id="argOnly" class="toggle" type="button" aria-pressed="true">Argentina compatible</button>
+        <button class="clear-button" type="button" data-command="clear-filters">Limpiar</button>
+      </section>
+
+      <div class="document-bar">
+        <span>JOBAS / OPORTUNIDADES</span>
+        <span class="document-meta">lectura pública · sin login</span>
       </div>
     </header>
 
-    <main>
-      <section class="pane-grid">
-        <aside class="dos-pane tree-pane">
-          <div class="pane-title">Navegación</div>
-          <div class="tree-root">JOBAS / oportunidades</div>
-          <nav class="feed-modes" id="feedModes" aria-label="Tipo de oportunidades">
-            <button class="feed-mode active" data-mode="remote">REMOTO</button>
-            <button class="feed-mode" data-mode="local">LOCAL</button>
-            <button class="feed-mode" data-mode="progress">EN CURSO <span id="progressCount">0</span></button>
-            <button class="feed-mode" data-mode="prospects">PROSPECTOS MICROJOBS <span id="prospectCount">0</span></button>
-          </nav>
-          <div class="tree-divider"></div>
-          <nav class="categories" id="categories" aria-label="Categorías"></nav>
-        </aside>
+    <main class="workspace">
+      <aside class="directory-panel" aria-label="Directorio de oportunidades">
+        <div class="panel-title">DIRECTORIO</div>
+        <div class="directory-root">JOBAS:</div>
+        <nav class="feed-modes" id="feedModes" aria-label="Tipo de oportunidades">
+          <button class="feed-mode active" data-mode="remote"><span>Remoto</span></button>
+          <button class="feed-mode" data-mode="local"><span>Local</span></button>
+          <button class="feed-mode" data-mode="progress"><span>En curso</span><b id="progressCount">0</b></button>
+          <button class="feed-mode" data-mode="prospects">PROSPECTOS MICROJOBS <b id="prospectCount">0</b></button>
+        </nav>
+        <div class="directory-divider">CATEGORÍAS</div>
+        <nav class="categories" id="categories" aria-label="Categorías"></nav>
+      </aside>
 
-        <section class="dos-pane main-pane">
-          <div class="pane-title">Resultados</div>
-          <section class="feed" id="feed" tabindex="0" aria-label="Resultados"><div class="empty">Cargando oportunidades…</div></section>
+      <section class="results-panel">
+        <div class="panel-title results-title">
+          <span>OPORTUNIDADES</span>
+          <span class="summary" id="summary"></span>
+        </div>
+        <section class="feed" id="feed" aria-label="Resultados">
+          <div class="empty">Cargando oportunidades…</div>
         </section>
       </section>
-
-      <section class="dos-pane command-pane">
-        <div class="pane-title">Buscar y filtrar</div>
-        <section class="controls" aria-label="Filtros">
-          <label class="dos-prompt" for="q">Buscar</label>
-          <input id="q" type="search" placeholder="buscar cargo, empresa o palabra..." autocomplete="off">
-          <button id="knownPay" class="toggle" type="button" aria-pressed="false">$ pago publicado</button>
-          <button id="argOnly" class="toggle" type="button" aria-pressed="true">Argentina compatible</button>
-        </section>
-        <section class="summary" id="summary"></section>
-      </section>
-
-      <details class="sources dos-pane">
-        <summary>Fuentes y estado</summary>
-        <div id="sourceHealth"></div>
-        <h3>Radar adicional</h3>
-        <div id="discovery"></div>
-      </details>
     </main>
 
+    <details class="sources-panel">
+      <summary>Fuentes y estado</summary>
+      <div id="sourceHealth"></div>
+      <h3>Radar adicional</h3>
+      <div id="discovery"></div>
+    </details>
+
     <footer class="statusbar">
-      <section class="term-log" id="term" aria-label="Consola de JOBAS" hidden>
-        <div class="term-head"><span aria-hidden="true">■ CONSOLA</span><button class="term-close" id="termClose" type="button" aria-label="Cerrar consola">×</button></div>
-        <div class="term-out" id="termOut" role="log" aria-live="polite"></div>
-      </section>
-      <form class="term-prompt" id="termForm" autocomplete="off">
-        <span class="term-label" id="termLabel" aria-hidden="true">C:\JOBAS\REMOTO&gt;</span>
-        <input class="term-input" id="termInput" type="text" aria-label="Consola de comandos. Escribí HELP" placeholder="HELP" spellcheck="false" autocapitalize="off" autocorrect="off" enterkeyhint="go">
-      </form>
-      <span class="hints"><span>/ Buscar</span><span>1–4 Vistas</span><span>T Panel</span><span>S Fuentes</span><span>: Consola</span></span>
-      <button class="status-btn" id="soundToggle" type="button" data-command="toggle-sound" aria-pressed="true">SONIDO <span data-sound-state>ON</span></button>
+      <span class="status-help">/ Buscar &nbsp; 1–4 Vistas &nbsp; T Directorio &nbsp; S Fuentes</span>
+      <span class="powered">Powered by GPT + GitHub + Cloudflare</span>
+      <button class="sound-button" id="soundToggle" type="button" data-command="toggle-sound" aria-pressed="true">Sonido <span data-sound-state>ON</span></button>
       <span class="status-clock">JOBAS · público</span>
     </footer>
     <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
   </div>
+
   <script type="module" src="/app.js"></script>
 </body>
 </html>
+
