@@ -57,3 +57,10 @@ test("frontend imports profile and coach modules while backend stays AI-free",()
   assert.match(a,/\.\/coach\.js/);
   assert.doesNotMatch(worker,/openrouter|chat\/completions|transcription/i);
 });
+
+test("window focus does not re-cover an opened action and mobile uses one active window",()=>{
+  const a=app();
+  assert.match(a,/addEventListener\("pointerdown"/);
+  assert.match(a,/matchMedia\("\(max-width:700px\)"\)/);
+  assert.match(a,/if\(mobile\).*retro-window/s);
+});
