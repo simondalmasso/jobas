@@ -147,8 +147,10 @@ function requireProfile(action){
 function openWindow(name){
   const el=document.querySelector(`[data-window="${CSS.escape(name)}"]`);
   if(!el)return;
+  const mobile=globalThis.matchMedia?.("(max-width:700px)")?.matches===true;
+  if(mobile)$(".retro-window").forEach(x=>{x.hidden=x!==el;});
   el.hidden=false;
-  $$(".retro-window").forEach(x=>x.classList.remove("is-active"));
+  $(".retro-window").forEach(x=>x.classList.remove("is-active"));
   el.classList.add("is-active");
   el.style.zIndex=String(++state.z);
   $("#startMenu").hidden=true;
@@ -458,6 +460,11 @@ async function handleOAuthReturn(){
 }
 
 function wireEvents(){
+  document.addEventListener("pointerdown",e=>{
+    const win=e.target.closest(".retro-window");
+    if(win)bringToFront(win);
+  });
+
   document.addEventListener("click",e=>{
     const open=e.target.closest("[data-window-open]");
     if(open){openWindow(open.dataset.windowOpen);return;}
@@ -465,8 +472,6 @@ function wireEvents(){
     if(close){closeWindow(close.dataset.windowClose);return;}
     const mini=e.target.closest("[data-window-minimize]");
     if(mini){closeWindow(mini.dataset.windowMinimize);return;}
-    const win=e.target.closest(".retro-window");
-    if(win)bringToFront(win);
   });
 
   $("#startButton").onclick=()=>$("#startMenu").hidden=!$("#startMenu").hidden;
