@@ -1,8 +1,4 @@
 import { applicationHref, applicationWorkflow, safeExternalHref, sameJob } from "./workflow.js";
-import { createAudio, bindAudioUnlock } from "./os-audio.js";
-import { initBoot } from "./os-boot.js";
-import { createShell } from "./os-shell.js";
-import { createNav } from "./os-nav.js";
 
 const $=s=>document.querySelector(s);
 
@@ -12,22 +8,13 @@ const state={
   category:"",
   knownPay:false,
   argOnly:true,
-  mode:"remote",
-  error:null
+  mode:"remote"
 };
-
-const MODES=["remote","local","progress","prospects"];
-const audio=createAudio();
-let os=null;
 
 const PROGRESS_KEY="jobas:in-progress:v1";
 const HERFASA_SEED={id:"manual-herfasa",lane:"LOCAL",curated:true,title:"ABERTURA HERFASA",company:"ABERTURA HERFASA",location:"Santa Fe",description:"Postulación en curso.",url:"",sourceName:"Seguimiento manual",sourceUrl:"",sourceDetail:"",category:"other",pay:{raw:"No publicado",monthlyMin:null,monthlyMax:null,currency:"ARS"},priority:100,argentina:{score:100,label:"Local"},scam:{score:100,label:"Seguimiento"},workerFee:false};
 const JOBAS_PROJECT_URL="https://chatgpt.com/g/g-p-6a8c77fe091081918b6fe7a55ee58c30-jobas/project";
 const CV_BASE_FOLDER="https://drive.google.com/drive/folders/1kBzaRZkGI0YK38SF4s2eTe_1eHaSAsn8?hl=es-419";
-const DIRECT_LINK_OVERRIDES={
-  "telegram · drop shipping group":"https://web.telegram.org/a/#-1001374899921"
-};
-
 const labels={
   "customer-success":"Customer Success",
   "support":"Soporte / CX",
@@ -48,16 +35,10 @@ const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({
   "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
 }[c]));
 
-function enrichProgressJob(job){
-  if(job?.directUrl)return job;
-  const directUrl=DIRECT_LINK_OVERRIDES[String(job?.sourceName||"").trim().toLowerCase()];
-  return directUrl?{...job,directUrl}:job;
-}
-
 function getProgressJobs(){
   try{
     const value=JSON.parse(localStorage.getItem(PROGRESS_KEY)||"[]");
-    const jobs=(Array.isArray(value)?value:[]).map(enrichProgressJob);
+    const jobs=Array.isArray(value)?value:[];
     if(!jobs.some(x=>x.id===HERFASA_SEED.id||String(x.company||"").toUpperCase()==="ABERTURA HERFASA")){
       jobs.unshift(HERFASA_SEED);
       localStorage.setItem(PROGRESS_KEY,JSON.stringify(jobs));
@@ -92,15 +73,6 @@ function updateProgressCount(){
   if(el)el.textContent=getProgressJobs().length;
 }
 
-function updateProspectCount(){
-  const el=$("#prospectCount");
-  if(el)el.textContent=state.jobs.filter(isProspect).length;
-}
-
-function isProspect(job){
-  return job?.prospectType==="microjob"||job?.lane==="PROSPECTOS"||job?.source==="gpt-prospectos";
-}
-
 function isLocalJob(job){
   if(job.lane==="LOCAL")return true;
   if(job.lane==="REMOTO")return false;
@@ -122,19 +94,18 @@ function monthly(job){
   return text;
 }
 
-function baseForMode(mode=state.mode){
-  if(mode==="progress")return getProgressJobs();
-  if(mode==="prospects")return state.jobs.filter(isProspect);
-  if(mode==="local")return state.jobs.filter(j=>!isProspect(j)&&isLocalJob(j));
-  return state.jobs.filter(j=>!isProspect(j)&&!isLocalJob(j));
+function baseForMode(){
+  if(state.mode==="progress")return getProgressJobs();
+  if(state.mode==="local")return state.jobs.filter(isLocalJob);
+  return state.jobs.filter(j=>!isLocalJob(j));
 }
 
-function filtered(mode=state.mode,category=state.category){
+function filtered(){
   const q=$("#q").value.trim().toLowerCase();
-  const argentinaFilterApplies=mode==="remote"||mode==="local";
-  return baseForMode(mode).filter(j=>
+  const argentinaFilterApplies=state.mode==="remote"||state.mode==="local";
+  return baseForMode().filter(j=>
     (!q||`${j.title} ${j.company} ${j.buyer||""} ${j.description||""}`.toLowerCase().includes(q)) &&
-    (!category||j.category===category) &&
+    (!state.category||j.category===state.category) &&
     (!state.knownPay||(j.pay?.monthlyMin||j.pay?.monthlyMax)) &&
     (!state.argOnly||!argentinaFilterApplies||j.argentina?.score>=80)
   );
@@ -215,8 +186,8 @@ function renderJobActions(job){
 
 function render(){
   const jobs=filtered();
-  const label=state.mode==="remote"?"remotas":state.mode==="local"?"locales":state.mode==="prospects"?"prospectos microjobs":"en curso";
-  const note=state.mode==="progress"?"guardadas en este navegador":state.mode==="prospects"?"demanda directa verificada · link directo":"orden: Argentina + fuente + pago + frescura";
+  const label=state.mode==="remote"?"remotas":state.mode==="local"?"locales":"en curso";
+  const note=state.mode==="progress"?"guardadas en este navegador":"orden: Argentina + fuente + pago + frescura";
   $("#summary").innerHTML=`<span class="pill">${jobs.length} ${label}</span><span class="pill">${note}</span>`;
   $("#feed").innerHTML=jobs.length?jobs.map(j=>`
     <article class="job" data-job-id="${esc(j.id||j.url)}">
@@ -240,8 +211,7 @@ function render(){
       </div>
       <div class="actions">${renderJobActions(j)}</div>
     </article>
-  `).join(""):`<div class="empty">${state.mode==="local"?"Todavía no hay ofertas locales cargadas.":state.mode==="progress"?"No marcaste ninguna oportunidad como en curso.":state.mode==="prospects"?"Todavía no hay prospectos microjobs verificados.":"No hay resultados con estos filtros."}</div>`;
-  os?.shell?.sync();
+  `).join(""):`<div class="empty">${state.mode==="local"?"Todavía no hay ofertas locales cargadas.":state.mode==="progress"?"No marcaste ninguna oportunidad como en curso.":"No hay resultados con estos filtros."}</div>`;
 }
 
 function renderCategories(){
@@ -263,7 +233,6 @@ async function boot(){
   state.jobs=feed.jobs||[];
   $("#fresh").textContent=feed.generatedAt?`actualizado ${new Date(feed.generatedAt).toLocaleString("es-AR")}`:"sin actualización";
   updateProgressCount();
-  updateProspectCount();
   renderCategories();
   $("#sourceHealth").innerHTML='<div class="source-grid">'+(feed.health||[]).map(s=>safeExternalHref(s.url)?`<a class="source-card" href="${esc(safeExternalHref(s.url))}" target="_blank" rel="noopener noreferrer"><strong>${esc(s.name)}</strong><br>${esc(s.state)} · ${s.jobs} jobs</a>`:`<div class="source-card"><strong>${esc(s.name)}</strong><br>${esc(s.state)} · ${s.jobs} jobs</div>`).join("")+'</div>';
   $("#discovery").innerHTML='<div class="source-grid">'+(feed.discoverySources||[]).map(s=>safeExternalHref(s.url)?`<a class="source-card" href="${esc(safeExternalHref(s.url))}" target="_blank" rel="noopener noreferrer"><strong>${esc(s.name)}</strong><br>${esc(s.note)}</a>`:`<div class="source-card"><strong>${esc(s.name)}</strong><br>${esc(s.note)}</div>`).join("")+'</div>';
@@ -271,7 +240,7 @@ async function boot(){
 }
 
 function selectMode(mode){
-  if(!MODES.includes(mode))return;
+  if(!["remote","local","progress"].includes(mode))return;
   state.mode=mode;
   state.category="";
   document.querySelectorAll(".feed-mode").forEach(x=>x.classList.toggle("active",x.dataset.mode===state.mode));
@@ -309,26 +278,22 @@ function showToast(message){
   toastTimer=setTimeout(()=>{el.hidden=true;},2600);
 }
 
-function clearFilters(){
-  state.category="";
-  state.knownPay=false;
-  state.argOnly=true;
-  $("#q").value="";
-  syncFilterButtons();
-  renderCategories();
-  render();
-}
-
 function runCommand(command){
   if(command==="toggle-pay"){state.knownPay=!state.knownPay;syncFilterButtons();render();}
   if(command==="toggle-arg"){state.argOnly=!state.argOnly;syncFilterButtons();render();}
-  if(command==="clear-filters")clearFilters();
+  if(command==="clear-filters"){
+    state.category="";
+    state.knownPay=false;
+    state.argOnly=true;
+    $("#q").value="";
+    syncFilterButtons();
+    renderCategories();
+    render();
+  }
   if(command==="toggle-tree")document.body.classList.toggle("tree-collapsed");
   if(command==="toggle-sources"){$(".sources").open=!$(".sources").open;}
   if(command==="focus-search")$("#q").focus();
-  if(command==="focus-term")os?.shell?.focus();
-  if(command==="toggle-sound")audio.toggle();
-  if(command==="show-shortcuts")showToast("/ buscar · 1-4 vistas · T panel · S fuentes · : consola · ↑↓ seleccionar · Enter abrir");
+  if(command==="show-shortcuts")showToast("/ buscar · 1-3 vistas · T panel · S fuentes · Esc cerrar menú");
 }
 
 $(".menubar").addEventListener("click",e=>{
@@ -346,15 +311,12 @@ document.addEventListener("click",e=>{
 
 document.addEventListener("keydown",e=>{
   if(e.key==="Escape"){closeMenus();return;}
-  if(e.ctrlKey||e.metaKey||e.altKey)return;
   const typing=/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName||"");
   if(typing)return;
   if(e.key==="/"){e.preventDefault();$("#q").focus();return;}
-  if(e.key===":"){e.preventDefault();os?.shell?.focus();return;}
   if(e.key==="1")selectMode("remote");
   if(e.key==="2")selectMode("local");
   if(e.key==="3")selectMode("progress");
-  if(e.key==="4")selectMode("prospects");
   if(e.key.toLowerCase()==="t")runCommand("toggle-tree");
   if(e.key.toLowerCase()==="s")runCommand("toggle-sources");
 });
@@ -386,60 +348,7 @@ $("#feed").addEventListener("click",e=>{
 $("#q").addEventListener("input",render);
 $("#knownPay").onclick=()=>runCommand("toggle-pay");
 $("#argOnly").onclick=()=>runCommand("toggle-arg");
-$("#soundToggle").onclick=()=>runCommand("toggle-sound");
-
-function snapshot(){
-  return{
-    mode:state.mode,
-    query:$("#q").value.trim(),
-    category:state.category,
-    knownPay:state.knownPay,
-    argOnly:state.argOnly,
-    visible:filtered().length,
-    loaded:Boolean(state.feed),
-    error:state.error,
-    counts:Object.fromEntries(MODES.map(m=>[m,baseForMode(m).length])),
-    feed:state.feed?{generatedAt:state.feed.generatedAt,jobsCount:state.feed.jobsCount??state.jobs.length,version:state.feed.version,health:state.feed.health||[]}:null
-  };
-}
-
-const osContext={
-  sound:audio,
-  snapshot,
-  setMode:selectMode,
-  resetFilters:clearFilters,
-  openSources(){const el=$(".sources");if(el)el.open=true;},
-  find(text){$("#q").value=text;render();const others={};for(const m of MODES)if(m!==state.mode)others[m]=filtered(m,"").length;return{count:filtered().length,mode:state.mode,others};},
-  reboot(){os?.shell?.clear();os?.boot?.restart();}
-};
-
-function initOs(){
-  bindAudioUnlock(audio);
-  const shell=createShell({ctx:osContext,audio});
-  const nav=createNav({audio});
-  const bootCtl=initBoot({
-    audio,
-    onDone({choice}){
-      if(choice)selectMode(choice);
-      $("#feed")?.focus({preventScroll:true});
-      nav.reset();
-    }
-  });
-  const syncSound=on=>{
-    for(const el of document.querySelectorAll("[data-sound-state]"))el.textContent=on?"ON":"OFF";
-    $("#soundToggle")?.setAttribute("aria-pressed",String(on));
-    $("#bootSound")?.setAttribute("aria-pressed",String(on));
-  };
-  audio.subscribe(syncSound);
-  syncSound(audio.isEnabled());
-  os={shell,nav,boot:bootCtl};
-  shell.sync();
-}
-
-initOs();
 
 boot().catch(e=>{
-  state.error=e.message;
   $("#feed").innerHTML=`<div class="empty">No pude cargar el feed: ${esc(e.message)}</div>`;
-  os?.shell?.sync();
 });
