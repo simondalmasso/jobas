@@ -100,9 +100,7 @@ const LOCAL_VERIFIED_SEED=[
 ];
 const GPT_FILES=[
   {lane:"LOCAL",id:"local",name:"GPT BUSQ LOCAL",url:"https://raw.githubusercontent.com/simondalmasso/jobas/main/data/gpt-local.json"},
-  {lane:"REMOTO",id:"remoto",name:"GPT BUSQ REMOTO",url:"https://raw.githubusercontent.com/simondalmasso/jobas/main/data/gpt-remoto.json"},
-  {lane:null,id:"telegram",name:"GPT TELEGRAM RADAR",url:"https://raw.githubusercontent.com/simondalmasso/jobas/main/data/gpt-telegram.json"},
-  {lane:"PROSPECTOS",id:"prospectos",name:"GPT PROSPECTOR MICROJOBS",url:"https://raw.githubusercontent.com/simondalmasso/jobas/main/data/gpt-prospectos.json"}
+  {lane:"REMOTO",id:"remoto",name:"GPT BUSQ REMOTO",url:"https://raw.githubusercontent.com/simondalmasso/jobas/main/data/gpt-remoto.json"}
 ];
 const headers={"content-type":"application/json; charset=utf-8","cache-control":"public, max-age=60, s-maxage=300","x-content-type-options":"nosniff","referrer-policy":"no-referrer"};
 const json=(body,status=200)=>new Response(JSON.stringify(body),{status,headers});
@@ -123,7 +121,7 @@ function normalizeFinding(x,meta){
     id:x.id||("gpt-"+sourceId+"-"+String(companyName)+"-"+String(x.title)),
     lane,curated:true,source:"gpt-"+sourceId,sourceName:x.sourceName||meta.name,sourceTrust:95,
     workerFee:x.workerFee===false?false:(x.workerFee===true?true:null),sourceUrl:x.sourceUrl||applyUrl,sourceDetail:x.messageUrl||x.sourceUrl||applyUrl,
-    title:String(x.title),company:String(companyName),buyer:x.buyer||null,prospectType:x.prospectType||(sourceId==="prospectos"?"microjob":null),location:String(x.location||(lane==="LOCAL"?"Santa Fe":lane==="PROSPECTOS"?"A verificar":"Remote / A verificar")),
+    title:String(x.title),company:String(companyName),buyer:x.buyer||null,prospectType:x.prospectType||null,location:String(x.location||(lane==="LOCAL"?"Santa Fe":"Remote / A verificar")),
     description:String(x.description||x.summary||x.rank?.reason||"").slice(0,1600),url:applyUrl,directUrl:x.directUrl||x.followUpUrl||null,applicationMode:resolveApplicationMode({...x,source:"gpt-"+sourceId,sourceName:x.sourceName||meta.name,sourceUrl:x.sourceUrl||applyUrl,sourceDetail:x.messageUrl||x.sourceUrl||applyUrl,url:applyUrl}),publishedAt:x.publishedAt||x.messageDate||null,verifiedAt:x.verifiedAt||null,
     tags:Array.isArray(x.tags)?x.tags:[],category:x.category||"other",pay:normalizePay(x),priority:score,rankReason:x.rank?.reason||"",
     argentina:{score:Number(argentinaScore),label:lane==="LOCAL"?"Local":(x.argentina?.label||(x.argentinaEligible===true?"Argentina/LatAm":"A verificar")),reason:x.argentina?.reason||""},

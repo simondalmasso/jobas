@@ -1,81 +1,80 @@
 # JOBAS
 
-Radar público de oportunidades para Argentina/LatAm: empleos remotos y locales, seguimiento de postulaciones, microjobs y prospectos accionables. Incluye un MCP público read-only para agentes.
+Radar público de oportunidades para Argentina/LatAm. JOBAS concentra empleos remotos y locales, permite filtrarlos y mantener un seguimiento liviano de postulaciones en curso.
 
 ## Acceso público
 
 - Aplicación / backend canónico: https://jobas.simondalmasso44.workers.dev
 - MCP público: https://jobas.simondalmasso44.workers.dev/mcp
-- Alias Firebase solicitado: https://jobas.web.app
+- Alias Firebase: https://jobas.web.app
 
-Cloudflare Workers sigue siendo el único runtime de JOBAS. Firebase Hosting se usa exclusivamente como alias de redirección HTTP hacia Cloudflare: no hay Functions, rewrites, base de datos ni backend duplicado en Firebase.
+Cloudflare Workers sigue siendo el único runtime. Firebase Hosting se usa únicamente como alias/redirección; no duplica backend, datos ni lógica.
 
-La configuración de esa capa está en `firebase.json` y `.firebaserc`. El target previsto es el sitio Firebase Hosting `jobas` dentro del proyecto `jobas-d3c12`. El deploy del alias es manual; no existe cron ni workflow que lo ejecute periódicamente.
-
-## Canon y espejo
+## Canon
 
 Repositorio principal: https://github.com/simondalmasso/jobas
 
 Espejo: https://gitlab.com/simondalmasso/jobas
 
-`GitHub/main` es la única autoridad para código, documentación y archivos de radar. GitLab es una réplica unidireccional y nunca debe ganar conflictos.
+`GitHub/main` es la autoridad de código, documentación y configuración de JOBAS.
 
 ## Datos de radar
 
-- `data/gpt-local.json`: vacantes locales/presenciales.
-- `data/gpt-remoto.json`: vacantes remotas.
-- `data/gpt-telegram.json`: oportunidades verificadas desde Telegram.
-- `data/gpt-prospectos.json`: demanda directa, microjobs y leads con permalink/contacto verificables.
-- `data/telegram-sources.json`: fuentes y cursores del radar Telegram.
+JOBAS conserva únicamente dos archivos JSON de radar:
 
-JOBAS consume estos archivos desde GitHub Raw y los normaliza en el feed público.
+- `data/gpt-local.json` — oportunidades locales/presenciales.
+- `data/gpt-remoto.json` — oportunidades remotas.
+
+No hay datasets propios de Prospectos ni Telegram dentro de JOBAS.
 
 ## Interfaz
 
-La web organiza el trabajo en cuatro vistas:
+La aplicación abre directamente en la interfaz principal. No hay pantalla de arranque, consola simulada ni emulación de sistema operativo.
 
-- REMOTO
-- LOCAL
-- EN CURSO
-- PROSPECTOS MICROJOBS
+Vistas:
 
-La navegación superior es funcional: permite cambiar vistas, limpiar/alternar filtros, ocultar el panel lateral, abrir fuentes, enfocar búsqueda y acceder a producción/MCP/CANON. Atajos: `/` busca, `1–4` cambia de vista, `T` muestra/oculta navegación y `S` abre/cierra fuentes.
+- `REMOTO`
+- `LOCAL`
+- `EN CURSO` — seguimiento guardado en el navegador.
 
-Las postulaciones tradicionales conservan el flujo de CV. Telegram, microjobs y marketplaces usan contacto/propuesta directa y seguimiento con `LINK DIRECTO`.
+La identidad visual mantiene el lenguaje oscuro/monocromo de JOBAS, pero toda la interacción es web convencional: menús, búsqueda, filtros, botones de acción y panel de fuentes.
+
+Atajos:
+
+- `/` enfoca búsqueda.
+- `1` REMOTO.
+- `2` LOCAL.
+- `3` EN CURSO.
+- `T` muestra/oculta navegación.
+- `S` abre/cierra Fuentes y estado.
 
 ## Runtime
 
 - Cloudflare Workers + Static Assets + KV.
 - Sin login obligatorio.
-- Sin Gmail, CV/PDF, chat ni Workers AI en el runtime.
-- Cron diario existente del feed: `15 10 * * *`.
-- El MCP no agrega cron, polling ni loop de background.
-- Los visitantes y agentes leen el snapshot; no disparan el radar completo.
-- Ocho fuentes automáticas: WeRemoto, Freehire, Carryer Tech, Remote OK, Remotive, Himalayas, Jobicy y We Work Remotely.
+- Sin Workers AI en el runtime.
+- Cron diario existente: `15 10 * * *`.
+- El MCP es stateless/read-only y no agrega polling ni loops.
+- Los visitantes leen el snapshot; no disparan el radar completo.
+- Fuentes automáticas: WeRemoto, Freehire, Carryer Tech, Remote OK, Remotive, Himalayas, Jobicy y We Work Remotely.
 
 ## MCP público
 
-`POST /mcp` expone un MCP stateless/read-only. La entrada recomendada para un agente es `agent_bootstrap`.
+`POST /mcp` expone el MCP público y read-only. La entrada recomendada para agentes es `agent_bootstrap`.
 
-Tools del feed: `agent_bootstrap`, `jobas_status`, `list_jobs`, `search_jobs`, `inspect_job`, `rank_jobs`, `list_microjobs`, `list_sources` y `mcp_status`.
+El MCP puede consultar estado, oportunidades, fuentes y herramientas públicas de investigación, pero no modifica postulaciones ni dispara navegadores/crawlers en segundo plano.
 
-Tools de apoyo público: `research_github_readme`, `research_github_file`, `research_zero_cost_catalog`, `skill_list`, `skill_route` y `skill_get`.
+## Firebase
 
-Los skills ligeros se cargan bajo demanda; crawlers, navegadores, modelos y providers externos no se ejecutan dentro del Worker.
+Configuración: `firebase.json` + `.firebaserc`.
 
-## Firebase: alias de redirección
-
-Prerequisito único: que Firebase Hosting permita crear/asignar el site ID `jobas` al proyecto `jobas-d3c12`.
-
-Comandos manuales:
+Deploy manual del alias:
 
 ```bash
 npm run firebase:sites
 npx --yes firebase-tools hosting:sites:create jobas --project jobas-d3c12
 npm run firebase:deploy:redirect
 ```
-
-La configuración responde con redirecciones temporales `302` hacia el Worker, incluyendo rutas. Se usa `302` durante la puesta en marcha para evitar cachear una asignación incorrecta; puede pasarse a `301` cuando el alias quede confirmado.
 
 ## Desarrollo y verificación
 
@@ -85,7 +84,7 @@ npm test
 npm run dry-run
 ```
 
-Deploy Cloudflare manual autorizado:
+Deploy manual:
 
 ```bash
 npm run deploy
