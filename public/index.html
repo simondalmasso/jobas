@@ -3,115 +3,256 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#111318">
-  <meta name="description" content="JOBAS: radar público de empleos remotos y locales para Argentina/LatAm.">
-  <title>JOBAS — oportunidades</title>
+  <meta name="theme-color" content="#000080">
+  <meta name="description" content="JOBAS: escritorio personal para buscar, organizar y preparar oportunidades laborales.">
+  <title>JOBAS — Computer Job Assistant</title>
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-  <div class="dos-shell">
-    <header class="top">
-      <div class="titlebar">
-        <span class="title-cap">■</span>
-        <h1>JOBAS Shell</h1>
-      </div>
-      <div class="menubar" aria-label="Acciones de JOBAS">
-        <div class="menu-group">
-          <button class="menu-trigger" type="button" data-menu-trigger="jobas" aria-expanded="false">JOBAS</button>
-          <div class="menu-popover" data-menu="jobas" hidden>
-            <a href="https://jobas.simondalmasso44.workers.dev/" target="_blank" rel="noopener noreferrer">Abrir producción</a>
-            <a href="https://jobas.simondalmasso44.workers.dev/mcp" target="_blank" rel="noopener noreferrer">MCP público</a>
-            <a href="https://github.com/simondalmasso/jobas" target="_blank" rel="noopener noreferrer">Repositorio CANON</a>
-          </div>
-        </div>
-        <div class="menu-group">
-          <button class="menu-trigger" type="button" data-menu-trigger="filters" aria-expanded="false">Filtros</button>
-          <div class="menu-popover" data-menu="filters" hidden>
-            <button type="button" data-command="toggle-pay">Alternar pago publicado</button>
-            <button type="button" data-command="toggle-arg">Alternar Argentina compatible</button>
-            <button type="button" data-command="clear-filters">Limpiar filtros</button>
-          </div>
-        </div>
-        <div class="menu-group">
-          <button class="menu-trigger" type="button" data-menu-trigger="view" aria-expanded="false">Vista</button>
-          <div class="menu-popover" data-menu="view" hidden>
-            <button type="button" data-mode-command="remote">Remoto</button>
-            <button type="button" data-mode-command="local">Local</button>
-            <button type="button" data-mode-command="progress">En curso</button>
-          </div>
-        </div>
-        <div class="menu-group">
-          <button class="menu-trigger" type="button" data-menu-trigger="panel" aria-expanded="false">Panel</button>
-          <div class="menu-popover" data-menu="panel" hidden>
-            <button type="button" data-command="toggle-tree">Mostrar/ocultar navegación</button>
-            <button type="button" data-command="toggle-sources">Fuentes y estado</button>
-            <button type="button" data-command="focus-search">Ir al buscador</button>
-          </div>
-        </div>
-        <div class="menu-group">
-          <button class="menu-trigger" type="button" data-menu-trigger="help" aria-expanded="false">Ayuda</button>
-          <div class="menu-popover" data-menu="help" hidden>
-            <button type="button" data-command="show-shortcuts">Atajos de teclado</button>
-            <a href="https://github.com/simondalmasso/jobas#readme" target="_blank" rel="noopener noreferrer">Documentación</a>
-          </div>
-        </div>
-        <span class="fresh" id="fresh">cargando…</span>
-      </div>
-      <div class="pathbar">
-        <strong>RADAR</strong>
-        <span class="path-copy">empleos remotos · locales · seguimiento</span>
-        <span class="path-current">lectura pública · sin login</span>
-      </div>
-    </header>
+  <main class="desktop" id="desktop">
+    <nav class="desktop-icons" aria-label="Memoria de JOBAS">
+      <button class="desktop-icon" type="button" data-window-open="profile">
+        <span class="icon-glyph icon-profile" aria-hidden="true">☺</span>
+        <span>Perfil</span>
+      </button>
+      <button class="desktop-icon" type="button" data-window-open="searches">
+        <span class="icon-glyph icon-folder" aria-hidden="true"></span>
+        <span>Búsquedas</span>
+      </button>
+      <button class="desktop-icon" type="button" data-window-open="applications">
+        <span class="icon-glyph icon-folder" aria-hidden="true"></span>
+        <span>Postulaciones</span>
+      </button>
+      <button class="desktop-icon" type="button" data-window-open="favorites">
+        <span class="icon-glyph icon-star" aria-hidden="true">★</span>
+        <span>Favoritos</span>
+      </button>
+      <button class="desktop-icon" type="button" data-window-open="folders">
+        <span class="icon-glyph icon-folder" aria-hidden="true"></span>
+        <span>Mis carpetas</span>
+      </button>
+    </nav>
 
-    <main>
-      <section class="pane-grid">
-        <aside class="dos-pane tree-pane">
-          <div class="pane-title">Navegación</div>
-          <div class="tree-root">JOBAS / oportunidades</div>
-          <nav class="feed-modes" id="feedModes" aria-label="Tipo de oportunidades">
-            <button class="feed-mode active" data-mode="remote">REMOTO</button>
-            <button class="feed-mode" data-mode="local">LOCAL</button>
-            <button class="feed-mode" data-mode="progress">EN CURSO <span id="progressCount">0</span></button>
-          </nav>
-          <div class="tree-divider"></div>
-          <nav class="categories" id="categories" aria-label="Categorías"></nav>
+    <section class="retro-window profile-window is-active" id="profileWindow" data-window="profile" aria-label="Perfil JOBAS">
+      <header class="window-titlebar">
+        <span>JOBAS — perfil de usuario</span>
+        <div class="window-controls">
+          <button type="button" data-window-minimize="profile" aria-label="Minimizar">_</button>
+          <button type="button" data-window-close="profile" aria-label="Cerrar">×</button>
+        </div>
+      </header>
+      <nav class="window-menubar" aria-label="Menú de perfil">
+        <button type="button" data-profile-edit>Archivo</button>
+        <button type="button" data-window-open="offers">Ofertas</button>
+        <button type="button" data-window-open="coach">Entrenador IA</button>
+        <button type="button" data-window-open="folders">Memoria</button>
+      </nav>
+
+      <div class="profile-hero">
+        <div class="pixel-avatar" aria-hidden="true"><span id="avatarInitials">J</span></div>
+        <div class="profile-copy">
+          <div class="profile-state" id="profileState">PERFIL INCOMPLETO</div>
+          <h1 id="profileName">Tu perfil JOBAS</h1>
+          <strong id="profileHeadline">Completá qué buscás para personalizar el radar.</strong>
+          <p id="profileSummary">Podés cargarlo manualmente o subir tu CV. Tus datos quedan en este navegador.</p>
+          <div class="mode-badges" id="profileModes"></div>
+        </div>
+      </div>
+
+      <div class="profile-required" id="profileRequired">
+        Para activar búsqueda personalizada y el Coach IA, completá nombre + objetivo laboral + modalidad.
+      </div>
+
+      <div class="launcher-buttons" aria-label="Acciones principales">
+        <button id="actionOffers" type="button"><span class="button-icon">▤</span> Ver ofertas de hoy</button>
+        <button id="actionApply" type="button"><span class="button-icon">✓</span> Postular</button>
+        <button id="actionCoach" type="button"><span class="button-icon">◉</span> Entrena con IA</button>
+        <button id="actionPersonalized" type="button"><span class="button-icon">⌕</span> Búsqueda personalizada</button>
+      </div>
+
+      <details class="profile-editor" id="profileEditor">
+        <summary>Completar manualmente</summary>
+        <form id="profileForm">
+          <div class="form-grid">
+            <label>Nombre
+              <input id="profileNameInput" name="name" autocomplete="name" required>
+            </label>
+            <label>Título / perfil
+              <input id="profileHeadlineInput" name="headline" placeholder="Customer Success · Atención digital">
+            </label>
+            <label>Ubicación
+              <input id="profileLocationInput" name="location" autocomplete="address-level2">
+            </label>
+            <label>Qué puestos buscás *
+              <input id="profileRolesInput" name="targetRoles" placeholder="Customer Success, Soporte, E-commerce" required>
+            </label>
+            <label class="wide">Skills
+              <input id="profileSkillsInput" name="skills" placeholder="Salesforce, CRM, Meta Ads, WhatsApp">
+            </label>
+            <label class="wide">Idiomas
+              <input id="profileLanguagesInput" name="languages" placeholder="Español, Inglés B2">
+            </label>
+          </div>
+          <fieldset class="mode-fieldset">
+            <legend>Modalidad *</legend>
+            <label><input type="checkbox" name="modes" value="remote"> Remoto / virtual</label>
+            <label><input type="checkbox" name="modes" value="local"> Local / presencial</label>
+            <label><input type="checkbox" name="modes" value="microjobs"> Microjobs</label>
+          </fieldset>
+          <label>Notas
+            <textarea id="profileNotesInput" name="notes" rows="3" placeholder="Disponibilidad, preferencias, restricciones..."></textarea>
+          </label>
+          <div class="form-actions">
+            <button class="classic-button primary" type="submit">Guardar perfil</button>
+            <button class="classic-button" type="button" id="profileReset">Limpiar</button>
+          </div>
+        </form>
+      </details>
+
+      <section class="cv-import">
+        <div>
+          <strong>Subir CV</strong>
+          <small>PDF, TXT o MD. El procesamiento IA usa exclusivamente tu propia cuenta conectada.</small>
+        </div>
+        <input id="cvInput" type="file" accept=".pdf,.txt,.md,application/pdf,text/plain,text/markdown">
+        <button class="classic-button" id="cvProcess" type="button">Ordenar info del CV</button>
+        <span class="inline-status" id="cvStatus"></span>
+      </section>
+    </section>
+
+    <section class="retro-window offers-window" id="offersWindow" data-window="offers" hidden aria-label="Ofertas de JOBAS">
+      <header class="window-titlebar">
+        <span>Ofertas de hoy — JOBAS</span>
+        <div class="window-controls">
+          <button type="button" data-window-minimize="offers" aria-label="Minimizar">_</button>
+          <button type="button" data-window-close="offers" aria-label="Cerrar">×</button>
+        </div>
+      </header>
+      <nav class="window-menubar">
+        <button type="button" data-mode="remote">REMOTO</button>
+        <button type="button" data-mode="local">LOCAL</button>
+        <button type="button" data-mode="progress">EN CURSO <span id="progressCount">0</span></button>
+        <span class="window-fresh" id="fresh">cargando…</span>
+      </nav>
+      <div class="offers-toolbar">
+        <input id="q" type="search" placeholder="Buscar cargo, empresa o palabra..." autocomplete="off">
+        <button id="knownPay" class="classic-button toggle" type="button" aria-pressed="false">$ pago publicado</button>
+        <button id="argOnly" class="classic-button toggle" type="button" aria-pressed="true">Argentina compatible</button>
+        <button id="saveSearch" class="classic-button" type="button">Guardar búsqueda</button>
+      </div>
+      <div class="offers-layout">
+        <aside class="category-panel">
+          <div class="section-label">Categorías</div>
+          <nav id="categories" class="categories"></nav>
         </aside>
-
-        <section class="dos-pane main-pane">
-          <div class="pane-title">Resultados</div>
+        <div class="feed-panel">
+          <div class="summary" id="summary"></div>
           <section class="feed" id="feed"><div class="empty">Cargando oportunidades…</div></section>
-        </section>
-      </section>
-
-      <section class="dos-pane command-pane">
-        <div class="pane-title">Buscar y filtrar</div>
-        <section class="controls" aria-label="Filtros">
-          <label class="dos-prompt" for="q">Buscar</label>
-          <input id="q" type="search" placeholder="buscar cargo, empresa o palabra..." autocomplete="off">
-          <button id="knownPay" class="toggle" type="button" aria-pressed="false">$ pago publicado</button>
-          <button id="argOnly" class="toggle" type="button" aria-pressed="true">Argentina compatible</button>
-        </section>
-        <section class="summary" id="summary"></section>
-      </section>
-
-      <details class="sources dos-pane">
+        </div>
+      </div>
+      <details class="sources">
         <summary>Fuentes y estado</summary>
         <div id="sourceHealth"></div>
         <h3>Radar adicional</h3>
         <div id="discovery"></div>
       </details>
-    </main>
+    </section>
 
-    <footer class="statusbar">
-      <span>/ Buscar</span>
-      <span>1–3 Vistas</span>
-      <span>T Panel</span>
-      <span>S Fuentes</span>
-      <span class="status-clock">JOBAS · público</span>
+    <section class="retro-window memory-window" id="applicationsWindow" data-window="applications" hidden>
+      <header class="window-titlebar"><span>Postulaciones</span><div class="window-controls"><button type="button" data-window-close="applications">×</button></div></header>
+      <div class="memory-content" id="applicationsList"></div>
+    </section>
+
+    <section class="retro-window memory-window" id="favoritesWindow" data-window="favorites" hidden>
+      <header class="window-titlebar"><span>Favoritos</span><div class="window-controls"><button type="button" data-window-close="favorites">×</button></div></header>
+      <div class="memory-content" id="favoritesList"></div>
+    </section>
+
+    <section class="retro-window memory-window" id="searchesWindow" data-window="searches" hidden>
+      <header class="window-titlebar"><span>Búsquedas guardadas</span><div class="window-controls"><button type="button" data-window-close="searches">×</button></div></header>
+      <div class="memory-content" id="searchesList"></div>
+    </section>
+
+    <section class="retro-window memory-window" id="foldersWindow" data-window="folders" hidden>
+      <header class="window-titlebar"><span>Mis carpetas</span><div class="window-controls"><button type="button" data-window-close="folders">×</button></div></header>
+      <div class="folder-toolbar">
+        <input id="newFolderName" placeholder="Nueva carpeta...">
+        <button id="addFolder" class="classic-button" type="button">Crear</button>
+      </div>
+      <div class="memory-content" id="foldersList"></div>
+    </section>
+
+    <section class="retro-window coach-window" id="coachWindow" data-window="coach" hidden aria-label="JOBAS Coach IA">
+      <header class="window-titlebar">
+        <span>JOBAS Coach IA — entrevistas</span>
+        <div class="window-controls"><button type="button" data-window-close="coach" aria-label="Cerrar">×</button></div>
+      </header>
+      <div class="coach-provider">
+        <div>
+          <strong>IA del usuario</strong>
+          <small id="coachProviderStatus">No conectada. JOBAS no paga ni intermedia estas llamadas.</small>
+        </div>
+        <button id="coachConnect" class="classic-button primary" type="button">Conectar OpenRouter</button>
+        <button id="coachDisconnect" class="classic-button" type="button" hidden>Desconectar</button>
+      </div>
+
+      <details class="provider-advanced">
+        <summary>Conectar con API key propia</summary>
+        <div class="provider-key-row">
+          <input id="coachKeyInput" type="password" autocomplete="off" placeholder="sk-or-...">
+          <label><input id="coachRemember" type="checkbox"> Recordar en este navegador</label>
+          <button id="coachUseKey" class="classic-button" type="button">Usar esta key</button>
+        </div>
+      </details>
+
+      <div class="coach-config">
+        <label>Modelo
+          <input id="coachModel" value="openrouter/free" spellcheck="false">
+        </label>
+        <label>Puesto para practicar
+          <select id="coachJobSelect"><option value="">Entrevista general</option></select>
+        </label>
+        <label>Modo
+          <select id="coachMode">
+            <option value="mock">Simulación de entrevista</option>
+            <option value="answer">Entrenar una respuesta</option>
+            <option value="feedback">Feedback exigente</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="coach-messages" id="coachMessages" aria-live="polite">
+        <div class="coach-message assistant">Conectá tu cuenta y elegí un puesto. Podemos practicar por texto o voz.</div>
+      </div>
+      <div class="coach-compose">
+        <textarea id="coachInput" rows="3" placeholder="Escribí tu respuesta o tocá el micrófono..."></textarea>
+        <div class="coach-buttons">
+          <button id="coachMic" class="classic-button" type="button">🎙 Audio</button>
+          <label class="speak-toggle"><input id="coachSpeak" type="checkbox"> Leer respuesta</label>
+          <button id="coachStart" class="classic-button" type="button">Comenzar entrevista</button>
+          <button id="coachSend" class="classic-button primary" type="button">Enviar</button>
+        </div>
+      </div>
+      <p class="privacy-note">Privacidad: perfil, CV y conversación no pasan por el Worker de JOBAS. Las solicitudes IA van directamente desde tu navegador a OpenRouter.</p>
+    </section>
+
+    <menu class="start-menu" id="startMenu" hidden>
+      <button type="button" data-window-open="profile">Perfil</button>
+      <button type="button" data-window-open="offers">Ofertas</button>
+      <button type="button" data-window-open="coach">Entrenador IA</button>
+      <button type="button" data-window-open="applications">Postulaciones</button>
+      <button type="button" data-window-open="favorites">Favoritos</button>
+    </menu>
+
+    <footer class="taskbar">
+      <button class="start-button" id="startButton" type="button"><span class="start-mark">J</span> JOBAS</button>
+      <div class="task-status" id="taskStatus">RADAR: cargando…</div>
+      <div class="task-status ai-status" id="taskAiStatus">IA: usuario</div>
+      <time id="taskClock"></time>
     </footer>
+
     <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
-  </div>
+  </main>
   <script type="module" src="/app.js"></script>
 </body>
 </html>
