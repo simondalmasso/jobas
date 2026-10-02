@@ -148,9 +148,9 @@ function openWindow(name){
   const el=document.querySelector(`[data-window="${CSS.escape(name)}"]`);
   if(!el)return;
   const mobile=globalThis.matchMedia?.("(max-width:700px)")?.matches===true;
-  if(mobile)$(".retro-window").forEach(x=>{x.hidden=x!==el;});
+  if(mobile)$$(".retro-window").forEach(x=>{x.hidden=x!==el;});
   el.hidden=false;
-  $(".retro-window").forEach(x=>x.classList.remove("is-active"));
+  $$(".retro-window").forEach(x=>x.classList.remove("is-active"));
   el.classList.add("is-active");
   el.style.zIndex=String(++state.z);
   $("#startMenu").hidden=true;
@@ -166,7 +166,7 @@ function closeWindow(name){
 }
 function bringToFront(el){
   if(!el)return;
-  $$(".retro-window").forEach(x=>x.classList.remove("is-active"));
+  $$$(".retro-window").forEach(x=>x.classList.remove("is-active"));
   el.classList.add("is-active");
   el.style.zIndex=String(++state.z);
 }
