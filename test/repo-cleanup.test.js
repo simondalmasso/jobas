@@ -12,9 +12,13 @@ test("JOBAS entra directo a la interfaz principal",()=>{
   assert.match(html,/data-mode="progress"/);
 });
 
-test("data conserva únicamente LOCAL y REMOTO",()=>{
+test("data separa radar curado del runtime sin datos personales",()=>{
   const files=fs.readdirSync("data").filter(x=>x.endsWith(".json")).sort();
-  assert.deepEqual(files,["gpt-local.json","gpt-remoto.json"]);
+  assert.deepEqual(files,["curated-local.json","gpt-local.json","gpt-remoto.json"]);
+  for(const file of files){
+    const raw=fs.readFileSync("data/"+file,"utf8");
+    assert.doesNotMatch(raw,/"rank"\s*:|"priority"\s*:/i);
+  }
 });
 
 test("no quedan módulos del experimento OS",()=>{
