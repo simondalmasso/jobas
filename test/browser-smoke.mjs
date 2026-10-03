@@ -226,10 +226,10 @@ try{
 } finally {
   try{cdp?.close();}catch{}
   try{if(tab?.id)await fetch("http://"+HOST+":"+CDP_PORT+"/json/close/"+tab.id);}catch{}
-  chrome.kill();
+  try{chrome.kill("SIGKILL");}catch{}
   await new Promise(resolve=>server.close(resolve));
-  await sleep(200);
-  try{fs.rmSync(userData,{recursive:true,force:true,maxRetries:4,retryDelay:150});}catch{}
+  await sleep(500);
+  await fs.promises.rm(userData,{recursive:true,force:true,maxRetries:8,retryDelay:200}).catch(()=>{});
 }
 
 const required=[
