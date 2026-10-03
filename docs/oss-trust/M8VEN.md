@@ -25,7 +25,7 @@ The current result has no concrete findings exposed by the ToolCheck surface. JO
 README uses M8ven's standard live badge endpoint:
 
 ```markdown
-[![M8ven Score](https://m8ven.ai/badge/mcp/simondalmasso/jobas)](https://m8ven.ai/mcp/simondalmasso/jobas)
+[![M8ven Score](https://m8ven.ai/badge/mcp/simondalmasso/jobas)](https://m8ven.ai/mcp/simondalmasso/jobas?s=readme)
 ```
 
 Do not describe JOBAS as a "Verified Publisher" until M8ven's public listing actually reports that state.
