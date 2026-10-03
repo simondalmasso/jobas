@@ -8,6 +8,7 @@ Public job radar and personal job-search workspace for Argentina/LatAm.
 
 [![CI](https://github.com/simondalmasso/jobas/actions/workflows/ci.yml/badge.svg)](https://github.com/simondalmasso/jobas/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![M8ven Score](https://m8ven.ai/badge/mcp/simondalmasso/jobas)](https://m8ven.ai/mcp/simondalmasso/jobas)
 
 ## What JOBAS does
 
