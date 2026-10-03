@@ -44,16 +44,17 @@ npm run verify
 Please preserve these constraints:
 
 - GitHub `main` is the canonical source.
-- `data/gpt-local.json` and `data/gpt-remoto.json` are the only radar JSON datasets.
+- named/manual opportunities belong in source-backed files under `data/`, never as job literals in runtime source;
 - the public Worker must remain usable without login;
 - AI coaching must use the user's own provider connection directly from the browser;
 - do not proxy AI inference, transcription or speech through the JOBAS Worker;
 - do not commit secrets, provider keys, browser sessions or personal CV data;
 - do not add background polling, browser agents or expensive runtime dependencies without an explicit architectural decision;
-- preserve the public read-only MCP contract.
+- preserve the public read-only MCP contract;
+- keep candidate-fit ranking browser-side and server ordering generic.
 
 ## Style
 
 Prefer plain JavaScript, small modules, native browser APIs and explicit tests over framework/runtime expansion.
 
-Powered by GPT + GitHub + Cloudflare.
+Built on GitHub + Cloudflare Workers. Optional AI is user-owned.
