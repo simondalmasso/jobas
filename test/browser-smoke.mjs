@@ -228,7 +228,8 @@ try{
   try{if(tab?.id)await fetch("http://"+HOST+":"+CDP_PORT+"/json/close/"+tab.id);}catch{}
   chrome.kill();
   await new Promise(resolve=>server.close(resolve));
-  fs.rmSync(userData,{recursive:true,force:true});
+  await sleep(200);
+  try{fs.rmSync(userData,{recursive:true,force:true,maxRetries:4,retryDelay:150});}catch{}
 }
 
 const required=[
