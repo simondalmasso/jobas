@@ -10,6 +10,7 @@ import {
   buildInterviewSystemPrompt
 } from "./coach.js";
 import { createUserMemory } from "./user-memory.js";
+import { personalFitScore, sortByPersonalFit } from "./fit.js";
 
 const $=s=>document.querySelector(s);
 const $$=s=>[...document.querySelectorAll(s)];
@@ -111,13 +112,14 @@ function profileTerms(){
 function personalizedJobs(){
   const allowed=new Set(state.profile.modes);
   const terms=profileTerms();
-  return state.jobs.filter(j=>{
+  const jobs=state.jobs.filter(j=>{
     if(isLocalJob(j)&&!allowed.has("local"))return false;
     if(!isLocalJob(j)&&!allowed.has("remote")&&!allowed.has("microjobs"))return false;
     if(!terms.length)return true;
     const text=`${j.title} ${j.company} ${j.description||""} ${labels[j.category]||j.category}`.toLowerCase();
     return terms.some(t=>text.includes(t));
   });
+  return sortByPersonalFit(jobs,state.profile);
 }
 function baseForMode(){
   if(state.personalized)return personalizedJobs();
@@ -166,7 +168,7 @@ function closeWindow(name){
 }
 function bringToFront(el){
   if(!el)return;
-  $$$(".retro-window").forEach(x=>x.classList.remove("is-active"));
+  $(".retro-window").forEach(x=>x.classList.remove("is-active"));
   el.classList.add("is-active");
   el.style.zIndex=String(++state.z);
 }
@@ -257,7 +259,7 @@ function renderJobActions(job){
 function renderFeed(){
   const jobs=filtered();
   const label=state.personalized?"personalizadas":state.mode==="remote"?"remotas":state.mode==="local"?"locales":"en curso";
-  const note=state.personalized?"según tu perfil":state.mode==="progress"?"guardadas en este navegador":"ordenadas por prioridad";
+  const note=state.personalized?"afinidad calculada en este navegador":state.mode==="progress"?"guardadas en este navegador":"ordenadas por calidad pública";
   $("#summary").innerHTML=`<span class="pill">${jobs.length} ${label}</span><span class="pill">${note}</span>`;
   $("#feed").innerHTML=jobs.length?jobs.map(j=>`
     <article class="job" data-job-id="${esc(j.id||j.url||j.sourceDetail)}">
@@ -271,7 +273,7 @@ function renderFeed(){
           <span class="tag pay">${esc(monthly(j))}</span>
         </div>
         <div class="why">
-          <span>Prioridad ${esc(j.priority??"—")}/100</span>
+          <span>${state.personalized?`Afinidad local ${esc(personalFitScore(j,state.profile))}/100`:`Calidad pública ${esc(j.qualityScore??"—")}/100`}</span>
           <span>·</span><span>${esc(j.scam?.label||"")}</span>
         </div>
         <div class="source-row">Fuente: ${safeExternalHref(j.sourceDetail||j.sourceUrl)?`<a href="${esc(safeExternalHref(j.sourceDetail||j.sourceUrl))}" target="_blank" rel="noopener noreferrer">${esc(j.sourceName)}</a>`:esc(j.sourceName||"Manual")}</div>

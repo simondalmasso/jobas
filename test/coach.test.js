@@ -5,7 +5,9 @@ import {
   createCredentialStore,
   sendCoachMessage,
   extractProfileFromCv,
-  buildInterviewSystemPrompt
+  buildInterviewSystemPrompt,
+  finishOpenRouterOAuth,
+  createSpeechController
 } from "../public/coach.js";
 
 test("OAuth URL uses OpenRouter PKCE S256 and state",()=>{
@@ -77,4 +79,70 @@ test("interview prompt uses profile and selected job without inventing experienc
   assert.match(prompt,/Ana/);
   assert.match(prompt,/CS Specialist/);
   assert.match(prompt,/no invent/i);
+});
+
+test("credential persistence is explicit opt-in and disconnect clears both stores",()=>{
+  const sessionMap=new Map(), localMap=new Map();
+  const session={getItem:k=>sessionMap.get(k)??null,setItem:(k,v)=>sessionMap.set(k,v),removeItem:k=>sessionMap.delete(k)};
+  const local={getItem:k=>localMap.get(k)??null,setItem:(k,v)=>localMap.set(k,v),removeItem:k=>localMap.delete(k)};
+  const store=createCredentialStore({sessionStorage:session,localStorage:local});
+  store.set("sk-persist",true);
+  assert.equal(sessionMap.size,0);
+  assert.equal(localMap.size,1);
+  store.clear();
+  assert.equal(sessionMap.size,0);
+  assert.equal(localMap.size,0);
+  assert.equal(store.get(),"");
+});
+
+test("OAuth callback rejects state mismatch before any key exchange",async()=>{
+  const map=new Map([
+    ["jobas:openrouter:pkce:state","expected"],
+    ["jobas:openrouter:pkce:verifier","verifier"]
+  ]);
+  const session={getItem:k=>map.get(k)??null,setItem:(k,v)=>map.set(k,v),removeItem:k=>map.delete(k)};
+  let called=0;
+  await assert.rejects(
+    finishOpenRouterOAuth({
+      url:"https://jobas.web.app/?code=abc&state=wrong",
+      sessionStorage:session,
+      credentialStore:{set(){throw new Error("should not store");}},
+      fetchImpl:async()=>{called++;throw new Error("should not fetch");},
+      historyObj:{replaceState(){}}
+    }),
+    /OPENROUTER_STATE_MISMATCH/
+  );
+  assert.equal(called,0);
+});
+
+test("OAuth callback exchanges code directly with OpenRouter and clears PKCE state",async()=>{
+  const map=new Map([
+    ["jobas:openrouter:pkce:state","state-ok"],
+    ["jobas:openrouter:pkce:verifier","verifier-ok"]
+  ]);
+  const session={getItem:k=>map.get(k)??null,setItem:(k,v)=>map.set(k,v),removeItem:k=>map.delete(k)};
+  const stored=[];
+  const urls=[];
+  const key=await finishOpenRouterOAuth({
+    url:"https://jobas.web.app/?code=abc&state=state-ok",
+    sessionStorage:session,
+    credentialStore:{set:(v,persist)=>stored.push({v,persist})},
+    fetchImpl:async(url)=>{urls.push(String(url));return{ok:true,json:async()=>({key:"sk-user"})};},
+    historyObj:{replaceState(){}}
+  });
+  assert.equal(key,"sk-user");
+  assert.equal(new URL(urls[0]).origin,"https://openrouter.ai");
+  assert.deepEqual(stored,[{v:"sk-user",persist:false}]);
+  assert.equal(map.has("jobas:openrouter:pkce:state"),false);
+  assert.equal(map.has("jobas:openrouter:pkce:verifier"),false);
+});
+
+test("unsupported voice degrades to text controls without throwing",()=>{
+  let error="";
+  const speech=createSpeechController({SpeechRecognitionCtor:null,speechSynthesis:null});
+  assert.equal(speech.recognitionSupported,false);
+  assert.equal(speech.synthesisSupported,false);
+  assert.equal(speech.listen({onError:e=>{error=e.message;}}),null);
+  assert.equal(error,"SPEECH_RECOGNITION_UNAVAILABLE");
+  assert.equal(speech.speak("hola"),false);
 });

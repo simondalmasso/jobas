@@ -1,63 +1,42 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "lane": "LOCAL",
   "updatedAt": "2026-10-01",
-  "curator": "GPT BUSQ LOCAL",
-  "writeContract": "MIGRATED/READ-ONLY: este archivo en JOBAS ya no es autoridad. CANONICAL WRITE TARGET: https://github.com/simondalmasso/the-iAffice/blob/main/data/gpt-local.json. Leer iAffice antes de actuar y escribir únicamente allí.",
+  "purpose": "Curated local/presential radar input for JOBAS. Records are factual source-backed opportunities; personal fit is computed only in the browser from the user's local profile.",
   "findingSchema": {
-    "id": "string único y estable",
+    "id": "stable string",
     "title": "string",
     "company": "string",
     "location": "string",
-    "description": "string breve y factual",
+    "description": "brief factual summary",
     "category": "customer-success | support | travel | admin-va | operations | sales | marketing | ecommerce-crm | content-social | data-ai | tech | finance | other",
     "sourceName": "string",
     "sourceUrl": "https://...",
-    "applyUrl": "https://... enlace directo a postulación/trabajo",
-    "publishedAt": "ISO-8601 o null",
+    "applyUrl": "https://... direct application/job URL",
+    "publishedAt": "ISO-8601 or null",
     "verifiedAt": "ISO-8601",
     "active": "boolean",
     "argentinaEligible": "boolean | null",
-    "workerFee": "false para no-pay-to-apply; true si exige pago; null si no se pudo verificar",
+    "workerFee": "false | true | null",
     "salary": {
-      "raw": "texto salarial original o No publicado",
+      "raw": "published salary text or No publicado",
       "monthlyMin": "number | null",
       "monthlyMax": "number | null",
-      "currency": "USD | ARS | otra"
+      "currency": "currency code"
     },
     "scamRisk": "low | medium | high",
-    "rank": {
-      "score": "0-100",
-      "reason": "justificación factual y breve"
-    },
     "evidence": [
-      "URLs primarias o evidencias de verificación"
+      "primary/supporting verification URLs"
     ]
   },
   "rules": [
-    "MIGRACIÓN ACTIVA: iAffice es el CANON. Si estás operando como setter, cambiar inmediatamente a simondalmasso/the-iAffice y continuar desde sus JSON; no resetear ni re-prospectar antes de revisar abiertos.",
-    "Solo oportunidades reales y verificadas.",
-    "Priorizar Santa Fe capital y área cercana; luego Paraná o híbridas razonables.",
-    "No incluir pay-to-apply ni fuentes con señales fuertes de scam.",
-    "Verificar que la vacante siga activa antes de agregarla.",
-    "Usar applyUrl directo cuando exista.",
-    "rank.score debe ser 0-100 y estar justificado en rank.reason.",
-    "No inventar salario: si no está publicado usar null y conservar salary.raw.",
-    "MODO PROSPECTOR ESPADA: priorizar demanda directa del comprador y microjobs concretos; no confundir con ofertas laborales genéricas ni autopromoción de proveedores.",
-    "Antes de contactar, investigar solo información pública/profesional relevante del solicitante, negocio y proyecto; identificar el dolor real y cualquier contexto verificable que permita una respuesta específica.",
-    "OUTREACH: no vender años de experiencia ni tirar portfolio/WhatsApp de entrada. Abrir demostrando comprensión del problema, aportar una observación o diagnóstico útil, bajar riesgo y terminar con un próximo paso o pregunta concreta.",
-    "OUTREACH: 1-4 frases cuando sea posible, humano, específico, sin corporate fluff, sin mencionar IA, sin afirmaciones inventadas y sin regalar precio antes de entender alcance.",
-    "RADAR MICROJOBS: aceptar como fresco solo pedido real + comprador + timestamp individual verificable <=48h + enlace directo + contacto posible; si no cumple, marcarlo como no verificado o descartarlo."
+    "Include only real, source-backed opportunities.",
+    "Verify active status before adding or refreshing a record.",
+    "Do not include pay-to-apply opportunities or records with strong scam indicators.",
+    "Use direct source/application URLs where available.",
+    "Do not invent compensation; preserve the published text and null numeric values when unknown.",
+    "Do not store candidate-specific fit scores, owner preferences, outreach state, or private candidate data in this file.",
+    "Server-side ordering uses only generic public signals; personal relevance belongs to the browser-local profile."
   ],
-  "findings": [],
-  "canonicalEditUrl": "https://github.com/simondalmasso/the-iAffice/edit/main/data/gpt-local.json",
-  "canonicalRawUrl": "https://raw.githubusercontent.com/simondalmasso/the-iAffice/main/data/gpt-local.json",
-  "gitlabMirrorUrl": "https://gitlab.com/simondalmasso/jobas/-/blob/main/data/gpt-local.json",
-  "migrationNotice": {
-    "status": "MOVED",
-    "movedAt": "2026-10-01",
-    "canonicalRepo": "https://github.com/simondalmasso/the-iAffice",
-    "canonicalFile": "https://github.com/simondalmasso/the-iAffice/blob/main/data/gpt-local.json",
-    "instruction": "STOP WRITING JOBAS. Leer y continuar desde iAffice. Preservar prospectos abiertos y estado de outreach; no resetear."
-  }
+  "findings": []
 }

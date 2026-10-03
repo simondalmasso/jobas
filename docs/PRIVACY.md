@@ -39,7 +39,8 @@ The OpenRouter credential:
 - is supplied/authorized by the user;
 - is stored in session storage by default;
 - may be persisted locally only when the user explicitly chooses that option;
-- is never sent to a JOBAS Worker endpoint.
+- is never sent to a JOBAS Worker endpoint;
+- is removed from both session and persistent browser storage when the user disconnects.
 
 ## CV import
 
@@ -49,11 +50,15 @@ PDF and AI-assisted profile extraction are sent directly from the browser to the
 
 ## Speech
 
-Voice input/output uses browser capabilities when available. JOBAS does not run a transcription or text-to-speech service on its Worker.
+Voice input/output uses browser capabilities when available. If speech recognition is unsupported, the Coach remains usable by text. JOBAS does not run a transcription or text-to-speech service on its Worker.
 
 ## No advertising data pipeline
 
 JOBAS does not require an advertising identifier or a user account to browse the public feed.
+
+## Worker visibility
+
+Because provider credentials and CV payloads never transit JOBAS endpoints, normal JOBAS Worker request logs do not contain those values.
 
 ## Operational logs
 

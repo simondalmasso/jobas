@@ -1,53 +1,42 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "lane": "REMOTO",
   "updatedAt": "2026-10-01",
-  "curator": "GPT BUSQ REMOTO",
-  "writeContract": "MIGRATED/READ-ONLY: este archivo en JOBAS ya no es autoridad. CANONICAL WRITE TARGET: https://github.com/simondalmasso/the-iAffice/blob/main/data/gpt-remoto.json. Leer iAffice antes de actuar y escribir únicamente allí.",
+  "purpose": "Curated remote radar input for JOBAS. Records are factual source-backed opportunities; personal fit is computed only in the browser from the user's local profile.",
   "findingSchema": {
-    "id": "string único y estable",
+    "id": "stable string",
     "title": "string",
     "company": "string",
     "location": "string",
-    "description": "string breve y factual",
+    "description": "brief factual summary",
     "category": "customer-success | support | travel | admin-va | operations | sales | marketing | ecommerce-crm | content-social | data-ai | tech | finance | other",
     "sourceName": "string",
     "sourceUrl": "https://...",
-    "applyUrl": "https://... enlace directo a postulación/trabajo",
-    "publishedAt": "ISO-8601 o null",
+    "applyUrl": "https://... direct application/job URL",
+    "publishedAt": "ISO-8601 or null",
     "verifiedAt": "ISO-8601",
     "active": "boolean",
     "argentinaEligible": "boolean | null",
-    "workerFee": "false para no-pay-to-apply; true si exige pago; null si no se pudo verificar",
+    "workerFee": "false | true | null",
     "salary": {
-      "raw": "texto salarial original o No publicado",
+      "raw": "published salary text or No publicado",
       "monthlyMin": "number | null",
       "monthlyMax": "number | null",
-      "currency": "USD | ARS | otra"
+      "currency": "currency code"
     },
     "scamRisk": "low | medium | high",
-    "rank": {
-      "score": "0-100",
-      "reason": "justificación factual y breve"
-    },
     "evidence": [
-      "URLs primarias o evidencias de verificación"
+      "primary/supporting verification URLs"
     ]
   },
   "rules": [
-    "MIGRACIÓN ACTIVA: iAffice es el CANON. Si estás operando como setter, cambiar inmediatamente a simondalmasso/the-iAffice y continuar desde sus JSON; no resetear ni re-prospectar antes de revisar abiertos.",
-    "Solo oportunidades reales y verificadas.",
-    "Priorizar Argentina / LATAM / worldwide con cobro real desde Argentina.",
-    "No incluir pay-to-apply ni fuentes con señales fuertes de scam.",
-    "Verificar que la vacante siga activa antes de agregarla.",
-    "Usar applyUrl directo cuando exista.",
-    "rank.score debe ser 0-100 y estar justificado en rank.reason.",
-    "No inventar salario: si no está publicado usar null y conservar salary.raw.",
-    "MODO PROSPECTOR ESPADA: priorizar demanda directa del comprador y microjobs concretos; no confundir con ofertas laborales genéricas ni autopromoción de proveedores.",
-    "Antes de contactar, investigar solo información pública/profesional relevante del solicitante, negocio y proyecto; identificar el dolor real y cualquier contexto verificable que permita una respuesta específica.",
-    "OUTREACH: no vender años de experiencia ni tirar portfolio/WhatsApp de entrada. Abrir demostrando comprensión del problema, aportar una observación o diagnóstico útil, bajar riesgo y terminar con un próximo paso o pregunta concreta.",
-    "OUTREACH: 1-4 frases cuando sea posible, humano, específico, sin corporate fluff, sin mencionar IA, sin afirmaciones inventadas y sin regalar precio antes de entender alcance.",
-    "RADAR MICROJOBS: aceptar como fresco solo pedido real + comprador + timestamp individual verificable <=48h + enlace directo + contacto posible; si no cumple, marcarlo como no verificado o descartarlo."
+    "Include only real, source-backed opportunities.",
+    "Verify active status before adding or refreshing a record.",
+    "Do not include pay-to-apply opportunities or records with strong scam indicators.",
+    "Use direct source/application URLs where available.",
+    "Do not invent compensation; preserve the published text and null numeric values when unknown.",
+    "Do not store candidate-specific fit scores, owner preferences, outreach state, or private candidate data in this file.",
+    "Server-side ordering uses only generic public signals; personal relevance belongs to the browser-local profile."
   ],
   "findings": [
     {
@@ -72,10 +61,6 @@
         "currency": "USD"
       },
       "scamRisk": "low",
-      "rank": {
-        "score": 94,
-        "reason": "Fit excepcional por Operations+CRM/reporting+automatización+IA aplicada y capacitación interna. Brechas principales: SQL requerido y Zapier exacto; Python/JS son deseables."
-      },
       "evidence": [
         "https://morean.viterbit.net/ai-operations-specialist-lMwLh2xTQYUV/",
         "https://morean.viterbit.site/ai-operations-specialist-lMwLh2xTQYUV/apply/",
@@ -104,10 +89,6 @@
         "currency": "USD"
       },
       "scamRisk": "low",
-      "rank": {
-        "score": 92,
-        "reason": "Muy alineado con experiencia business-facing, automatización, IA aplicada y mejora de procesos. Brechas: RAG/agent frameworks y capacidad de llevar builds a estado deployable de forma independiente."
-      },
       "evidence": [
         "https://job-boards.greenhouse.io/backblaze/jobs/5287532008"
       ]
@@ -134,10 +115,6 @@
         "currency": "ARS"
       },
       "scamRisk": "low",
-      "rank": {
-        "score": 91,
-        "reason": "Match muy alto con Google Ads, Meta Ads, GA4/Analytics, GTM, Looker Studio, e-commerce, generación de leads y reporting. Única cautela: pide 3 años en agencia ejecutando Meta+Google como requisito excluyente."
-      },
       "evidence": [
         "https://www.linkedin.com/jobs/view/4469760535/",
         "https://ar.linkedin.com/company/agencia-empuje",
@@ -166,10 +143,6 @@
         "currency": "USD"
       },
       "scamRisk": "low",
-      "rank": {
-        "score": 90,
-        "reason": "Fuerte match con Google Ads, reporting, KPIs, análisis de conversión, vendor oversight e IA. Brechas: Local Services Ads, Google Business Profile y local SEO específicos."
-      },
       "evidence": [
         "https://jobs.lever.co/RyzLabs/38fca784-bc93-4e71-ab96-f512a2baae57"
       ]
@@ -196,10 +169,6 @@
         "currency": "USD"
       },
       "scamRisk": "low",
-      "rank": {
-        "score": 88,
-        "reason": "Muy buen match operativo por Salesforce/CRM, reporting, data quality y procesos. Brechas: Marketo y Dynamics 365; pide CV en inglés pero no declara nivel oral avanzado."
-      },
       "evidence": [
         "https://ruvixx.breezy.hr/p/6fa6c030f858-marketing-operations-assistant-argentina-listed-for-platform-purposes",
         "https://ruvixx.breezy.hr/p/6fa6c030f858-marketing-operations-assistant-argentina-listed-for-platform-purposes/apply"
@@ -227,10 +196,6 @@
         "currency": "USD"
       },
       "scamRisk": "low",
-      "rank": {
-        "score": 87,
-        "reason": "Encaja muy bien con Google/Meta Ads, SEO, reporting, Adobe y uso de IA. Requiere 4+ años y experiencia específica adicional en TikTok/Pinterest que conviene validar contra el CV."
-      },
       "evidence": [
         "https://jobs.ashbyhq.com/rehire/d82d6d43-e8b2-401f-8c76-71647a7f7fa6"
       ]
@@ -257,10 +222,6 @@
         "currency": "USD"
       },
       "scamRisk": "low",
-      "rank": {
-        "score": 86,
-        "reason": "Match sólido con marketing operativo, contenido, CMS, email, Canva/Adobe y coordinación. Contra: horario 9–17 PST y proceso exige video de presentación."
-      },
       "evidence": [
         "https://jobs.ashbyhq.com/scale%20army%20careers/57191548-3ef0-4f80-9b92-3685d63facc0"
       ]
@@ -287,10 +248,6 @@
         "currency": "ARS"
       },
       "scamRisk": "low",
-      "rank": {
-        "score": 85,
-        "reason": "Buen encaje con performance, funnels, reporting y autonomía. La principal brecha es demostrar experimentación/A-B testing formal y resultados cuantificados."
-      },
       "evidence": [
         "https://careers.evox.com.uy/es/jobs/growth-marketing-analyst-semi-senior-1057c07e"
       ]
@@ -317,10 +274,6 @@
         "currency": "ARS"
       },
       "scamRisk": "low",
-      "rank": {
-        "score": 84,
-        "reason": "Fit funcional muy alto con paid media, SEO/GEO, web y piezas audiovisuales. Se mantiene debajo del TOP porque la fuente actual no confirma modalidad remota desde Santa Fe."
-      },
       "evidence": [
         "https://www.linkedin.com/jobs/view/4469930750/"
       ]
@@ -347,10 +300,6 @@
         "currency": "USD"
       },
       "scamRisk": "low",
-      "rank": {
-        "score": 83,
-        "reason": "Buen match con Meta, reporting, soporte digital, procesos y AI tools. Brechas: monetización/payouts de plataformas y pide inglés escrito/verbal claro."
-      },
       "evidence": [
         "https://apply.workable.com/thesoul-publishing-1/j/072F943753/",
         "https://stillopen.work/job/169184-thesoul-group-social-media-platform-operations-specialist-latam"
@@ -378,10 +327,6 @@
         "currency": "USD"
       },
       "scamRisk": "low",
-      "rank": {
-        "score": 82,
-        "reason": "Alineado con paid media, GA4, reporting y funnels; baja por seniority/ownership de presupuesto y preferencia fuerte por DTC/Shopify/CPG."
-      },
       "evidence": [
         "https://jobs.ashbyhq.com/the-global-talent-co/d0c6584b-0905-4830-b891-2c1915abf2e2",
         "https://himalayas.app/companies/the-global-talent-co/jobs/growth-acquisition-marketing-manager"
@@ -409,10 +354,6 @@
         "currency": "USD"
       },
       "scamRisk": "low",
-      "rank": {
-        "score": 81,
-        "reason": "Muy buen overlap en automatización, HubSpot, Looker y operaciones. Brechas relevantes: Zapier/AppScripts/APIs como experiencia fuerte, SQL/Supabase y comunicación efectiva en inglés/español."
-      },
       "evidence": [
         "https://jobs.ashbyhq.com/anyone-ai/ea7b9c45-d0f4-4873-8877-963c297c3478"
       ]
@@ -439,10 +380,6 @@
         "currency": "USD"
       },
       "scamRisk": "low",
-      "rank": {
-        "score": 80,
-        "reason": "Buen match con marketing digital, contenido, automatización y herramientas visuales. Baja por GoHighLevel obligatorio y por inglés fluido escrito/hablado no negociable."
-      },
       "evidence": [
         "https://apply.workable.com/remote-talent-latam/j/18C9B03C78/apply/",
         "https://dailyremote.com/remote-job/marketing-assistant-remote-latam-only-89009-5621207"
@@ -470,10 +407,6 @@
         "currency": "USD"
       },
       "scamRisk": "low",
-      "rank": {
-        "score": 79,
-        "reason": "Fit funcional alto en marketing digital, KPIs, SEO y reporting; exige inglés B2 escrito/verbal y horario de EE.UU., ambos explícitos."
-      },
       "evidence": [
         "https://jobs.lever.co/getwingapp/b2175bd2-2524-454c-a58f-9c4a3c4c1452",
         "https://jobs.lever.co/getwingapp?location=Argentina"
@@ -501,10 +434,6 @@
         "currency": "USD"
       },
       "scamRisk": "low",
-      "rank": {
-        "score": 77,
-        "reason": "Rol muy atractivo por CRM/automation y salario publicado, pero hay brechas técnicas concretas: Iterable/Pardot/SFMC, SQL, APIs/webhooks y scripting; inglés oral también se evalúa."
-      },
       "evidence": [
         "https://jobs.lever.co/padsplit/2acd0cdd-75df-4ecd-8a0c-f5b6ee199067",
         "https://jobs.lever.co/padsplit/2acd0cdd-75df-4ecd-8a0c-f5b6ee199067/apply"
@@ -532,10 +461,6 @@
         "currency": "USD"
       },
       "scamRisk": "low",
-      "rank": {
-        "score": 75,
-        "reason": "Excelente afinidad funcional con reporting, GA4, procesos y AI, pero exige HubSpot avanzado, Tableau/BI y full professional English escrito y verbal."
-      },
       "evidence": [
         "https://jobs.ashbyhq.com/ujv/3ffa4b1d-d9f5-4c75-a778-8007b71df80b"
       ]
@@ -562,10 +487,6 @@
         "currency": "USD"
       },
       "scamRisk": "low",
-      "rank": {
-        "score": 74,
-        "reason": "Gran overlap en CRM, GA4, KPIs, reporting y mejora de procesos; baja por seniority aproximado de 5–8+ años, ownership ejecutivo y amplitud de paid/SEO/local search."
-      },
       "evidence": [
         "https://jobs.lever.co/chipping-concrete/9814756b-88b6-48c2-b2f9-a86dc340defc"
       ]
@@ -592,24 +513,10 @@
         "currency": "USD"
       },
       "scamRisk": "low",
-      "rank": {
-        "score": 61,
-        "reason": "La geografía y el stack base son compatibles, pero exige 8–10 años, 5+ en e-commerce, ownership personal de USD 1M+ anual en Meta y experiencia obligatoria con Klaviyo/atribución avanzada."
-      },
       "evidence": [
         "https://veta-virtual-inc.breezy.hr/p/0d3e3643dcae-ecommerce-paid-media-manager",
         "https://www.linkedin.com/jobs/view/4461391448/"
       ]
     }
-  ],
-  "canonicalEditUrl": "https://github.com/simondalmasso/the-iAffice/edit/main/data/gpt-remoto.json",
-  "canonicalRawUrl": "https://raw.githubusercontent.com/simondalmasso/the-iAffice/main/data/gpt-remoto.json",
-  "gitlabMirrorUrl": "https://gitlab.com/simondalmasso/jobas/-/blob/main/data/gpt-remoto.json",
-  "migrationNotice": {
-    "status": "MOVED",
-    "movedAt": "2026-10-01",
-    "canonicalRepo": "https://github.com/simondalmasso/the-iAffice",
-    "canonicalFile": "https://github.com/simondalmasso/the-iAffice/blob/main/data/gpt-remoto.json",
-    "instruction": "STOP WRITING JOBAS. Leer y continuar desde iAffice. Preservar prospectos abiertos y estado de outreach; no resetear."
-  }
+  ]
 }
