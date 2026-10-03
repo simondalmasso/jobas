@@ -49,7 +49,7 @@ browser -> JOBAS Worker -> AI provider
 
 The provider credential belongs to the user, is browser-side, and defaults to session-only storage.
 
-See [Privacy and data flow](docs/PRIVACY.md).
+See [Privacy and data flow](docs/PRIVACY.md) and the [manual BYOK smoke](docs/BYOK-SMOKE.md).
 
 ## Architecture
 
