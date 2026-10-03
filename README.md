@@ -20,7 +20,7 @@ JOBAS combines a public opportunity radar with a browser-local workspace for man
 - **AI interview Coach** with text and optional browser voice.
 - **Public read-only MCP** for agents and external tools.
 
-The product keeps infrastructure deliberately small: Cloudflare Workers + Static Assets + KV, two canonical radar JSON files and native browser storage for personal workspace state.
+The product keeps infrastructure deliberately small: Cloudflare Workers + Static Assets + KV, source-backed curated data files and native browser storage for personal workspace state.
 
 ## Product principles
 
@@ -57,7 +57,8 @@ See [Privacy and data flow](docs/PRIVACY.md).
 GitHub main
    │
    ├── data/gpt-local.json
-   └── data/gpt-remoto.json
+   ├── data/gpt-remoto.json
+   └── data/curated-local.json
             │
             ▼
      Cloudflare Worker
@@ -91,11 +92,12 @@ Full details: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 ├── src/                     # Cloudflare Worker
 │   ├── index.js             # Routes, feed, scheduled refresh
 │   ├── sources.js           # Automatic opportunity sources
-│   ├── judge.js             # Normalization/ranking
+│   ├── judge.js             # Normalization + generic public quality
 │   └── mcp.js               # Public read-only MCP
 ├── data/
 │   ├── gpt-local.json
-│   └── gpt-remoto.json
+│   ├── gpt-remoto.json
+│   └── curated-local.json
 ├── test/                    # Node test suite
 ├── docs/                    # Architecture, privacy, research
 ├── firebase-public/         # Redirect-only Firebase alias
@@ -123,11 +125,12 @@ Verification:
 npm run verify
 ```
 
-That runs:
+That runs Node contracts, Wrangler dry-run and the lean browser acceptance gate:
 
 ```bash
 npm test
 npm run dry-run
+npm run test:browser
 ```
 
 ## Deployment
@@ -148,10 +151,7 @@ It does not host a second backend.
 
 ## Radar data
 
-JOBAS keeps only two curated JSON inputs:
-
-- `data/gpt-local.json`
-- `data/gpt-remoto.json`
+JOBAS keeps source-backed curated inputs under `data/`. Named/manual opportunities live there rather than inside Worker source code. Server ordering uses generic public quality signals only; candidate fit is computed in the browser from the user's local profile.
 
 Automated sources are normalized and merged into the public feed by the Worker.
 
@@ -165,7 +165,7 @@ Endpoint:
 POST https://jobas.simondalmasso44.workers.dev/mcp
 ```
 
-The MCP is public, stateless and read-only. Recommended first tool for agents: `agent_bootstrap`.
+The MCP is public, stateless and read-only. Recommended first tool for agents: `agent_bootstrap`. Full contract: [docs/MCP.md](docs/MCP.md).
 
 It does not create applications, store provider secrets or start background browsers.
 
@@ -186,4 +186,4 @@ Copyright © 2026 Simón Dalmasso.
 
 ---
 
-**Powered by GPT + GitHub + Cloudflare**
+**Built on GitHub + Cloudflare Workers. Optional AI uses the user's own OpenRouter account.**
