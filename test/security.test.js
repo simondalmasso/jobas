@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import fs from "node:fs";
 import worker,{SECURITY_HEADERS} from "../src/index.js";
 
 function kv(initial={}){
@@ -40,4 +41,14 @@ test("static responses and API health receive hardening headers",async()=>{
     assert.match(r.headers.get("content-security-policy")||"",/frame-ancestors 'none'/);
     assert.ok(r.headers.get("strict-transport-security"));
   }
+});
+
+
+test("Cloudflare static assets receive the same security policy without forcing Worker execution",()=>{
+  const headers=fs.readFileSync("public/_headers","utf8");
+  assert.match(headers,/Content-Security-Policy:/);
+  assert.match(headers,/connect-src 'self' https:\/\/openrouter\.ai/);
+  assert.match(headers,/X-Frame-Options: DENY/);
+  assert.match(headers,/X-Content-Type-Options: nosniff/);
+  assert.match(headers,/Strict-Transport-Security:/);
 });
