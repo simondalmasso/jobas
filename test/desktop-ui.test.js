@@ -55,7 +55,8 @@ test("frontend imports profile and coach modules while backend stays AI-free",()
   const worker=fs.readFileSync("src/index.js","utf8");
   assert.match(a,/\.\/profile\.js/);
   assert.match(a,/\.\/coach\.js/);
-  assert.doesNotMatch(worker,/openrouter|chat\/completions|transcription/i);
+  assert.doesNotMatch(worker,/fetch\([^\n]*openrouter|chat\/completions|transcription/i);
+  assert.match(worker,/connect-src 'self' https:\/\/openrouter\.ai/);
 });
 
 test("window focus does not re-cover an opened action and mobile uses one active window",()=>{
