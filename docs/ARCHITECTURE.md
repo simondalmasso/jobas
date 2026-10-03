@@ -13,6 +13,8 @@ JOBAS is a small public web application built on Cloudflare Workers and Static A
             │                               │
             └───────────────┬───────────────┘
                             │
+                  data/curated-local.json
+                            │
                     Cloudflare Worker
                  feed + MCP + static app
                             │
@@ -34,6 +36,7 @@ JOBAS is a small public web application built on Cloudflare Workers and Static A
 Browser application.
 
 - `app.js` — product UI, feed interaction and application workflow.
+- `fit.js` — candidate-fit scoring using browser-local profile state only.
 - `profile.js` — browser-local candidate profile.
 - `user-memory.js` — favorites, searches and user folders.
 - `coach.js` — user-owned OpenRouter connection and browser speech helpers.
@@ -46,21 +49,32 @@ Cloudflare Worker.
 
 - `index.js` — HTTP routes, feed orchestration and scheduled refresh.
 - `sources.js` — automatic opportunity sources.
-- `judge.js` — normalization, classification and ranking helpers.
+- `judge.js` — normalization, classification and generic public-quality helpers. It must not encode candidate preferences.
 - `mcp.js` — public read-only MCP.
 
 ### `data/`
 
-Canonical manually curated radar inputs.
+Source-backed curated radar inputs. Named/manual opportunities belong here rather than in Worker source.
 
-Only:
+Current surfaces:
 
 - `gpt-local.json`
 - `gpt-remoto.json`
+- `curated-local.json`
 
 ### `test/`
 
-Node test suite covering feed, workflow, MCP, UI contracts, profile, memory and Coach boundaries.
+Node contracts plus a headless-browser acceptance gate covering feed, workflow, MCP, UI, profile, memory and Coach boundaries.
+
+## Ranking boundary
+
+Server ordering is generic public quality only:
+
+```text
+source/risk evidence + freshness + compensation transparency + geographic compatibility
+```
+
+Personal candidate fit is computed only in the browser from the user's own local profile.
 
 ## AI boundary
 
