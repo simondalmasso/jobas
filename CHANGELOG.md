@@ -4,6 +4,18 @@ All notable product changes to JOBAS are documented here.
 
 ## Unreleased
 
+## 1.1.0 — 2026-10-03
+
+### Product
+- compact Penny assistant using the user's own Hugging Face token directly from the browser;
+- lightweight desktop Notes, Paint and tic-tac-toe utilities;
+- canonical Penny artwork integrated without changing the established retro JOBAS desktop identity.
+
+### Trust and hardening
+- OSS hardening baseline from v1.0.0 preserved;
+- M8ven Trust Index badge and compact external-trust record added;
+- MCP read-only, browser-local personal fit, BYOK boundaries, security headers and desktop/mobile browser gates preserved.
+
 ### Repository
 - public MIT license;
 - product-oriented README and documentation;
