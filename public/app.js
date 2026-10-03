@@ -11,6 +11,7 @@ import {
 } from "./coach.js";
 import { createUserMemory } from "./user-memory.js";
 import { personalFitScore, sortByPersonalFit } from "./fit.js";
+import { createPennyCredentialStore, sendPennyMessage, buildPennySystemPrompt } from "./penny.js";
 
 const $=s=>document.querySelector(s);
 const $$=s=>[...document.querySelectorAll(s)];
@@ -19,7 +20,9 @@ const PROFILE= createProfileStore();
 const MEMORY=createUserMemory();
 const CREDENTIALS=createCredentialStore();
 const SPEECH=createSpeechController();
+const PENNY_CREDENTIALS=createPennyCredentialStore();
 const PROGRESS_KEY="jobas:in-progress:v1";
+const NOTES_KEY="jobas:notes:v1";
 
 const state={
   jobs:[],
@@ -31,6 +34,9 @@ const state={
   personalized:false,
   profile:PROFILE.load(),
   coachHistory:[],
+  pennyHistory:[],
+  gameBoard:Array(9).fill(""),
+  gameTurn:"X",
   z:90
 };
 
@@ -161,6 +167,7 @@ function openWindow(name){
   if(name==="searches")renderSearches();
   if(name==="folders")renderFolders();
   if(name==="coach"){renderCoachJobs();renderCoachProvider();}
+  if(name==="penny")renderPennyProvider();
 }
 function closeWindow(name){
   const el=document.querySelector(`[data-window="${CSS.escape(name)}"]`);
@@ -168,7 +175,7 @@ function closeWindow(name){
 }
 function bringToFront(el){
   if(!el)return;
-  $(".retro-window").forEach(x=>x.classList.remove("is-active"));
+  $$(".retro-window").forEach(x=>x.classList.remove("is-active"));
   el.classList.add("is-active");
   el.style.zIndex=String(++state.z);
 }
@@ -434,6 +441,83 @@ function readFileDataUrl(file){
   });
 }
 
+
+function renderPennyProvider(){
+  const connected=Boolean(PENNY_CREDENTIALS.get());
+  $("#pennyProviderStatus").textContent=connected
+    ?"Hugging Face conectado con credencial del usuario. Llamadas directas desde este navegador."
+    :"Conectá tu cuenta/créditos de Hugging Face. JOBAS no intermedia estas llamadas.";
+  $("#pennyDisconnect").disabled=!connected;
+}
+function pennyMessage(role,text){
+  const el=document.createElement("div");
+  el.className=`penny-message ${role}`;
+  el.textContent=text;
+  $("#pennyMessages").appendChild(el);
+  $("#pennyMessages").scrollTop=$("#pennyMessages").scrollHeight;
+}
+async function sendPenny(text){
+  const token=PENNY_CREDENTIALS.get();
+  if(!token){openWindow("penny");toast("Conectá tu cuenta de Hugging Face primero.",true);return;}
+  const userText=String(text||"").trim();
+  if(!userText)return;
+  const system=buildPennySystemPrompt({profile:state.profile,jobs:filtered().slice(0,6)});
+  state.pennyHistory.push({role:"user",content:userText});
+  pennyMessage("user",userText);
+  $("#pennyInput").value="";
+  $("#pennySend").disabled=true;
+  $("#pennyProviderStatus").textContent="Pensando con tu cuenta…";
+  try{
+    const out=await sendPennyMessage({
+      token,
+      model:$("#pennyModel").value.trim()||"google/gemma-2-2b-it:cheapest",
+      messages:[{role:"system",content:system},...state.pennyHistory.slice(-10)]
+    });
+    state.pennyHistory.push({role:"assistant",content:out.content});
+    pennyMessage("assistant",out.content);
+  }catch(e){
+    pennyMessage("assistant","Error: "+e.message);
+    toast("Penny no pudo consultar Hugging Face: "+e.message,true);
+  }finally{
+    $("#pennySend").disabled=false;
+    renderPennyProvider();
+  }
+}
+function setupNotes(){
+  try{$("#notesText").value=localStorage.getItem(NOTES_KEY)||"";}catch{}
+  $("#notesText").addEventListener("input",()=>{
+    try{localStorage.setItem(NOTES_KEY,$("#notesText").value);$("#notesStatus").textContent="Guardado local";}catch{$("#notesStatus").textContent="No se pudo guardar";}
+  });
+  $("#notesClear").onclick=()=>{if(!confirm("¿Limpiar las notas guardadas en este navegador?"))return;$("#notesText").value="";try{localStorage.removeItem(NOTES_KEY);}catch{}};
+}
+function setupPaint(){
+  const canvas=$("#paintCanvas"),ctx=canvas.getContext("2d");
+  ctx.lineCap="round";ctx.lineJoin="round";ctx.strokeStyle="#111";
+  let drawing=false,last=null;
+  const point=e=>{const r=canvas.getBoundingClientRect();return{x:(e.clientX-r.left)*canvas.width/r.width,y:(e.clientY-r.top)*canvas.height/r.height};};
+  canvas.addEventListener("pointerdown",e=>{drawing=true;last=point(e);canvas.setPointerCapture?.(e.pointerId);});
+  canvas.addEventListener("pointermove",e=>{if(!drawing)return;const p=point(e);ctx.lineWidth=Number($("#paintSize").value)||4;ctx.beginPath();ctx.moveTo(last.x,last.y);ctx.lineTo(p.x,p.y);ctx.stroke();last=p;});
+  const stop=()=>{drawing=false;last=null;};
+  canvas.addEventListener("pointerup",stop);canvas.addEventListener("pointercancel",stop);canvas.addEventListener("pointerleave",stop);
+  $("#paintClear").onclick=()=>ctx.clearRect(0,0,canvas.width,canvas.height);
+}
+function gameWinner(board){
+  const lines=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+  for(const [a,b,c] of lines)if(board[a]&&board[a]===board[b]&&board[a]===board[c])return board[a];
+  return board.every(Boolean)?"draw":"";
+}
+function renderGame(){
+  $$("#ticGrid [data-cell]").forEach((b,i)=>{b.textContent=state.gameBoard[i];b.disabled=Boolean(state.gameBoard[i]||gameWinner(state.gameBoard));});
+  const winner=gameWinner(state.gameBoard);
+  $("#gameStatus").textContent=winner==="draw"?"Empate.":winner?`Ganó ${winner}.`:`Turno: ${state.gameTurn}`;
+}
+function resetGame(){state.gameBoard=Array(9).fill("");state.gameTurn="X";renderGame();}
+function setupGame(){
+  $("#ticGrid").addEventListener("click",e=>{const b=e.target.closest("[data-cell]");if(!b)return;const i=Number(b.dataset.cell);if(state.gameBoard[i]||gameWinner(state.gameBoard))return;state.gameBoard[i]=state.gameTurn;state.gameTurn=state.gameTurn==="X"?"O":"X";renderGame();});
+  $("#gameReset").onclick=resetGame;
+  renderGame();
+}
+
 async function loadFeed(){
   const r=await fetch("/api/feed",{cache:"no-store"});
   if(!r.ok)throw new Error(`HTTP ${r.status}`);
@@ -562,6 +646,21 @@ function wireEvents(){
     });
   };
 
+  $("#pennyUseKey").onclick=()=>{
+    const key=$("#pennyKeyInput").value.trim();
+    if(!key){toast("Pegá un token de Hugging Face.",true);return;}
+    PENNY_CREDENTIALS.set(key,$("#pennyRemember").checked);
+    $("#pennyKeyInput").value="";
+    renderPennyProvider();
+    toast("Token guardado en este navegador.");
+  };
+  $("#pennyDisconnect").onclick=()=>{PENNY_CREDENTIALS.clear();state.pennyHistory=[];renderPennyProvider();toast("Hugging Face desconectado de este navegador.");};
+  $("#pennySend").onclick=()=>sendPenny($("#pennyInput").value);
+  $("#pennyInput").addEventListener("keydown",e=>{if((e.ctrlKey||e.metaKey)&&e.key==="Enter"){e.preventDefault();sendPenny($("#pennyInput").value);}});
+
+  setupNotes();
+  setupPaint();
+  setupGame();
   $("#cvProcess").onclick=processCv;
 
   document.addEventListener("keydown",e=>{
@@ -586,7 +685,7 @@ function tickClock(){
 async function boot(){
   wireEvents();
   renderProfile();
-  renderApplications();renderFavorites();renderSearches();renderFolders();renderCoachProvider();
+  renderApplications();renderFavorites();renderSearches();renderFolders();renderCoachProvider();renderPennyProvider();
   tickClock();setInterval(tickClock,30000);
   await handleOAuthReturn();
   try{await loadFeed();}
