@@ -22,9 +22,10 @@ mirror_github_to_gitlab:
     - git init --bare upstream.git
     - cd upstream.git
     - git remote add github https://github.com/simondalmasso/jobas.git
-    - git fetch --prune github '+refs/heads/*:refs/heads/*' '+refs/tags/*:refs/tags/*'
+    - git fetch github '+refs/heads/main:refs/heads/main' '+refs/tags/*:refs/tags/*'
     - git remote add gitlab "https://gitlab-ci-token:${CI_JOB_TOKEN}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git"
-    - git push --force --prune gitlab '+refs/heads/*:refs/heads/*' '+refs/tags/*:refs/tags/*'
+    - git push gitlab refs/heads/main:refs/heads/main
+    - git push gitlab --tags
     - GH_SHA="$(git rev-parse refs/heads/main)"
     - GL_SHA="$(git ls-remote gitlab refs/heads/main | awk '{print $1}')"
     - test -n "$GH_SHA"

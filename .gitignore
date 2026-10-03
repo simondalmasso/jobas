@@ -9,3 +9,7 @@ evidence/
 *.log
 .DS_Store
 .firebase/
+qa-*.png
+.preview-server.mjs
+.desktop-qa.mjs
+*.bak.*
