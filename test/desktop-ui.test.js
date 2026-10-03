@@ -65,3 +65,53 @@ test("window focus does not re-cover an opened action and mobile uses one active
   assert.match(a,/matchMedia[^\n]*max-width:700px/);
   assert.match(a,/if\(mobile\)\$\$\("\.retro-window"\)\.forEach/);
 });
+
+
+test("desktop suma utilidades livianas, branding superior y Penny",()=>{
+  const h=html();
+  for(const token of [
+    'id="desktopBrand"',
+    'data-window-open="notes"',
+    'data-window-open="paint"',
+    'data-window-open="game"',
+    'id="notesWindow"',
+    'id="paintWindow"',
+    'id="gameWindow"',
+    'id="pennyLauncher"',
+    'id="pennyWindow"',
+    'id="pennyInput"',
+    'id="pennySend"'
+  ]) assert.ok(h.includes(token),token);
+});
+
+test("Penny usa Hugging Face desde el navegador, no el Worker",()=>{
+  const penny=fs.readFileSync("public/penny.js","utf8");
+  const worker=fs.readFileSync("src/index.js","utf8");
+  assert.match(penny,/router\.huggingface\.co\/v1\/chat\/completions/);
+  assert.doesNotMatch(penny,/workers\.dev|\/api\/penny|\/api\/ai/);
+  assert.doesNotMatch(worker,/huggingface|router\.huggingface\.co/i);
+});
+
+
+test("bringToFront limpia foco sobre todas las ventanas sin error",()=>{
+  const a=app();
+  const block=a.match(/function bringToFront\(el\)\{([\s\S]*?)\n\}/)?.[1]||"";
+  assert.match(block,/\$\$\("\.retro-window"\)\.forEach\(x=>x\.classList\.remove\("is-active"\)\)/);
+});
+
+
+test("Penny acompaña la UX como launcher chico y panel compacto",()=>{
+  const c=css();
+  assert.match(c,/\.penny-launcher\{[^}]*width:44px[^}]*height:44px/s);
+  assert.match(c,/\.penny-window\{[^}]*width:min\(360px,[^}]*right:12px[^}]*bottom:48px[^}]*top:auto/s);
+  assert.match(c,/\.penny-avatar\{[^}]*width:36px[^}]*height:36px/s);
+});
+
+
+test("usa el asset canónico de Penny sin sustituciones",async()=>{
+  const crypto=await import("node:crypto");
+  const image=fs.readFileSync("public/assets/penny.png");
+  const hash=crypto.createHash("sha256").update(image).digest("hex");
+  assert.equal(hash,"38a2d74306128716bf6e3c424adb0f0d078fd122c9f55c2a7f29e0ff7fffa58d");
+  assert.match(html(),/\/assets\/penny\.png/);
+});

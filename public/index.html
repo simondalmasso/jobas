@@ -21,6 +21,7 @@
 </head>
 <body>
   <main class="desktop" id="desktop">
+    <div class="desktop-brand" id="desktopBrand">JOBAS - Job assistant</div>
     <nav class="desktop-icons" aria-label="Memoria de JOBAS">
       <button class="desktop-icon" type="button" data-window-open="profile">
         <span class="icon-glyph icon-profile" aria-hidden="true">☺</span>
@@ -41,6 +42,18 @@
       <button class="desktop-icon" type="button" data-window-open="folders">
         <span class="icon-glyph icon-folder" aria-hidden="true"></span>
         <span>Mis carpetas</span>
+      </button>
+      <button class="desktop-icon utility-icon" type="button" data-window-open="notes">
+        <span class="icon-glyph icon-note" aria-hidden="true">▤</span>
+        <span>Notas</span>
+      </button>
+      <button class="desktop-icon utility-icon" type="button" data-window-open="paint">
+        <span class="icon-glyph icon-paint" aria-hidden="true">✎</span>
+        <span>Paint</span>
+      </button>
+      <button class="desktop-icon utility-icon" type="button" data-window-open="game">
+        <span class="icon-glyph icon-game" aria-hidden="true">×○</span>
+        <span>Mini juego</span>
       </button>
     </nav>
 
@@ -193,6 +206,35 @@
       <div class="memory-content" id="foldersList"></div>
     </section>
 
+    <section class="retro-window utility-window" id="notesWindow" data-window="notes" hidden aria-label="Notas">
+      <header class="window-titlebar"><span>Notas</span><div class="window-controls"><button type="button" data-window-close="notes">×</button></div></header>
+      <div class="utility-content">
+        <textarea id="notesText" rows="14" placeholder="Notas rápidas. Se guardan solo en este navegador."></textarea>
+        <div class="utility-actions"><span id="notesStatus">Guardado local</span><button class="classic-button" id="notesClear" type="button">Limpiar</button></div>
+      </div>
+    </section>
+
+    <section class="retro-window utility-window" id="paintWindow" data-window="paint" hidden aria-label="Paint simple">
+      <header class="window-titlebar"><span>Paint simple</span><div class="window-controls"><button type="button" data-window-close="paint">×</button></div></header>
+      <div class="utility-content paint-content">
+        <div class="paint-toolbar"><label>Trazo <input id="paintSize" type="range" min="1" max="18" value="4"></label><button class="classic-button" id="paintClear" type="button">Limpiar</button></div>
+        <canvas id="paintCanvas" width="640" height="360" aria-label="Lienzo de dibujo"></canvas>
+      </div>
+    </section>
+
+    <section class="retro-window utility-window" id="gameWindow" data-window="game" hidden aria-label="Tres en raya">
+      <header class="window-titlebar"><span>Tres en raya</span><div class="window-controls"><button type="button" data-window-close="game">×</button></div></header>
+      <div class="utility-content game-content">
+        <p id="gameStatus">Turno: X</p>
+        <div class="tic-grid" id="ticGrid" aria-label="Tablero tres en raya">
+          <button type="button" data-cell="0"></button><button type="button" data-cell="1"></button><button type="button" data-cell="2"></button>
+          <button type="button" data-cell="3"></button><button type="button" data-cell="4"></button><button type="button" data-cell="5"></button>
+          <button type="button" data-cell="6"></button><button type="button" data-cell="7"></button><button type="button" data-cell="8"></button>
+        </div>
+        <button class="classic-button" id="gameReset" type="button">Reiniciar</button>
+      </div>
+    </section>
+
     <section class="retro-window coach-window" id="coachWindow" data-window="coach" hidden aria-label="JOBAS Coach IA">
       <header class="window-titlebar">
         <span>JOBAS Coach IA — entrevistas</span>
@@ -245,6 +287,39 @@
         </div>
       </div>
       <p class="privacy-note">Privacidad: perfil, CV y conversación no pasan por el Worker de JOBAS. Las solicitudes IA van directamente desde tu navegador a OpenRouter.</p>
+    </section>
+
+    <button class="penny-launcher" id="pennyLauncher" type="button" data-window-open="penny" aria-label="Abrir Penny">
+      <img src="/assets/penny.png" alt="" aria-hidden="true"><span>Penny</span>
+    </button>
+
+    <section class="retro-window penny-window" id="pennyWindow" data-window="penny" hidden aria-label="Penny, asistente de JOBAS">
+      <header class="window-titlebar">
+        <span>Penny — asistente JOBAS</span>
+        <div class="window-controls"><button type="button" data-window-close="penny" aria-label="Cerrar">×</button></div>
+      </header>
+      <div class="penny-provider">
+        <img class="penny-avatar" src="/assets/penny.png" alt="Penny, lapicera azul">
+        <div><strong>IA del usuario</strong><small id="pennyProviderStatus">Conectá tu cuenta/créditos de Hugging Face.</small></div>
+      </div>
+      <details class="provider-advanced">
+        <summary>Conectar Hugging Face</summary>
+        <div class="provider-key-row">
+          <input id="pennyKeyInput" type="password" autocomplete="off" placeholder="hf_...">
+          <label><input id="pennyRemember" type="checkbox"> Recordar</label>
+          <button id="pennyUseKey" class="classic-button" type="button">Conectar</button>
+          <button id="pennyDisconnect" class="classic-button" type="button">Desconectar</button>
+        </div>
+        <label class="penny-model-label">Modelo <input id="pennyModel" value="google/gemma-2-2b-it:cheapest" spellcheck="false"></label>
+      </details>
+      <div class="penny-messages" id="pennyMessages" aria-live="polite">
+        <div class="penny-message assistant">Soy Penny. Puedo ayudarte a orientarte en JOBAS, revisar una oportunidad o preparar próximos pasos.</div>
+      </div>
+      <div class="penny-compose">
+        <textarea id="pennyInput" rows="2" placeholder="Escribí tu mensaje..."></textarea>
+        <button id="pennySend" class="classic-button primary" type="button">Enviar</button>
+      </div>
+      <p class="privacy-note">Penny usa tu propia cuenta/créditos de Hugging Face directamente desde este navegador. JOBAS no recibe la clave ni intermedia la inferencia.</p>
     </section>
 
     <menu class="start-menu" id="startMenu" hidden>
