@@ -1,152 +1,189 @@
-# JOBAS
+# JOBAS — Computer Job Assistant
 
-JOBAS es un radar público de oportunidades para Argentina/LatAm y un escritorio personal para organizar la búsqueda laboral, seguimiento, favoritos y preparación de entrevistas.
+Public job radar and personal job-search workspace for Argentina/LatAm.
 
-## Acceso público
+**Live app:** https://jobas.web.app  
+**Primary runtime:** https://jobas.simondalmasso44.workers.dev  
+**Public MCP:** https://jobas.simondalmasso44.workers.dev/mcp
 
-- Aplicación / backend canónico: https://jobas.simondalmasso44.workers.dev
-- MCP público: https://jobas.simondalmasso44.workers.dev/mcp
-- Alias Firebase: https://jobas.web.app
+[![CI](https://github.com/simondalmasso/jobas/actions/workflows/ci.yml/badge.svg)](https://github.com/simondalmasso/jobas/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-Cloudflare Workers sigue siendo el único runtime de JOBAS. Firebase Hosting se usa únicamente como alias/redirección; no duplica backend, datos ni lógica.
+## What JOBAS does
 
-## Canon
+JOBAS combines a public opportunity radar with a browser-local workspace for managing a job search.
 
-Repositorio principal: https://github.com/simondalmasso/jobas
+- **Remote + local radar** for Argentina/LatAm.
+- **Profile-driven search** without requiring an account.
+- **Application tracking**, favorites, saved searches and custom folders.
+- **Application workflow** that distinguishes traditional CV-based jobs from direct-contact opportunities.
+- **AI interview Coach** with text and optional browser voice.
+- **Public read-only MCP** for agents and external tools.
 
-Espejo: https://gitlab.com/simondalmasso/jobas
+The product keeps infrastructure deliberately small: Cloudflare Workers + Static Assets + KV, two canonical radar JSON files and native browser storage for personal workspace state.
 
-`GitHub/main` es la autoridad de código, documentación y configuración de JOBAS.
+## Product principles
 
-## Datos de radar
+1. **Public first.** Browsing the radar does not require login.
+2. **Human in the loop.** JOBAS organizes and assists; it does not silently apply on behalf of the user.
+3. **User-owned AI.** The interview Coach connects directly to the user's OpenRouter account.
+4. **Low-cost runtime.** No hidden AI proxy, no hourly browser agents and no background inference in the Worker.
+5. **Traceable opportunities.** Source links, geography, compensation and freshness stay visible.
+6. **Small canonical surface.** GitHub `main` is authoritative.
 
-JOBAS conserva únicamente dos archivos JSON de radar:
+## AI Coach: cost boundary
 
-- `data/gpt-local.json` — oportunidades locales/presenciales.
-- `data/gpt-remoto.json` — oportunidades remotas.
-
-No se agregan datasets de radar nuevos para memoria, perfil o Coach. Esa información vive en el navegador del usuario.
-
-## Escritorio personal
-
-La interfaz usa una metáfora de escritorio retro, sin emular un sistema operativo ni incluir consola/boot falsos.
-
-Áreas principales:
-
-- Perfil.
-- Búsquedas guardadas.
-- Postulaciones.
-- Favoritos.
-- Carpetas personalizadas.
-- Ofertas de hoy.
-- Búsqueda personalizada.
-- JOBAS Coach IA para entrevistas.
-
-El perfil se puede completar manualmente o desde un CV. Para personalización mínima requiere:
-
-- nombre;
-- al menos un objetivo laboral;
-- al menos una modalidad: remoto, local/presencial o microjobs.
-
-Perfil, favoritos, búsquedas, carpetas y seguimiento se guardan browser-side.
-
-## Ofertas y seguimiento
-
-Vistas del feed:
-
-- `REMOTO`
-- `LOCAL`
-- `EN CURSO`
-
-Se mantienen los flujos existentes de aplicación:
-
-- vacantes tradicionales: seguimiento + preparación de CV + aplicación;
-- microjobs/Telegram/directos: contacto directo, sin forzar CV;
-- plataformas como Workana/Upwork: flujo de propuesta, sin forzar CV.
-
-La búsqueda personalizada filtra el feed ya cargado usando el perfil local del usuario; no dispara un crawler ni una búsqueda externa desde el Worker.
-
-## JOBAS Coach IA
-
-El Coach permite:
-
-- simulación de entrevista;
-- entrenamiento de respuestas;
-- feedback posterior;
-- texto;
-- entrada por voz cuando el navegador soporta `SpeechRecognition`;
-- lectura de respuestas mediante `speechSynthesis`.
-
-Proveedor actual: OpenRouter.
-
-### Frontera de costo y privacidad
-
-El Coach **no usa Workers AI ni consume inferencia desde JOBAS**.
-
-Flujo:
+JOBAS does **not** pay for or proxy AI inference.
 
 ```text
-navegador del usuario -> OpenRouter
+user browser ───────────────> OpenRouter
+       │
+       └── profile / CV / interview context
 ```
 
-No:
+Not:
 
 ```text
-navegador -> JOBAS Worker -> proveedor IA
+browser -> JOBAS Worker -> AI provider
 ```
 
-El usuario conecta su propia cuenta mediante OAuth PKCE o puede usar su propia API key.
+The provider credential belongs to the user, is browser-side, and defaults to session-only storage.
 
-- OAuth usa PKCE S256 + `state`.
-- La credencial queda en `sessionStorage` por defecto.
-- Persistencia en `localStorage` es opt-in.
-- Desconectar elimina las credenciales browser-side.
-- Las llamadas del Coach y el procesamiento de CV van directamente a `https://openrouter.ai`.
-- `src/` no contiene integración con OpenRouter, chat completions, transcripción ni voz.
-- JOBAS no paga ni intermedia el consumo IA del usuario.
+See [Privacy and data flow](docs/PRIVACY.md).
 
-Para PDF, JOBAS usa el soporte de file input de OpenRouter desde el navegador del usuario. TXT/MD se leen localmente antes de enviarlos al proveedor elegido por el usuario.
+## Architecture
 
-## Runtime
-
-- Cloudflare Workers + Static Assets + KV.
-- Sin login obligatorio.
-- Sin Workers AI en el runtime.
-- Cron diario existente: `15 10 * * *`.
-- El MCP es stateless/read-only y no agrega polling ni loops.
-- Los visitantes leen el snapshot; no disparan el radar completo.
-- Fuentes automáticas: WeRemoto, Freehire, Carryer Tech, Remote OK, Remotive, Himalayas, Jobicy y We Work Remotely.
-
-## MCP público
-
-`POST /mcp` expone el MCP público y read-only. La entrada recomendada para agentes es `agent_bootstrap`.
-
-El MCP puede consultar estado, oportunidades, fuentes y herramientas públicas de investigación, pero no modifica postulaciones ni dispara navegadores/crawlers en segundo plano.
-
-## Firebase
-
-Configuración: `firebase.json` + `.firebaserc`.
-
-Deploy manual del alias:
-
-```bash
-npm run firebase:sites
-npx --yes firebase-tools hosting:sites:create jobas --project jobas-d3c12
-npm run firebase:deploy:redirect
+```text
+GitHub main
+   │
+   ├── data/gpt-local.json
+   └── data/gpt-remoto.json
+            │
+            ▼
+     Cloudflare Worker
+      feed + MCP + app
+            │
+            ▼
+         Browser
+   ┌────────┴─────────┐
+   │                  │
+local workspace   optional AI Coach
+                      │
+                      ▼
+                 OpenRouter
+              (user-owned account)
 ```
 
-## Desarrollo y verificación
+Full details: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+
+## Repository layout
+
+```text
+.
+├── public/                  # Browser application
+│   ├── app.js               # Main UI + feed interaction
+│   ├── coach.js             # User-owned AI provider boundary
+│   ├── profile.js           # Browser-local profile
+│   ├── user-memory.js       # Favorites, searches, folders
+│   ├── workflow.js          # Apply/contact workflow
+│   ├── index.html
+│   └── styles.css
+├── src/                     # Cloudflare Worker
+│   ├── index.js             # Routes, feed, scheduled refresh
+│   ├── sources.js           # Automatic opportunity sources
+│   ├── judge.js             # Normalization/ranking
+│   └── mcp.js               # Public read-only MCP
+├── data/
+│   ├── gpt-local.json
+│   └── gpt-remoto.json
+├── test/                    # Node test suite
+├── docs/                    # Architecture, privacy, research
+├── firebase-public/         # Redirect-only Firebase alias
+├── wrangler.jsonc
+└── package.json
+```
+
+## Local development
+
+Requirements:
+
+- Node.js 22+
+- npm
 
 ```bash
+git clone https://github.com/simondalmasso/jobas.git
+cd jobas
 npm ci
+npm run dev
+```
+
+Verification:
+
+```bash
+npm run verify
+```
+
+That runs:
+
+```bash
 npm test
 npm run dry-run
 ```
 
-Deploy manual:
+## Deployment
+
+Primary deployment:
 
 ```bash
 npm run deploy
 ```
 
-GitHub Actions ejecuta tests + dry-run sobre `main` y pull requests.
+Firebase is only a public alias/redirect layer:
+
+```bash
+npm run firebase:deploy:redirect
+```
+
+It does not host a second backend.
+
+## Radar data
+
+JOBAS keeps only two curated JSON inputs:
+
+- `data/gpt-local.json`
+- `data/gpt-remoto.json`
+
+Automated sources are normalized and merged into the public feed by the Worker.
+
+Research notes for opportunity sources live under [docs/research/](docs/research/).
+
+## Public MCP
+
+Endpoint:
+
+```text
+POST https://jobas.simondalmasso44.workers.dev/mcp
+```
+
+The MCP is public, stateless and read-only. Recommended first tool for agents: `agent_bootstrap`.
+
+It does not create applications, store provider secrets or start background browsers.
+
+## Security and privacy
+
+- [Security policy](SECURITY.md)
+- [Privacy and data flow](docs/PRIVACY.md)
+- [Contributing](CONTRIBUTING.md)
+- [Canonical repository rules](docs/CANONICAL-REPOSITORY.md)
+
+Never commit API keys, CVs, browser sessions or personal candidate data.
+
+## License
+
+JOBAS is released under the [MIT License](LICENSE).
+
+Copyright © 2026 Simón Dalmasso.
+
+---
+
+**Powered by GPT + GitHub + Cloudflare**
