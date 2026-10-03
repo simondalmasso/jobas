@@ -2,30 +2,16 @@ import { buildFeed, SOURCE_REGISTRY, DISCOVERY_SOURCES } from "./sources.js";
 import { finalizeJob } from "./judge.js";
 import { resolveApplicationMode } from "../public/workflow.js";
 import { handleMcpRequest } from "./mcp.js";
+import localRadar from "../data/gpt-local.json" with { type: "json" };
+import remoteRadar from "../data/gpt-remoto.json" with { type: "json" };
+import curatedLocal from "../data/curated-local.json" with { type: "json" };
 
 const FEED_KEY="feed:v2";
-const CURATED_KEY="curated-findings:v5";
-const CURATED_TTL_MS=5*60*1000;
 
 const DATA_FILES=[
-  {
-    lane:"LOCAL",
-    id:"local",
-    name:"Curated local radar",
-    url:"https://raw.githubusercontent.com/simondalmasso/jobas/main/data/gpt-local.json"
-  },
-  {
-    lane:"REMOTO",
-    id:"remoto",
-    name:"Curated remote radar",
-    url:"https://raw.githubusercontent.com/simondalmasso/jobas/main/data/gpt-remoto.json"
-  },
-  {
-    lane:"LOCAL",
-    id:"curated-local",
-    name:"Verified local coverage",
-    url:"https://raw.githubusercontent.com/simondalmasso/jobas/main/data/curated-local.json"
-  }
+  {lane:"LOCAL",id:"local",name:"Curated local radar",path:"data/gpt-local.json",data:localRadar},
+  {lane:"REMOTO",id:"remoto",name:"Curated remote radar",path:"data/gpt-remoto.json",data:remoteRadar},
+  {lane:"LOCAL",id:"curated-local",name:"Verified local coverage",path:"data/curated-local.json",data:curatedLocal}
 ];
 
 const SECURITY_HEADERS={
@@ -118,50 +104,23 @@ function normalizeFinding(x,meta){
   };
   return finalizeJob(base);
 }
-async function loadCuratedFindings(env){
-  const cached=await env.JOBAS_FEED.get(CURATED_KEY);
-  if(cached){
-    try{
-      const parsed=JSON.parse(cached);
-      if(Date.now()-parsed.cachedAt<CURATED_TTL_MS)return parsed;
-    }catch{}
-  }
-  const settled=await Promise.allSettled(DATA_FILES.map(async meta=>{
-    const r=await fetch(meta.url,{headers:{"user-agent":"JOBAS/1.0","cache-control":"no-cache"}});
-    if(!r.ok)throw new Error(String(r.status));
-    const data=await r.json();
-    const findings=(data.findings||[]).filter(isCurrentFinding).map(x=>normalizeFinding(x,meta)).filter(Boolean);
-    return{meta,updatedAt:data.updatedAt||null,findings};
-  }));
+function loadCuratedFindings(){
   const jobs=[],health=[];
-  settled.forEach((res,i)=>{
-    const meta=DATA_FILES[i];
-    if(res.status==="fulfilled"){
-      jobs.push(...res.value.findings);
-      health.push({
-        source:"data-"+meta.id,
-        name:meta.name,
-        state:"healthy",
-        jobs:res.value.findings.length,
-        lastCheck:new Date().toISOString(),
-        url:meta.url,
-        updatedAt:res.value.updatedAt
-      });
-    }else{
-      health.push({
-        source:"data-"+meta.id,
-        name:meta.name,
-        state:"degraded",
-        jobs:0,
-        lastCheck:new Date().toISOString(),
-        url:meta.url,
-        error:String(res.reason?.message||res.reason)
-      });
-    }
-  });
-  const payload={cachedAt:Date.now(),jobs,health};
-  await env.JOBAS_FEED.put(CURATED_KEY,JSON.stringify(payload),{expirationTtl:86400});
-  return payload;
+  for(const meta of DATA_FILES){
+    const data=meta.data||{};
+    const findings=(data.findings||[]).filter(isCurrentFinding).map(x=>normalizeFinding(x,meta)).filter(Boolean);
+    jobs.push(...findings);
+    health.push({
+      source:"data-"+meta.id,
+      name:meta.name,
+      state:"healthy",
+      jobs:findings.length,
+      lastCheck:new Date().toISOString(),
+      path:meta.path,
+      updatedAt:data.updatedAt||null
+    });
+  }
+  return{jobs,health};
 }
 function normalizeBaseFeed(feed){
   return{
@@ -198,17 +157,17 @@ function mergeFeed(feed,curated){
 }
 async function currentFeed(env){
   const base=await readFeed(env)||await refresh(env);
-  const curated=await loadCuratedFindings(env);
+  const curated=loadCuratedFindings();
   return mergeFeed(base,curated);
 }
 async function currentSources(env){
   const feed=await readFeed(env);
-  const curated=await loadCuratedFindings(env);
+  const curated=loadCuratedFindings();
   return{
     active:Object.values(SOURCE_REGISTRY),
     health:[...(curated.health||[]),...(feed?.health||[])],
     discovery:DISCOVERY_SOURCES,
-    dataFiles:DATA_FILES
+    dataFiles:DATA_FILES.map(({data,...meta})=>meta)
   };
 }
 async function fetchPublicText(url){
@@ -251,8 +210,8 @@ export default{
     return withSecurityHeaders(await env.ASSETS.fetch(request));
   },
   async scheduled(_controller,env,ctx){
-    ctx.waitUntil(Promise.all([refresh(env),loadCuratedFindings(env)]));
+    ctx.waitUntil(refresh(env));
   }
 };
 
-export { SECURITY_HEADERS, DATA_FILES, normalizeFinding, mergeFeed };
+export { SECURITY_HEADERS, DATA_FILES, normalizeFinding, mergeFeed, loadCuratedFindings };
