@@ -34,10 +34,13 @@ The scheduled mirror fetches GitHub `main` and pushes it without force-pushing t
 
 ## Canonical data
 
-The curated radar surface is intentionally limited to:
+Curated opportunity data lives under `data/`. Current source-backed surfaces are:
 
 - `data/gpt-local.json`
 - `data/gpt-remoto.json`
+- `data/curated-local.json`
+
+Runtime source must not contain named manually curated job literals.
 
 Generated folders, local QA artifacts, caches and secrets are not canonical.
 
