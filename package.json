@@ -8,9 +8,10 @@
     "dev": "wrangler dev --test-scheduled",
     "dry-run": "wrangler deploy --dry-run --outdir dist/worker",
     "deploy": "wrangler deploy",
-    "verify": "npm test && npm run dry-run",
+    "verify": "npm test && npm run dry-run && npm run test:browser",
     "firebase:sites": "npx --yes firebase-tools hosting:sites:list --project jobas-d3c12",
-    "firebase:deploy:redirect": "npx --yes firebase-tools deploy --only hosting --project jobas-d3c12"
+    "firebase:deploy:redirect": "npx --yes firebase-tools deploy --only hosting --project jobas-d3c12",
+    "test:browser": "node test/browser-smoke.mjs"
   },
   "devDependencies": {
     "wrangler": "^4.145.0"
