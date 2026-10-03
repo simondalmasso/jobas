@@ -26,11 +26,11 @@ Firebase Hosting is redirect-only. It is not a second backend.
 
 ## Mirror
 
-GitLab may be maintained as a one-way replica:
+GitLab is maintained as a one-way replica:
 
 https://gitlab.com/simondalmasso/jobas
 
-The mirror must never become a source of truth or automatically promote GitLab-only changes back into GitHub.
+The scheduled mirror fetches GitHub `main` and pushes it without force-pushing the protected branch. The mirror must never become a source of truth or automatically promote GitLab-only changes back into GitHub. Mirror health still requires a successful GitLab pipeline plus SHA equality with GitHub `main`.
 
 ## Canonical data
 
