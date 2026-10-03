@@ -106,3 +106,12 @@ test("Penny acompaña la UX como launcher chico y panel compacto",()=>{
   assert.match(c,/\.penny-window\{[^}]*width:min\(360px,[^}]*right:12px[^}]*bottom:48px[^}]*top:auto/s);
   assert.match(c,/\.penny-avatar\{[^}]*width:36px[^}]*height:36px/s);
 });
+
+
+test("usa el asset canónico de Penny sin sustituciones",async()=>{
+  const crypto=await import("node:crypto");
+  const image=fs.readFileSync("public/assets/penny.png");
+  const hash=crypto.createHash("sha256").update(image).digest("hex");
+  assert.equal(hash,"38a2d74306128716bf6e3c424adb0f0d078fd122c9f55c2a7f29e0ff7fffa58d");
+  assert.match(html(),/\/assets\/penny\.png/);
+});
