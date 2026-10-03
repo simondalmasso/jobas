@@ -3,19 +3,25 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import { safeExternalHref, sameJob } from "../public/workflow.js";
 
-test("menu principal usa controles reales y no etiquetas decorativas",()=>{
+test("desktop usa controles reales para abrir las áreas de JOBAS",()=>{
   const html=fs.readFileSync("public/index.html","utf8");
-  for(const menu of ["jobas","filters","view","panel","help"]){
-    assert.match(html,new RegExp(`data-menu-trigger="${menu}"`));
+  for(const win of ["profile","searches","applications","favorites","folders","offers","coach"]){
+    assert.match(html,new RegExp(`(?:data-window-open|data-window)="${win}"`));
   }
-  assert.doesNotMatch(html,/<span>File<\/span>|<span>Options<\/span>|<span>View<\/span>|<span>Tree<\/span>|<span>Help<\/span>/);
+  assert.match(html,/id="startButton"/);
+  assert.match(html,/id="profileForm"/);
+  assert.match(html,/id="q"/);
+  assert.doesNotMatch(html,/PRESS ANY KEY TO BOOT|id="termForm"|Command Prompt/i);
 });
 
-test("layout desktop usa sidebar angosta y ocupa el alto disponible",()=>{
+test("layout desktop usa ventanas clásicas y tiene fallback móvil sin overflow intencional",()=>{
   const css=fs.readFileSync("public/styles.css","utf8");
-  assert.match(css,/grid-template-columns:clamp\(190px,22vw,230px\) minmax\(0,1fr\)/);
+  assert.match(css,/\.desktop\s*\{/);
+  assert.match(css,/\.retro-window\s*\{/);
+  assert.match(css,/\.taskbar\s*\{/);
+  assert.match(css,/@media\(max-width:700px\)/);
+  assert.match(css,/width:100%!?/);
   assert.match(css,/min-height:100dvh/);
-  assert.match(css,/grid-template-rows:auto minmax\(0,1fr\) auto/);
 });
 
 test("trabajos sin id ni URL no colisionan entre sí",()=>{

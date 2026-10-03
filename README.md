@@ -1,6 +1,6 @@
 # JOBAS
 
-Radar público de oportunidades para Argentina/LatAm. JOBAS concentra empleos remotos y locales, permite filtrarlos y mantener un seguimiento liviano de postulaciones en curso.
+JOBAS es un radar público de oportunidades para Argentina/LatAm y un escritorio personal para organizar la búsqueda laboral, seguimiento, favoritos y preparación de entrevistas.
 
 ## Acceso público
 
@@ -8,7 +8,7 @@ Radar público de oportunidades para Argentina/LatAm. JOBAS concentra empleos re
 - MCP público: https://jobas.simondalmasso44.workers.dev/mcp
 - Alias Firebase: https://jobas.web.app
 
-Cloudflare Workers sigue siendo el único runtime. Firebase Hosting se usa únicamente como alias/redirección; no duplica backend, datos ni lógica.
+Cloudflare Workers sigue siendo el único runtime de JOBAS. Firebase Hosting se usa únicamente como alias/redirección; no duplica backend, datos ni lógica.
 
 ## Canon
 
@@ -25,28 +25,87 @@ JOBAS conserva únicamente dos archivos JSON de radar:
 - `data/gpt-local.json` — oportunidades locales/presenciales.
 - `data/gpt-remoto.json` — oportunidades remotas.
 
-No hay datasets propios de Prospectos ni Telegram dentro de JOBAS.
+No se agregan datasets de radar nuevos para memoria, perfil o Coach. Esa información vive en el navegador del usuario.
 
-## Interfaz
+## Escritorio personal
 
-La aplicación abre directamente en la interfaz principal. No hay pantalla de arranque, consola simulada ni emulación de sistema operativo.
+La interfaz usa una metáfora de escritorio retro, sin emular un sistema operativo ni incluir consola/boot falsos.
 
-Vistas:
+Áreas principales:
+
+- Perfil.
+- Búsquedas guardadas.
+- Postulaciones.
+- Favoritos.
+- Carpetas personalizadas.
+- Ofertas de hoy.
+- Búsqueda personalizada.
+- JOBAS Coach IA para entrevistas.
+
+El perfil se puede completar manualmente o desde un CV. Para personalización mínima requiere:
+
+- nombre;
+- al menos un objetivo laboral;
+- al menos una modalidad: remoto, local/presencial o microjobs.
+
+Perfil, favoritos, búsquedas, carpetas y seguimiento se guardan browser-side.
+
+## Ofertas y seguimiento
+
+Vistas del feed:
 
 - `REMOTO`
 - `LOCAL`
-- `EN CURSO` — seguimiento guardado en el navegador.
+- `EN CURSO`
 
-La identidad visual mantiene el lenguaje oscuro/monocromo de JOBAS, pero toda la interacción es web convencional: menús, búsqueda, filtros, botones de acción y panel de fuentes.
+Se mantienen los flujos existentes de aplicación:
 
-Atajos:
+- vacantes tradicionales: seguimiento + preparación de CV + aplicación;
+- microjobs/Telegram/directos: contacto directo, sin forzar CV;
+- plataformas como Workana/Upwork: flujo de propuesta, sin forzar CV.
 
-- `/` enfoca búsqueda.
-- `1` REMOTO.
-- `2` LOCAL.
-- `3` EN CURSO.
-- `T` muestra/oculta navegación.
-- `S` abre/cierra Fuentes y estado.
+La búsqueda personalizada filtra el feed ya cargado usando el perfil local del usuario; no dispara un crawler ni una búsqueda externa desde el Worker.
+
+## JOBAS Coach IA
+
+El Coach permite:
+
+- simulación de entrevista;
+- entrenamiento de respuestas;
+- feedback posterior;
+- texto;
+- entrada por voz cuando el navegador soporta `SpeechRecognition`;
+- lectura de respuestas mediante `speechSynthesis`.
+
+Proveedor actual: OpenRouter.
+
+### Frontera de costo y privacidad
+
+El Coach **no usa Workers AI ni consume inferencia desde JOBAS**.
+
+Flujo:
+
+```text
+navegador del usuario -> OpenRouter
+```
+
+No:
+
+```text
+navegador -> JOBAS Worker -> proveedor IA
+```
+
+El usuario conecta su propia cuenta mediante OAuth PKCE o puede usar su propia API key.
+
+- OAuth usa PKCE S256 + `state`.
+- La credencial queda en `sessionStorage` por defecto.
+- Persistencia en `localStorage` es opt-in.
+- Desconectar elimina las credenciales browser-side.
+- Las llamadas del Coach y el procesamiento de CV van directamente a `https://openrouter.ai`.
+- `src/` no contiene integración con OpenRouter, chat completions, transcripción ni voz.
+- JOBAS no paga ni intermedia el consumo IA del usuario.
+
+Para PDF, JOBAS usa el soporte de file input de OpenRouter desde el navegador del usuario. TXT/MD se leen localmente antes de enviarlos al proveedor elegido por el usuario.
 
 ## Runtime
 
