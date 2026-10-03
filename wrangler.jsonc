@@ -29,7 +29,7 @@
   },
   "vars": {
     "FEED_LIMIT": "320",
-    "JOBAS_REFRESH_VERSION": "feed-v2"
+    "JOBAS_REFRESH_VERSION": "feed-v4"
   },
   "migrations": [
     {
