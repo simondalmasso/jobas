@@ -46,7 +46,7 @@ const MIME={
   ".svg":"image/svg+xml",
   ".png":"image/png"
 };
-const CSP="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://openrouter.ai; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'self'; form-action 'self'";
+const CSP="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://openrouter.ai https://router.huggingface.co; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'self'; form-action 'self'";
 
 const server=http.createServer((req,res)=>{
   requests.push({method:req.method,url:req.url});
@@ -211,6 +211,26 @@ try{
   const coachState=await cdp.eval('({visible:!document.querySelector("#coachWindow").hidden,status:document.querySelector("#coachProviderStatus").textContent,connectVisible:!document.querySelector("#coachConnect").hidden,sessionKey:sessionStorage.getItem("jobas:openrouter:key:session"),localKey:localStorage.getItem("jobas:openrouter:key:local")})');
   check("COACH_DISCONNECTED_STATE",coachState.visible&&/No conectada/.test(coachState.status)&&coachState.connectVisible&&!coachState.sessionKey&&!coachState.localKey);
 
+  await cdp.eval('document.querySelector(\'[data-window-open="notes"]\').click();document.querySelector("#notesText").value="QA note";document.querySelector("#notesText").dispatchEvent(new Event("input",{bubbles:true}))');
+  await sleep(50);
+  const notes=await cdp.eval('({value:document.querySelector("#notesText").value,stored:localStorage.getItem("jobas:notes:v1")})');
+  check("NOTES_LOCAL",notes.value==="QA note"&&notes.stored==="QA note");
+
+  await cdp.eval('document.querySelector(\'[data-window-open="paint"]\').click()');
+  await sleep(30);
+  const paint=await cdp.eval('({visible:!document.querySelector("#paintWindow").hidden,w:document.querySelector("#paintCanvas").width,h:document.querySelector("#paintCanvas").height})');
+  check("PAINT_READY",paint.visible&&paint.w===640&&paint.h===360);
+
+  await cdp.eval('document.querySelector(\'[data-window-open="game"]\').click();document.querySelector(\'#ticGrid [data-cell="0"]\').click()');
+  await sleep(30);
+  const game=await cdp.eval('document.querySelector(\'#ticGrid [data-cell="0"]\').textContent');
+  check("GAME_READY",game==="X");
+
+  await cdp.eval('document.querySelector("#pennyLauncher").click()');
+  await sleep(80);
+  const penny=await cdp.eval('(()=>{const w=document.querySelector("#pennyWindow"),r=w.getBoundingClientRect(),img=document.querySelector(".penny-avatar");return{visible:!w.hidden,width:r.width,right:r.right,screen:innerWidth,status:document.querySelector("#pennyProviderStatus").textContent,asset:img.complete&&img.naturalWidth>0};})()');
+  check("PENNY_COMPACT",penny.visible&&penny.width<=360&&penny.right<=penny.screen&&/Hugging Face/.test(penny.status)&&penny.asset,"width="+penny.width+" right="+penny.right);
+
   await cdp.send("Emulation.setDeviceMetricsOverride",{width:390,height:844,deviceScaleFactor:1,mobile:true,screenWidth:390,screenHeight:844});
   await cdp.eval('document.querySelector(\'[data-window-open="profile"]\').click()');
   await sleep(120);
@@ -234,6 +254,7 @@ try{
 
 const required=[
   "PUBLIC_BROWSE_NO_PROFILE","PROFILE_CREATE","PROFILE_LOCAL_ONLY","FAVORITE","SAVE_SEARCH",
-  "APPLICATION_TRACKING","COACH_DISCONNECTED_STATE","MOBILE_390","DESKTOP_1440","CONSOLE_ERRORS"
+  "APPLICATION_TRACKING","COACH_DISCONNECTED_STATE","NOTES_LOCAL","PAINT_READY","GAME_READY","PENNY_COMPACT",
+  "MOBILE_390","DESKTOP_1440","CONSOLE_ERRORS"
 ];
 if(required.some(x=>results.get(x)!==true))process.exitCode=1;
