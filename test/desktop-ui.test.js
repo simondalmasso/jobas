@@ -64,3 +64,29 @@ test("window focus does not re-cover an opened action and mobile uses one active
   assert.match(a,/matchMedia[^\n]*max-width:700px/);
   assert.match(a,/if\(mobile\)\$\$\("\.retro-window"\)\.forEach/);
 });
+
+
+test("desktop suma utilidades livianas, branding superior y Penny",()=>{
+  const h=html();
+  for(const token of [
+    'id="desktopBrand"',
+    'data-window-open="notes"',
+    'data-window-open="paint"',
+    'data-window-open="game"',
+    'id="notesWindow"',
+    'id="paintWindow"',
+    'id="gameWindow"',
+    'id="pennyLauncher"',
+    'id="pennyWindow"',
+    'id="pennyInput"',
+    'id="pennySend"'
+  ]) assert.ok(h.includes(token),token);
+});
+
+test("Penny usa Hugging Face desde el navegador, no el Worker",()=>{
+  const penny=fs.readFileSync("public/penny.js","utf8");
+  const worker=fs.readFileSync("src/index.js","utf8");
+  assert.match(penny,/router\.huggingface\.co\/v1\/chat\/completions/);
+  assert.doesNotMatch(penny,/workers\.dev|\/api\/penny|\/api\/ai/);
+  assert.doesNotMatch(worker,/huggingface|router\.huggingface\.co/i);
+});
