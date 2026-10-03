@@ -1,5 +1,5 @@
 import { normalizeMonthlyPay, finalizeJob } from "./judge.js";
-const UA="JOBAS/1.0 (+https://jobas.simondalmasso44.workers.dev)";
+const UA="JOBAS/1.0";
 const MAX_DESCRIPTION=1200;
 export const SOURCE_REGISTRY={
   weremoto:{name:"WeRemoto",trust:94,workerFee:false,kind:"html",homepage:"https://www.weremoto.com/"},
