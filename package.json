@@ -1,5 +1,5 @@
 {
-  "name": "jobas-feed",
+  "name": "jobas",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -14,5 +14,30 @@
   },
   "devDependencies": {
     "wrangler": "^4.145.0"
+  },
+  "description": "Public job radar and personal job-search workspace for Argentina/LatAm.",
+  "license": "MIT",
+  "author": "Simón Dalmasso",
+  "homepage": "https://jobas.web.app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/simondalmasso/jobas.git"
+  },
+  "bugs": {
+    "url": "https://github.com/simondalmasso/jobas/issues"
+  },
+  "keywords": [
+    "jobs",
+    "job-search",
+    "career",
+    "latam",
+    "argentina",
+    "cloudflare-workers",
+    "mcp",
+    "openrouter",
+    "ai-coach"
+  ],
+  "engines": {
+    "node": ">=22"
   }
 }
