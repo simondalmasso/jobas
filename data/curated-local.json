@@ -1,0 +1,134 @@
+{
+  "schemaVersion": 1,
+  "lane": "LOCAL",
+  "updatedAt": "2026-09-24T20:20:00-03:00",
+  "purpose": "Source-backed manually curated local opportunities. Runtime code consumes this data surface; records are not personal-fit ranked.",
+  "freshnessPolicy": {
+    "maxAgeDaysSinceVerified": 21,
+    "behavior": "Records older than the policy remain inspectable in git but are excluded from the live feed until re-verified."
+  },
+  "findingSchema": {
+    "id": "stable string",
+    "title": "string",
+    "company": "string",
+    "location": "string",
+    "description": "factual summary",
+    "category": "JOBAS category",
+    "sourceName": "string",
+    "sourceUrl": "source homepage",
+    "sourceDetail": "direct verified listing URL",
+    "publishedAt": "ISO-8601 or null",
+    "verifiedAt": "ISO-8601",
+    "expiresAt": "ISO-8601 derived from verifiedAt + freshness policy",
+    "sourceTrust": "0-100 generic source confidence",
+    "workerFee": "boolean|null",
+    "pay": "published compensation only",
+    "evidence": "primary/supporting URLs"
+  },
+  "findings": [
+    {
+      "id": "local-herfasa-marketing",
+      "title": "Analista de Marketing",
+      "company": "Aberturas Herfasa",
+      "location": "Sauce Viejo, Santa Fe",
+      "description": "Marketing & Community Manager presencial. Contenido, campañas orgánicas y pagas, diseño, web, atención digital y reporting.",
+      "category": "marketing",
+      "sourceName": "Computrabajo",
+      "sourceUrl": "https://ar.computrabajo.com/",
+      "sourceDetail": "https://ar.computrabajo.com/ofertas-de-trabajo/oferta-de-trabajo-de-analista-de-marketing-en-sauce-viejo-D58B626227BCC70861373E686DCF3405",
+      "applyUrl": "https://ar.computrabajo.com/ofertas-de-trabajo/oferta-de-trabajo-de-analista-de-marketing-en-sauce-viejo-D58B626227BCC70861373E686DCF3405",
+      "publishedAt": "2026-09-01T14:10:49-03:00",
+      "verifiedAt": "2026-09-24T20:20:00-03:00",
+      "expiresAt": "2026-10-15T20:20:00-03:00",
+      "sourceTrust": 90,
+      "workerFee": false,
+      "pay": {
+        "raw": "A convenir",
+        "monthlyMin": null,
+        "monthlyMax": null,
+        "currency": "ARS"
+      },
+      "evidence": [
+        "https://ar.computrabajo.com/ofertas-de-trabajo/oferta-de-trabajo-de-analista-de-marketing-en-sauce-viejo-D58B626227BCC70861373E686DCF3405"
+      ]
+    },
+    {
+      "id": "local-community-santo-tome",
+      "title": "Community Manager",
+      "company": "Consultores de Empresas",
+      "location": "Santo Tomé / Sauce Viejo, Santa Fe",
+      "description": "Gestión de redes, calendario, influencers, reels, pauta y soporte a Marketing. Presencial, jornada de 6 o 9 horas.",
+      "category": "content-social",
+      "sourceName": "Computrabajo / Consultores de Empresas",
+      "sourceUrl": "https://ar.computrabajo.com/",
+      "sourceDetail": "https://ar.computrabajo.com/ofertas-de-trabajo/oferta-de-trabajo-de-community-manager-santo-tome-en-santo-tome-8AE2139979D3F68661373E686DCF3405",
+      "applyUrl": "https://ar.computrabajo.com/ofertas-de-trabajo/oferta-de-trabajo-de-community-manager-santo-tome-en-santo-tome-8AE2139979D3F68661373E686DCF3405",
+      "publishedAt": "2026-09-08T16:45:21-03:00",
+      "verifiedAt": "2026-09-24T20:20:00-03:00",
+      "expiresAt": "2026-10-15T20:20:00-03:00",
+      "sourceTrust": 92,
+      "workerFee": false,
+      "pay": {
+        "raw": "A convenir",
+        "monthlyMin": null,
+        "monthlyMax": null,
+        "currency": "ARS"
+      },
+      "evidence": [
+        "https://ar.computrabajo.com/ofertas-de-trabajo/oferta-de-trabajo-de-community-manager-santo-tome-en-santo-tome-8AE2139979D3F68661373E686DCF3405"
+      ]
+    },
+    {
+      "id": "local-marketing-digital-consumo",
+      "title": "Analista de Marketing Digital y Comunicación",
+      "company": "Empresa de consumo masivo",
+      "location": "Santa Fe, Santa Fe",
+      "description": "Campañas, Meta Business Suite, diseño, atención multicanal, reputación online y fidelización. Jornada lunes a viernes de 8 a 17.",
+      "category": "marketing",
+      "sourceName": "Computrabajo",
+      "sourceUrl": "https://ar.computrabajo.com/",
+      "sourceDetail": "https://ar.computrabajo.com/ofertas-de-trabajo/oferta-de-trabajo-de-analista-de-marketing-digital-y-comunicacion-en-santa-fe-A8696928B677F62C61373E686DCF3405",
+      "applyUrl": "https://ar.computrabajo.com/ofertas-de-trabajo/oferta-de-trabajo-de-analista-de-marketing-digital-y-comunicacion-en-santa-fe-A8696928B677F62C61373E686DCF3405",
+      "publishedAt": "2026-07-28T11:48:22-03:00",
+      "verifiedAt": "2026-09-24T20:20:00-03:00",
+      "expiresAt": "2026-10-15T20:20:00-03:00",
+      "sourceTrust": 85,
+      "workerFee": false,
+      "pay": {
+        "raw": "A convenir",
+        "monthlyMin": null,
+        "monthlyMax": null,
+        "currency": "ARS"
+      },
+      "evidence": [
+        "https://ar.computrabajo.com/ofertas-de-trabajo/oferta-de-trabajo-de-analista-de-marketing-digital-y-comunicacion-en-santa-fe-A8696928B677F62C61373E686DCF3405"
+      ]
+    },
+    {
+      "id": "local-universo-gerente-marketing",
+      "title": "Gerente de Marketing",
+      "company": "UNIVERSO",
+      "location": "Santa Fe, Santa Fe · híbrido",
+      "description": "Estrategia integral, branding, e-commerce, CRM, Power BI, presupuesto y liderazgo de equipo. Perfil senior.",
+      "category": "marketing",
+      "sourceName": "Computrabajo / Universo",
+      "sourceUrl": "https://ar.computrabajo.com/",
+      "sourceDetail": "https://ar.computrabajo.com/ofertas-de-trabajo/oferta-de-trabajo-de-gerente-de-marketing-en-santa-fe-1FFAC05504F33B1061373E686DCF3405",
+      "applyUrl": "https://ar.computrabajo.com/ofertas-de-trabajo/oferta-de-trabajo-de-gerente-de-marketing-en-santa-fe-1FFAC05504F33B1061373E686DCF3405",
+      "publishedAt": "2026-09-11T17:12:02-03:00",
+      "verifiedAt": "2026-09-24T20:20:00-03:00",
+      "expiresAt": "2026-10-15T20:20:00-03:00",
+      "sourceTrust": 88,
+      "workerFee": false,
+      "pay": {
+        "raw": "A convenir",
+        "monthlyMin": null,
+        "monthlyMax": null,
+        "currency": "ARS"
+      },
+      "evidence": [
+        "https://ar.computrabajo.com/ofertas-de-trabajo/oferta-de-trabajo-de-gerente-de-marketing-en-santa-fe-1FFAC05504F33B1061373E686DCF3405"
+      ]
+    }
+  ]
+}
