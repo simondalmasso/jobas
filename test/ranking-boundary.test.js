@@ -28,11 +28,20 @@ test("curated normalization never consumes rank.score or priority",()=>{
   assert.doesNotMatch(x.description,/perfect for owner/i);
 });
 
-test("merged server feed orders only by qualityScore",()=>{
-  const low={id:"low",url:"https://e/low",title:"A",company:"A",qualityScore:20,category:"other"};
-  const high={id:"high",url:"https://e/high",title:"B",company:"B",qualityScore:90,category:"other"};
+test("merged server feed orders only by recomputed generic quality",()=>{
+  const low={
+    id:"low",url:"https://e/low",title:"A",company:"A",category:"other",location:"Remote",
+    sourceTrust:40,workerFee:null,publishedAt:"2026-08-01T00:00:00Z",
+    pay:{raw:"No publicado",monthlyMin:null,monthlyMax:null,currency:"USD"}
+  };
+  const high={
+    id:"high",url:"https://e/high",title:"B",company:"B",category:"other",location:"Argentina",
+    sourceTrust:95,workerFee:false,publishedAt:"2026-10-01T00:00:00Z",
+    pay:{raw:"USD 1000",monthlyMin:1000,monthlyMax:1000,currency:"USD"}
+  };
   const out=mergeFeed({jobs:[low,high],health:[]},{jobs:[],health:[]});
   assert.equal(out.jobs[0].id,"high");
+  assert.ok(out.jobs[0].qualityScore>out.jobs[1].qualityScore);
   assert.equal(out.rankingModel,"generic-quality-v1");
 });
 
