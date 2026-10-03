@@ -7,7 +7,13 @@ const JSON_HEADERS={
   "cache-control":"no-store",
   "access-control-allow-origin":"*",
   "access-control-allow-methods":"POST, OPTIONS",
-  "access-control-allow-headers":"content-type, accept, mcp-protocol-version"
+  "access-control-allow-headers":"content-type, accept, mcp-protocol-version",
+  "content-security-policy":"default-src 'none'; frame-ancestors 'none'; base-uri 'none'",
+  "x-content-type-options":"nosniff",
+  "x-frame-options":"DENY",
+  "referrer-policy":"no-referrer",
+  "permissions-policy":"camera=(), geolocation=(), microphone=(), payment=()",
+  "strict-transport-security":"max-age=31536000; includeSubDomains"
 };
 
 const SKILLS=[
@@ -111,7 +117,7 @@ const TOOL_DEFS=[
   },
   {
     name:"rank_jobs",
-    description:"Return the highest-priority JOBAS opportunities after optional public filters. Read-only.",
+    description:"Return JOBAS opportunities ordered by generic public quality signals (source/risk, freshness, compensation transparency and location compatibility). This is not candidate fit. Read-only.",
     inputSchema:{type:"object",properties:{
       lane:{type:"string",enum:["REMOTO","LOCAL"]},
       category:{type:"string",minLength:1},
@@ -312,17 +318,17 @@ async function callTool(name,args,context){
   const feed=await context.getFeed();
   if(name==="jobas_status")return{
     service:"JOBAS",version:feed?.version||null,generatedAt:feed?.generatedAt||null,
-    jobs:counts(feed),gptFindingsCount:feed?.gptFindingsCount??null,public:true,auth:false
+    jobs:counts(feed),curatedFindingsCount:feed?.curatedFindingsCount??null,public:true,auth:false
   };
   if(name==="agent_bootstrap"){
-    const limit=intArg(args.limit,8,1,20),ranked=filterJobs(feed,{argentina_only:true}).slice().sort((a,b)=>(Number(b.priority)||0)-(Number(a.priority)||0));
-    const micro=filterJobs(feed,{}).filter(j=>applicationMode(j)!=="cv").slice().sort((a,b)=>(Number(b.priority)||0)-(Number(a.priority)||0));
+    const limit=intArg(args.limit,8,1,20),ranked=filterJobs(feed,{argentina_only:true}).slice().sort((a,b)=>(Number(b.qualityScore)||0)-(Number(a.qualityScore)||0));
+    const micro=filterJobs(feed,{}).filter(j=>applicationMode(j)!=="cv").slice().sort((a,b)=>(Number(b.qualityScore)||0)-(Number(a.qualityScore)||0));
     return{
       service:"JOBAS",endpoint:"/mcp",public:true,auth:false,readOnly:true,
       generatedAt:feed?.generatedAt||null,counts:counts(feed),
       top:ranked.slice(0,limit).map(presentJob),microjobs:micro.slice(0,limit).map(presentJob),
       next:["search_jobs","inspect_job","list_microjobs","skill_route","skill_get"],
-      note:"Stateless/on-demand MCP. No MCP hourly polling or background loop."
+      note:"Stateless/on-demand MCP. Server ordering is generic public quality, never candidate fit. No MCP hourly polling or background loop."
     };
   }
   if(name==="list_jobs")return paginate(filterJobs(feed,args),args);
@@ -338,7 +344,7 @@ async function callTool(name,args,context){
     return{found:Boolean(job),job:job?presentJob(job):null};
   }
   if(name==="rank_jobs"){
-    const jobs=filterJobs(feed,args).slice().sort((a,b)=>(Number(b.priority)||0)-(Number(a.priority)||0));
+    const jobs=filterJobs(feed,args).slice().sort((a,b)=>(Number(b.qualityScore)||0)-(Number(a.qualityScore)||0));
     return paginate(jobs,{...args,offset:0});
   }
   if(name==="list_microjobs"){
