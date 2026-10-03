@@ -108,8 +108,9 @@ export function qualityBreakdown(job,now=Date.now()){
 }
 
 export function finalizeJob(job){
-  const category=job.category||classifyCategory(job);
-  const base={...job,category};
+  const {priority:_priority,priorityComponents:_priorityComponents,rank:_rank,rankReason:_rankReason,...publicJob}=job||{};
+  const category=publicJob.category||classifyCategory(publicJob);
+  const base={...publicJob,category};
   const quality=qualityBreakdown(base);
   return{
     ...base,
