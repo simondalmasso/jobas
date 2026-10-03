@@ -19,7 +19,10 @@ JOBAS deliberately keeps a narrow trust boundary:
 - OpenRouter credentials belong to the user and remain browser-side;
 - AI requests go directly from the user's browser to OpenRouter;
 - CV processing is never proxied through the JOBAS Worker;
-- no provider secret is embedded in the repository.
+- no provider secret is embedded in the repository;
+- OAuth uses PKCE S256 plus `state` verification;
+- provider credentials default to `sessionStorage`, persistent storage is explicit opt-in, and disconnect clears both stores;
+- security headers include CSP, HSTS, frame denial, nosniff, referrer policy and permissions policy.
 
 Never commit:
 
@@ -29,4 +32,4 @@ Never commit:
 - personal CVs or candidate data;
 - Cloudflare, GitHub, Firebase or OpenRouter credentials.
 
-See [docs/PRIVACY.md](docs/PRIVACY.md) for the data-flow model.
+See [docs/PRIVACY.md](docs/PRIVACY.md) for the data-flow model and [docs/MCP.md](docs/MCP.md) for the public read-only MCP contract.
