@@ -6,24 +6,24 @@ const jobs=[
   {
     id:"job-remote-1",lane:"REMOTO",title:"Marketing Specialist",company:"Acme",
     location:"Remote · Argentina",description:"Paid media and reporting",category:"marketing",
-    url:"https://example.com/job-1",applicationMode:"cv",priority:90,
+    url:"https://example.com/job-1",applicationMode:"cv",qualityScore:90,
     argentina:{score:92,label:"Argentina/LatAm"},pay:{raw:"USD 1,500",monthlyMin:1500,monthlyMax:1500,currency:"USD"}
   },
   {
     id:"job-micro-1",lane:"REMOTO",title:"Landing page fix",company:"Telegram client",
     location:"Remote",description:"Small paid project",category:"tech",
     url:"https://t.me/example/42",directUrl:"https://web.telegram.org/a/#-1001",
-    applicationMode:"direct",priority:75,argentina:{score:70,label:"A verificar"},
+    applicationMode:"direct",qualityScore:75,argentina:{score:70,label:"A verificar"},
     pay:{raw:"USD 50",monthlyMin:null,monthlyMax:null,currency:"USD"}
   }
 ];
 
 const context={
   getFeed:async()=>({
-    version:"feed-v3",generatedAt:"2026-10-01T00:00:00Z",jobs,jobsCount:jobs.length,
-    gptFindingsCount:2,health:[]
+    version:"feed-v4",generatedAt:"2026-10-01T00:00:00Z",jobs,jobsCount:jobs.length,
+    curatedFindingsCount:2,health:[]
   }),
-  getSources:async()=>({active:[],health:[],discovery:[],gptFiles:[]}),
+  getSources:async()=>({active:[],health:[],discovery:[],dataFiles:[]}),
   fetchText:async url=>url.includes("obra/superpowers")?"# Superpowers\nProcedural development skills.":"# Skill"
 };
 
@@ -98,4 +98,41 @@ test("GET is method-not-allowed and unsupported RPC methods return -32601",async
   const bad=await post({jsonrpc:"2.0",id:9,method:"resources/list",params:{}});
   const body=await bad.json();
   assert.equal(body.error.code,-32601);
+});
+
+
+test("first-class read-only MCP contract tools all return without mutating state",async()=>{
+  const cases=[
+    ["agent_bootstrap",{}],
+    ["jobas_status",{}],
+    ["list_jobs",{limit:10}],
+    ["search_jobs",{query:"marketing",limit:10}],
+    ["inspect_job",{job_id:"job-remote-1"}],
+    ["rank_jobs",{limit:10}],
+    ["list_sources",{}],
+    ["mcp_status",{}]
+  ];
+  for(const [name,args] of cases){
+    const r=await post({jsonrpc:"2.0",id:"contract-"+name,method:"tools/call",params:{name,arguments:args}});
+    assert.equal(r.status,200,name);
+    const body=await r.json();
+    assert.equal(body.result?.isError,false,name);
+    assert.ok(body.result?.structuredContent,name);
+  }
+});
+
+test("rank_jobs uses generic qualityScore and never exposes a candidate-fit rank",async()=>{
+  const r=await post({jsonrpc:"2.0",id:20,method:"tools/call",params:{name:"rank_jobs",arguments:{limit:10}}});
+  const body=await r.json();
+  assert.equal(body.result.structuredContent.jobs[0].id,"job-remote-1");
+  assert.equal(body.result.structuredContent.jobs[0].qualityScore,90);
+  assert.equal("priority" in body.result.structuredContent.jobs[0],false);
+});
+
+test("MCP transport exposes no mutation methods and GET remains read-only forbidden",async()=>{
+  const list=await post({jsonrpc:"2.0",id:21,method:"tools/list",params:{}});
+  const names=(await list.json()).result.tools.map(x=>x.name);
+  assert.equal(names.some(x=>/create|update|delete|apply|submit|send|write|save/i.test(x)),false);
+  const get=await handleMcpRequest(new Request("https://jobas.example/mcp"),context);
+  assert.equal(get.status,405);
 });
