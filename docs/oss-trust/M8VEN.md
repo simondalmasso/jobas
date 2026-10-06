@@ -2,43 +2,49 @@
 
 External trust signal for the public JOBAS MCP. This file records observed state; it is not a substitute for JOBAS tests, CI, source review or security policy.
 
-- Observed: 2026-10-03
+- Observed: 2026-10-06
 - Listing: https://m8ven.ai/mcp/simondalmasso/jobas
 - Repository: https://github.com/simondalmasso/jobas
-- Trust score: 74/100
-- Verdict: Caution
+- ToolCheck trust score: 89/100
+- ToolCheck verdict: Caution
+- ToolCheck reason: Code clean and publisher verified, but no adoption track record yet
 - Code sub-score: 100/100
 - Maintenance: live
 - Freshness: fresh
-- Top findings: none reported by the M8ven ToolCheck surface at observation time
-- Publisher claim: confirmed by M8ven against a commit-author email
-- Publisher status: Claimed; Verified Publisher not yet confirmed by M8ven
-- Live monitoring: not connected
+- Top findings: none exposed by the M8ven ToolCheck surface at observation time
+- Publisher claim: confirmed
+- Publisher status: Verified Publisher
+- Live monitoring: connected
+- GitHub App repository scope: only `simondalmasso/jobas`
+- GitHub App permissions observed in GitHub: read access to Dependabot alerts, code, and metadata; no write permission shown
 
 ## Meaning
 
 M8ven is an external scanner/index. Its score is one independent signal, not a JOBAS release gate by itself and not proof that the software is secure.
 
-The current result has no concrete findings exposed by the ToolCheck surface. JOBAS should not change code merely to optimize this score. Any future finding must be reproduced or otherwise substantiated before changing product behavior.
+The current ToolCheck result exposes no concrete findings. JOBAS should not change code merely to optimize this score. Any future finding must be reproduced or otherwise substantiated before changing product behavior.
+
+M8ven surfaces can update asynchronously. At the observation above, ToolCheck had moved to 89/100 while the public listing page still displayed its earlier 74/100 snapshot and commit `7352c3d`. That presentation lag is recorded rather than reconciled by assumption.
 
 ## Publisher badge
 
-README uses M8ven's standard live badge endpoint:
+README carries the publisher-verification badge supplied by M8ven:
 
 ```markdown
-[![M8ven Score](https://m8ven.ai/badge/mcp/simondalmasso-jobas-17b8z9)](https://m8ven.ai/mcp/simondalmasso/jobas?s=readme)
+[![M8ven Score](https://m8ven.ai/badge/mcp/simondalmasso-jobas-17b8z9?v=07bfd6c708387e86bfdce7b7402cd8aa)](https://m8ven.ai/mcp/simondalmasso-jobas-17b8z9?s=readme)
 ```
 
-Fresh recheck after merging the claimed-listing badge still reports `simondalmasso · Claimed`. Do not describe JOBAS as a "Verified Publisher" until M8ven's public listing actually reports that state.
+The public listing now reports `simondalmasso · Verified Publisher`.
 
-## Connect Live guardrail
+## Connect Live
 
-Connecting M8ven is optional. If enabled, it must be scoped only to `simondalmasso/jobas` and must remain read-only.
+M8ven Verify is installed as a GitHub App with repository access restricted to `simondalmasso/jobas`.
 
-M8ven's public data-handling page states that its GitHub App is read-only and repository-selective. It describes:
-- Monitor: metadata and dependency information only.
-- Verify: adds read access to repository file contents.
+GitHub showed:
+- **Repository access:** Only select repositories → `simondalmasso/jobas` (1 repository).
+- **Permissions:** Read access to Dependabot alerts, code, and metadata.
+- **Write permissions:** none shown.
 
-Source: https://m8ven.ai/connect/data-handling
+After saving that scope, M8ven reported `⚡ Live Monitored` and stated that the repository will be re-verified automatically on code changes.
 
-If the GitHub installation screen requests write permissions or broader repository access than `simondalmasso/jobas`, stop and do not authorize it.
+If the installation ever requests write access or expands beyond `simondalmasso/jobas`, stop and review the integration before accepting the change.
