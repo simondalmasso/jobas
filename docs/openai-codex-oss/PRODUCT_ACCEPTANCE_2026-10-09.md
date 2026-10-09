@@ -1,6 +1,6 @@
 # JOBAS product acceptance — 2026-10-09
 
-**Verdict: HOLD.** This file tracks observed evidence and explicit unknowns, not a marketing readiness grade.
+**Historical pre-release verdict: HOLD.** The original observations and contract below record the pre-deployment state; they are retained for audit traceability. **Post-release product verification: PASS** on 2026-10-09 (see the addendum at the end). Bounded source validity and optional AI/accessibility testing remain explicit limitations.
 
 ## Identity, deployment, releases
 
@@ -122,3 +122,11 @@ FINAL_VERDICT=HOLD
 ```
 
 **Release boundary:** no production deploy, no tag movement, no GitHub Release and no merge to `main` until gates and explicit owner authorization. No M8ven score optimization.
+
+## Post-release acceptance addendum — 2026-10-09
+
+Following authorization, [PR #23](https://github.com/simondalmasso/jobas/pull/23) was merged. The release commit `38d303297f2e776027c0e3aaafe1fadac4ea9eb0` passed [GitHub CI](https://github.com/simondalmasso/jobas/actions/runs/37916326760). A public Cloudflare version preview passed browser tests before Worker version `51d205cd-a4d2-4448-953f-960cea8d1775` was promoted to 100% traffic.
+
+After retaining the previous KV snapshot for reversibility, the feed was regenerated from eight source adapters and written to production KV. Production tests observed `/api/health.jobsCount=342`, `/api/feed.jobs.length=342`, `curatedFindingsCount=22`, **4 Argentina-compatible LOCAL opportunities**, and **0 HTML-escaped application URLs**. Live Chromium tested desktop 1440, mobile 390/360, searches, empty states, profile, local persistence, favorites, application tracking, disconnected optional Coach, MCP initialize/tools/list, security headers and zero console errors. The [GitHub v1.1.1 release](https://github.com/simondalmasso/jobas/releases/tag/v1.1.1) was published from that release commit.
+
+The earlier `FINAL_VERDICT=HOLD` block is **historical, not the current deployment outcome**. Current release-product verdict is `PASS_WITH_DOCUMENTED_LIMITATIONS`; current Codex for OSS submission verdict is `GO_FOR_OWNER_SUBMISSION`. This does not attest each vacancy is still open, that authenticated BYOK inference works on every provider, a complete accessibility audit, zero Cloudflare charges, or OpenAI program selection. A later `main` commit updated curated remote data separately from the pinned production release.

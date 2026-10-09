@@ -1,42 +1,37 @@
-# OSS and Product Readiness
+# JOBAS — Open Source Submission Readiness
 
-Canonical repository: https://github.com/simondalmasso/jobas
+LAST_CHECK=2026-10-09
+OSS_SUBMISSION=GO_FOR_OWNER_SUBMISSION
+APPLICATION_STATUS=NOT_SUBMITTED
+RELEASE=v1.1.1
+RELEASE_COMMIT=38d303297f2e776027c0e3aaafe1fadac4ea9eb0
+PRODUCTION_WORKER_VERSION=51d205cd-a4d2-4448-953f-960cea8d1775
+RELEASE_PRODUCTION_ACCEPTANCE=PASS
+CANONICAL_REPOSITORY=https://github.com/simondalmasso/jobas
 
-**Release history is immutable.** `v1.0.0` records the first hardened OSS baseline; `v1.1.0` points to `7352c3d87f9de6c78cc9f7de003194244f7ad8cb`. New documentation merges after that release do not require moving a published tag. The proposed corrections are scoped to a separate `v1.1.1` patch candidate (unreleased). Any subsequent functional change requires a *new* semver version and explicit deployment/release approval.
+## Verifiable evidence
 
-## Gates
+- **Public MIT repository**, primary maintainer `simondalmasso`; no claim of widespread adoption or established usage metrics.
+- **Release:** [JOBAS v1.1.1](https://github.com/simondalmasso/jobas/releases/tag/v1.1.1) is published (not draft/prerelease). Its annotated tag points to commit `38d303297f2e776027c0e3aaafe1fadac4ea9eb0`.
+- **CI:** [main release-commit verify](https://github.com/simondalmasso/jobas/actions/runs/37916326760) passed. Local `npm ci`, `npm run verify`, and `npm audit` passed; the release-candidate test suite had 75 passing Node tests.
+- **Cloudflare:** Worker version `51d205cd-a4d2-4448-953f-960cea8d1775` was deployed at 100% and tested against live production, including 1440px desktop and 390px/360px mobile Chromium, zero console errors, local/remote radar, browser-local profile and saved state, and public read-only MCP. Feed and health agreed at **342** during the release verification; four compatible LOCAL opportunities rendered and no `&amp;` query separators remained.
+- **Feed evidence:** [46-link deterministic sample](FEED_SAMPLE_2026-10-09.json) across 10 sources had 31 visible listing-text matches, 2 HTTP-reachable but unconfirmed listings, and 13 blocked/inaccessible endpoints; a transport success is never asserted to prove a vacancy is actively recruiting.
+- **Privacy and boundaries:** user profiles, CV and saved state are browser-local; optional user-owned OpenRouter AI is browser-to-provider (not through JOBAS Worker); the Worker has no privileged application-submission tool.
 
-| Surface | Acceptance evidence |
-| --- | --- |
-| Main | GitHub `main`; verify exact SHA before qualification |
-| CI | `npm ci && npm run verify` (Node contracts, Wrangler dry-run, headless browser); inspect job conclusion |
-| Browser mock-free | `npm run test:live-browser`, directly against the deployed public Worker (separate from the mocked CI smoke) |
-| Desktop/mobile | Test 1440×900, 390×844, **360×800**, browser reload, no horizontal overflow or console errors |
-| Health | `/api/health` must report the **merged** `/api/feed` count, including curated items |
-| Feed quality | Clearly distinguish publication age, source metadata, declared verification and **unverified vacancy status** |
-| Application workflow | Open external link only after user intent; never claim an application was submitted |
-| Privacy | No personal profile/CV sent to JOBAS Worker; optional BYOK flows directly to user's provider |
-| MCP | `POST /mcp` initialize / tools/list works; `GET /mcp` returns 405; tools read-only |
-| Security | CSP, HSTS, nosniff, frame and referrer headers; dependency audit; input escaping |
-| Runtime | Compare preview deployed from exact candidate HEAD, then production only after authorization |
-| Cost | Confirm runtime limits and actual billing/usage; code-only estimates are not billing evidence |
+## Current release identity vs newer main
 
-## Current product acceptance
+`v1.1.1` and the verified production deployment correspond to the **release commit above**. A later commit on `main` updated only `data/gpt-remoto.json` (curated remote-source data). Changes to data/docs after the release do **not** move the release tag or retroactively alter the deployed release artifact. Do not claim that current `main` is byte-identical to v1.1.1 production until any later changes are separately deployed and verified.
 
-**HOLD / pending final gates.** See [dated acceptance report](PRODUCT_ACCEPTANCE_2026-10-09.md).
+## Explicit limitations
 
-A passing mocked CI browser test is not sufficient to declare the public feed current or every outbound job link valid. Likewise a source adapter returning successfully is not proof every listed vacancy is still open.
+- **Vacancy status:** individual jobs are not continuously revalidated; age, unknown geography and inaccessible links remain labelled as such. The 46-link audit is bounded evidence, not an exhaustive availability guarantee.
+- **AI:** full OpenRouter-authenticated model calls and AI-assisted CV extraction were not tested with private owner credentials. The public product remains usable in the disconnected state.
+- **Accessibility:** responsive tests at three viewport sizes and browser smoke do not substitute for a full keyboard/screen-reader audit.
+- **Billing:** Workers Free may cover base usage if account limits permit, but actual Cloudflare recurring spend is not independently reconciled.
+- **Adoption:** the public GitHub repository currently has no demonstrated ecosystem-scale usage; do not invent stars, downloads, external users, institutional support, or selection by OpenAI.
 
-The 2026-10-09 audit identified a live mismatch between `/api/health` (320) and `/api/feed` (342), RFC-822 RSS dates not normalized, some outdated/undated entries, and dev-tool dependency advisories. The isolated fix branch addresses these defects and passed both local Wrangler and Cloudflare Remote Preview browser checks against actual public feed data. A deterministic 46-link audit records 31 listing-text matches, 2 generic HTTP 200 and 13 inaccessible links, without asserting vacancies remain open. The 14 HTML-escaped WeRemoto URLs in the existing KV snapshot also require a source refresh after release. All fixes remain **unreleased** until reviewed, approved and deployed. Do not represent branch-only fixes as production behavior.
+## Owner submission
 
-## Repeatable verification
+Apply at <https://openai.com/form/codex-for-oss/>. The official form allows a maximum of **500 characters** for each of three narrative answers (repository eligibility, proposed API-credit use, additional context). Primary maintainer must provide/confirm their ChatGPT email, GitHub identity, OpenAI organization ID, and accept the program terms.
 
-```sh
-git clone https://github.com/simondalmasso/jobas.git
-cd jobas
-npm ci
-npm run verify
-npm run test:live-browser
-```
-
-The last command targets the public Worker with a disposable Chromium profile, makes no applications or provider calls and intentionally fails if live production gates are broken. It requires Chrome/Chromium and network access. To test a candidate preview set `JOBAS_TEST_ORIGIN` to its URL. An OpenRouter-connected paid/third-party interaction cannot be declared green without separate user-owned credentials and permission.
+**Decision:** `OSS_SUBMISSION=GO` for the *owner to submit*, without asserting acceptance or benefit eligibility is guaranteed. Program selection is OpenAI's decision. This is not a release gate for future code changes.

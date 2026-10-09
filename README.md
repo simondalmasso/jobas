@@ -10,6 +10,14 @@ Public job radar and personal job-search workspace for Argentina/LatAm.
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![M8ven Score](https://m8ven.ai/badge/mcp/simondalmasso-jobas-17b8z9?v=07bfd6c708387e86bfdce7b7402cd8aa)](https://m8ven.ai/mcp/simondalmasso-jobas-17b8z9?s=readme)
 
+## Release and verification
+
+Latest published release: **[JOBAS v1.1.1](https://github.com/simondalmasso/jobas/releases/tag/v1.1.1)** (2026-10-09), with a pinned [source commit](https://github.com/simondalmasso/jobas/commit/38d303297f2e776027c0e3aaafe1fadac4ea9eb0).
+
+The release passed [GitHub Actions CI](https://github.com/simondalmasso/jobas/actions/runs/37916326760) and real Chromium checks against production at 1440px desktop and 390px/360px mobile. Public feed/health counts, LOCAL radar, browser-local saved state, and read-only MCP were verified. A [reproducible 46-link sample](docs/openai-codex-oss/FEED_SAMPLE_2026-10-09.json) records both reachable listings and inaccessible sources rather than implying that every vacancy is still open.
+
+**Scope:** early-stage OSS without established adoption metrics. Some job dates and Argentina eligibility remain uncertain; AI is optional and requires user-owned provider credentials. See the [current OSS readiness](docs/openai-codex-oss/READINESS.md) and the [dated product audit](docs/openai-codex-oss/PRODUCT_ACCEPTANCE_2026-10-09.md). Post-release source-data maintenance on `main` does not move the published v1.1.1 tag.
+
 ## What JOBAS does
 
 JOBAS combines a public opportunity radar with a browser-local workspace for managing a job search.
