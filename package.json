@@ -1,7 +1,7 @@
 {
   "name": "jobas",
   "private": true,
-  "version": "1.1.0",
+  "version": "1.1.1",
   "type": "module",
   "scripts": {
     "test": "node --test test/*.test.js",
@@ -11,10 +11,11 @@
     "verify": "npm test && npm run dry-run && npm run test:browser",
     "firebase:sites": "npx --yes firebase-tools hosting:sites:list --project jobas-d3c12",
     "firebase:deploy:redirect": "npx --yes firebase-tools deploy --only hosting --project jobas-d3c12",
-    "test:browser": "node test/browser-smoke.mjs"
+    "test:browser": "node test/browser-smoke.mjs",
+    "test:live-browser": "node test/browser-live.mjs"
   },
   "devDependencies": {
-    "wrangler": "^4.145.0"
+    "wrangler": "4.149.0"
   },
   "description": "Public job radar and personal job-search workspace for Argentina/LatAm.",
   "license": "MIT",

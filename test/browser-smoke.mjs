@@ -237,6 +237,11 @@ try{
   const mobile=await cdp.eval('({scroll:document.documentElement.scrollWidth,width:innerWidth,profile:!document.querySelector("#profileWindow").hidden})');
   check("MOBILE_390",mobile.scroll<=mobile.width&&mobile.profile,"scroll="+mobile.scroll+" width="+mobile.width);
 
+  await cdp.send("Emulation.setDeviceMetricsOverride",{width:360,height:800,deviceScaleFactor:1,mobile:true,screenWidth:360,screenHeight:800});
+  await sleep(120);
+  const mobile360=await cdp.eval('({scroll:document.documentElement.scrollWidth,width:innerWidth,offers:!document.querySelector("#offersWindow").hidden})');
+  check("MOBILE_360",mobile360.scroll<=mobile360.width,"scroll="+mobile360.scroll+" width="+mobile360.width);
+
   await cdp.send("Emulation.setDeviceMetricsOverride",{width:1440,height:900,deviceScaleFactor:1,mobile:false,screenWidth:1440,screenHeight:900});
   await sleep(100);
   const desktop=await cdp.eval('({scroll:document.documentElement.scrollWidth,width:innerWidth,desktop:!!document.querySelector(".desktop")})');
@@ -255,6 +260,6 @@ try{
 const required=[
   "PUBLIC_BROWSE_NO_PROFILE","PROFILE_CREATE","PROFILE_LOCAL_ONLY","FAVORITE","SAVE_SEARCH",
   "APPLICATION_TRACKING","COACH_DISCONNECTED_STATE","NOTES_LOCAL","PAINT_READY","GAME_READY","PENNY_COMPACT",
-  "MOBILE_390","DESKTOP_1440","CONSOLE_ERRORS"
+  "MOBILE_390","MOBILE_360","DESKTOP_1440","CONSOLE_ERRORS"
 ];
 if(required.some(x=>results.get(x)!==true))process.exitCode=1;

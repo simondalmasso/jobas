@@ -42,11 +42,15 @@ The OpenRouter credential:
 - is never sent to a JOBAS Worker endpoint;
 - is removed from both session and persistent browser storage when the user disconnects.
 
+## Penny (optional)
+
+Penny uses the user's own Hugging Face token directly from the browser to `router.huggingface.co`. JOBAS does not provide a shared token or proxy Penny inference. Session-only token storage is the default. Disconnect removes the user token from the browser credential store.
+
 ## CV import
 
 TXT/MD files are read in the browser.
 
-PDF and AI-assisted profile extraction are sent directly from the browser to the provider connected by the user. JOBAS does not upload the CV to its Worker, KV or repository.
+PDF and AI-assisted profile extraction are sent directly from the browser to the provider connected by the user **only after the user explicitly chooses AI processing**. JOBAS does not upload the CV to its Worker, KV or repository. Without an AI provider configured, manual profile entry remains available; automatic extraction from uploaded CV files is not available.
 
 ## Speech
 

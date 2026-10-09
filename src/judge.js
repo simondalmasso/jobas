@@ -47,7 +47,9 @@ export function argentinaEligibility(job){
   const positive=`${location} ${description}`;
   const hardRestriction=/us only|usa only|united states only|canada only|europe only|uk only|north america|must be based in the us|u\.s\. residents only/i;
   if(hardRestriction.test(title)||((/united states|usa|u\.s\.|canada|north america|europe|united kingdom|\buk\b/i.test(location))&&!/argentina|latam|latin america|south america/i.test(location)))return{score:5,label:"No compatible",reason:"La publicación restringe la ubicación fuera de Argentina."};
-  if(ARGENTINA_NEGATIVE.test(`${title} ${location} ${description}`))return{score:5,label:"No compatible",reason:"La publicación restringe la ubicación."};
+  if(ARGENTINA_NEGATIVE.test(`${title} ${location} ${description}`)||
+     /(?:except|excluding|exclude|not (?:available|hiring|eligible) in|outside of)\s+(?:the\s+)?argentina|argentina\s+(?:excluded|not eligible)/i.test(`${title} ${location} ${description}`))
+    return{score:5,label:"No compatible",reason:"La publicación restringe la ubicación."};
   if(/argentina/i.test(positive))return{score:100,label:"Argentina",reason:"Menciona Argentina explícitamente."};
   if(/latam|latin america|south america|americas/i.test(positive))return{score:92,label:"LatAm",reason:"Admite LatAm/Américas."};
   if(/worldwide|anywhere|global/i.test(positive)||job.worldwide)return{score:82,label:"Worldwide",reason:"Publicación global/remota."};
@@ -63,7 +65,8 @@ export function scamAssessment(job){
 }
 
 export function normalizeMonthlyPay({min,max,currency="USD",period="annual",raw=""}={}){
-  const nmin=Number(min),nmax=Number(max);
+  const nmin=min==null||min===""?null:Number(min);
+  const nmax=max==null||max===""?null:Number(max);
   if(!Number.isFinite(nmin)&&!Number.isFinite(nmax))return{raw:raw||"No publicado",monthlyMin:null,monthlyMax:null,currency};
   const factor=period==="hourly"?160:period==="weekly"?4.33:period==="monthly"?1:period==="annual"?1/12:1;
   return{

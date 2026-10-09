@@ -5,3 +5,14 @@ test("señales de scam bajan confianza",()=>{const a=scamAssessment({sourceTrust
 test("normaliza pagos",()=>{assert.equal(normalizeMonthlyPay({min:10,max:20,period:"hourly"}).monthlyMin,1600);assert.equal(normalizeMonthlyPay({min:12000,max:24000,period:"annual"}).monthlyMax,2000);assert.equal(parseSalaryText("$1,800 - $2,500 per month").monthlyMin,1800);assert.equal(parseSalaryText("Salary Range: USD 2,000–3,500 per month").monthlyMax,3500);});
 test("limpia HTML",()=>assert.equal(cleanHtml("<script>x()</script><p>A &amp; B</p>"),"A & B"));
 test("feed no depende de login Google ni Workers AI",()=>{assert.equal(Object.keys(SOURCE_REGISTRY).length,8);assert.ok(DISCOVERY_SOURCES.length>=8);const j=finalizeJob({title:"Customer Support",company:"A",location:"LatAm",description:"chat support",sourceTrust:90,workerFee:false,publishedAt:new Date().toISOString(),pay:normalizeMonthlyPay({min:1000,max:1200,period:"monthly"})});assert.ok(j.qualityScore>70);assert.equal("priority" in j,false);});
+
+test("missing salary is null, never normalized to fabricated zero pay",()=>{
+  const p=normalizeMonthlyPay({min:null,max:null,period:"annual",raw:"No publicado"});
+  assert.equal(p.monthlyMin,null);
+  assert.equal(p.monthlyMax,null);
+  assert.equal(finalizeJob({title:"Analyst",company:"Example",location:"Argentina",sourceTrust:90,pay:p}).qualityComponents.compensationTransparency,45);
+});
+test("explicit Argentina exclusions override worldwide marketing copy",()=>{
+  const r=argentinaEligibility({title:"Support",location:"Worldwide",description:"Remote worldwide except Argentina"});
+  assert.equal(r.label,"No compatible");
+});

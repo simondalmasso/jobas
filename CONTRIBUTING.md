@@ -39,6 +39,14 @@ Before opening a PR:
 npm run verify
 ```
 
+Live, non-mocked production acceptance (opt-in; requires Chrome and internet):
+
+```bash
+npm run test:live-browser
+```
+
+This uses an isolated disposable browser profile and never submits job applications or sends model-provider credentials. The public production command can intentionally fail if a release-only bug remains; evaluate a new change against an exact-head preview before authorizing a deploy. Do not use test data to claim live vacancy availability.
+
 ## Project invariants
 
 Please preserve these constraints:
