@@ -11,6 +11,7 @@ import {
 } from "./coach.js";
 import { createUserMemory } from "./user-memory.js";
 import { personalFitScore, sortByPersonalFit } from "./fit.js";
+import { opportunityProvenance } from "./provenance.js";
 import { createPennyCredentialStore, sendPennyMessage, buildPennySystemPrompt } from "./penny.js";
 
 const $=s=>document.querySelector(s);
@@ -284,6 +285,7 @@ function renderFeed(){
           <span>·</span><span>${esc(j.scam?.label||"")}</span>
         </div>
         <div class="source-row">Fuente: ${safeExternalHref(j.sourceDetail||j.sourceUrl)?`<a href="${esc(safeExternalHref(j.sourceDetail||j.sourceUrl))}" target="_blank" rel="noopener noreferrer">${esc(j.sourceName)}</a>`:esc(j.sourceName||"Manual")}</div>
+        <div class="source-row" aria-label="Vigencia y verificación">${esc(opportunityProvenance(j).freshness)} · ${esc(opportunityProvenance(j).verification)}</div>
       </div>
       <div class="actions">${renderJobActions(j)}</div>
     </article>
@@ -524,7 +526,9 @@ async function loadFeed(){
   const feed=await r.json();
   state.feed=feed;
   state.jobs=feed.jobs||[];
-  $("#fresh").textContent=feed.generatedAt?`actualizado ${new Date(feed.generatedAt).toLocaleString("es-AR")}`:"sin actualización";
+  $("#fresh").textContent=feed.stale
+    ? `ÚLTIMA COPIA · ${feed.generatedAt?new Date(feed.generatedAt).toLocaleString("es-AR"):"fecha desconocida"} · actualización fallida; verificar vacantes`
+    : feed.generatedAt?`feed actualizado ${new Date(feed.generatedAt).toLocaleString("es-AR")} · vacantes sin validación individual`:"sin actualización del feed";
   $("#taskStatus").textContent=`RADAR: ${state.jobs.length} oportunidades`;
   $("#sourceHealth").innerHTML='<div class="source-grid">'+(feed.health||[]).map(s=>safeExternalHref(s.url)?`<a class="source-card" href="${esc(safeExternalHref(s.url))}" target="_blank" rel="noopener noreferrer"><strong>${esc(s.name)}</strong><br>${esc(s.state)} · ${s.jobs} jobs</a>`:`<div class="source-card"><strong>${esc(s.name)}</strong><br>${esc(s.state)} · ${s.jobs} jobs</div>`).join("")+'</div>';
   $("#discovery").innerHTML='<div class="source-grid">'+(feed.discoverySources||[]).map(s=>safeExternalHref(s.url)?`<a class="source-card" href="${esc(safeExternalHref(s.url))}" target="_blank" rel="noopener noreferrer"><strong>${esc(s.name)}</strong><br>${esc(s.note)}</a>`:`<div class="source-card"><strong>${esc(s.name)}</strong><br>${esc(s.note)}</div>`).join("")+'</div>';

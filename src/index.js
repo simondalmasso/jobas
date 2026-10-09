@@ -34,13 +34,30 @@ async function readFeed(env){
   if(!raw)return null;
   try{return JSON.parse(raw);}catch{return null;}
 }
-async function refresh(env){
+async function refresh(env,buildFeedImpl=buildFeed){
   const limit=Math.max(40,Math.min(500,Number(env.FEED_LIMIT||320)));
-  const feed=await buildFeed(limit);
+  const previous=await readFeed(env);
+  const fresh=await buildFeedImpl(limit);
+  // If all source adapters fail, keep the last known public snapshot, clearly marked stale.
+  // The old publication dates stay intact; this does not certify an expired vacancy.
+  const retained=!fresh.jobs?.length&&previous?.jobs?.length;
+  const feed=retained?{
+    ...previous,
+    health:fresh.health||[],
+    stale:true,
+    refreshFailureAt:new Date().toISOString(),
+    lastSuccessfulRefreshAt:previous.lastSuccessfulRefreshAt||previous.generatedAt||null
+  }:{
+    ...fresh,
+    stale:false,
+    refreshFailureAt:null,
+    lastSuccessfulRefreshAt:fresh.generatedAt||null
+  };
   await env.JOBAS_FEED.put(FEED_KEY,JSON.stringify(feed));
   return feed;
 }
 function num(v){
+  if(v==null||v==="")return null;
   const n=Number(v);
   return Number.isFinite(n)?n:null;
 }
@@ -113,9 +130,9 @@ function loadCuratedFindings(){
     health.push({
       source:"data-"+meta.id,
       name:meta.name,
-      state:"healthy",
+      state:"curated",
       jobs:findings.length,
-      lastCheck:new Date().toISOString(),
+      lastCheck:data.updatedAt||null,
       path:meta.path,
       updatedAt:data.updatedAt||null
     });
@@ -185,7 +202,7 @@ export default{
   async fetch(request,env){
     const url=new URL(request.url);
     if(url.pathname==="/api/health"){
-      const feed=await readFeed(env);
+      const feed=await currentFeed(env);
       return json({
         ok:true,
         service:"JOBAS",
@@ -214,4 +231,4 @@ export default{
   }
 };
 
-export { SECURITY_HEADERS, DATA_FILES, normalizeFinding, mergeFeed, loadCuratedFindings };
+export { SECURITY_HEADERS, DATA_FILES, normalizeFinding, mergeFeed, loadCuratedFindings, refresh };
