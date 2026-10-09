@@ -4,7 +4,7 @@
 
 Canonical repository:
 
-https://github.com/simondalmasso/jobas
+https://github.com/simondalmasso/jobas-latam-job-search
 
 Canonical branch:
 
