@@ -26,7 +26,7 @@ JOBAS combines a public opportunity radar with a browser-local workspace for man
 - **Profile-driven search** without requiring an account.
 - **Application tracking**, favorites, saved searches and custom folders.
 - **Application workflow** that distinguishes traditional CV-based jobs from direct-contact opportunities.
-- **AI interview Coach** with text and optional browser voice.
+- **AI interview Coach** with text and optional browser voice. **Penny** shares the user's OpenRouter connection and defaults to the free-model router; Hugging Face remains optional.
 - **Public read-only MCP** for agents and external tools.
 
 The product keeps infrastructure deliberately small: Cloudflare Workers + Static Assets + KV, source-backed curated data files and native browser storage for personal workspace state.

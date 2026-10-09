@@ -300,17 +300,29 @@
       </header>
       <div class="penny-provider">
         <img class="penny-avatar" src="/assets/penny.png" alt="Penny, lapicera azul">
-        <div><strong>IA del usuario</strong><small id="pennyProviderStatus">Conectá tu cuenta/créditos de Hugging Face.</small></div>
+        <div><strong>Penny · IA sin proxy</strong><small id="pennyProviderStatus">Conectá OpenRouter para usar el modelo gratuito.</small></div>
       </div>
-      <details class="provider-advanced">
-        <summary>Conectar Hugging Face</summary>
+      <div class="penny-connection">
+        <label>Proveedor
+          <select id="pennyProviderMode">
+            <option value="openrouter">OpenRouter · modelos gratis</option>
+            <option value="huggingface">Hugging Face · token propio</option>
+          </select>
+        </label>
+        <div class="penny-connect-actions">
+          <button id="pennyConnectOpenRouter" class="classic-button primary" type="button">Conectar OpenRouter</button>
+          <button id="pennyDisconnectOpenRouter" class="classic-button" type="button" hidden>Desconectar OpenRouter</button>
+        </div>
+      </div>
+      <details class="provider-advanced" id="pennyHfSettings" hidden>
+        <summary>Conectar Hugging Face (opcional)</summary>
         <div class="provider-key-row">
           <input id="pennyKeyInput" type="password" autocomplete="off" placeholder="hf_...">
           <label><input id="pennyRemember" type="checkbox"> Recordar</label>
           <button id="pennyUseKey" class="classic-button" type="button">Conectar</button>
           <button id="pennyDisconnect" class="classic-button" type="button">Desconectar</button>
         </div>
-        <label class="penny-model-label">Modelo <input id="pennyModel" value="google/gemma-2-2b-it:cheapest" spellcheck="false"></label>
+        <label class="penny-model-label">Modelo HF <input id="pennyModel" value="openai/gpt-oss-120b:cheapest" spellcheck="false"></label>
       </details>
       <div class="penny-messages" id="pennyMessages" aria-live="polite">
         <div class="penny-message assistant">Soy Penny. Puedo ayudarte a orientarte en JOBAS, revisar una oportunidad o preparar próximos pasos.</div>
@@ -319,7 +331,7 @@
         <textarea id="pennyInput" rows="2" placeholder="Escribí tu mensaje..."></textarea>
         <button id="pennySend" class="classic-button primary" type="button">Enviar</button>
       </div>
-      <p class="privacy-note">Penny usa tu propia cuenta/créditos de Hugging Face directamente desde este navegador. JOBAS no recibe la clave ni intermedia la inferencia.</p>
+      <p class="privacy-note">OpenRouter: <code>openrouter/free</code> (sin costo por tokens, sujeto a cupos de tu cuenta). Hugging Face opcional puede consumir sus créditos. Todas las solicitudes IA van directamente del navegador al proveedor; no pasan por Cloudflare Worker.</p>
     </section>
 
     <menu class="start-menu" id="startMenu" hidden>

@@ -44,7 +44,7 @@ The OpenRouter credential:
 
 ## Penny (optional)
 
-Penny uses the user's own Hugging Face token directly from the browser to `router.huggingface.co`. JOBAS does not provide a shared token or proxy Penny inference. Session-only token storage is the default. Disconnect removes the user token from the browser credential store.
+Penny defaults to the same user-owned OpenRouter connection as Coach, using `openrouter/free` for text responses. Inference calls go **directly browser → OpenRouter**; the JOBAS Cloudflare Worker never receives the user's provider key or AI prompts. Free models have provider-defined usage limits and may require the user's own OpenRouter account. Hugging Face is an optional alternate provider using a separate user token directly from the browser to `router.huggingface.co`; it can consume the user's Hugging Face credits. User credentials default to session storage, persistent storage requires explicit opt-in, and disconnect removes the corresponding browser credentials.
 
 ## CV import
 

@@ -230,7 +230,41 @@ try{
   await cdp.eval('document.querySelector("#pennyLauncher").click()');
   await sleep(80);
   const penny=await cdp.eval('(()=>{const w=document.querySelector("#pennyWindow"),r=w.getBoundingClientRect(),img=document.querySelector(".penny-avatar");return{visible:!w.hidden,width:r.width,right:r.right,screen:innerWidth,status:document.querySelector("#pennyProviderStatus").textContent,asset:img.complete&&img.naturalWidth>0};})()');
-  check("PENNY_COMPACT",penny.visible&&penny.width<=360&&penny.right<=penny.screen&&/Hugging Face/.test(penny.status)&&penny.asset,"width="+penny.width+" right="+penny.right);
+  check("PENNY_COMPACT",penny.visible&&penny.width<=360&&penny.right<=penny.screen&&/OpenRouter/.test(penny.status)&&penny.asset,"width="+penny.width+" right="+penny.right);
+  // Simulated provider response in the browser; no external credits or Worker proxy.
+  await cdp.eval(`(()=>{
+    const originalFetch=window.fetch.bind(window);
+    window.__pennyRequests=[];
+    window.fetch=(url,options)=> {
+      if(String(url)==="https://openrouter.ai/api/v1/chat/completions"){
+        window.__pennyRequests.push({url:String(url),body:JSON.parse(options.body),auth:options.headers?.Authorization});
+        return Promise.resolve(new Response(JSON.stringify({choices:[{message:{content:"Hola desde Penny gratis"}}]}),{status:200,headers:{"content-type":"application/json"}}));
+      }
+      return originalFetch(url,options);
+    };
+    document.querySelector("#coachKeyInput").value="sk-or-mocked-only";
+    document.querySelector("#coachUseKey").click();
+    document.querySelector("#pennyInput").value="Hola Penny";
+    document.querySelector("#pennySend").click();
+  })()`);
+  await sleep(180);
+  const pennyReply=await cdp.eval(`(()=>({
+    text:document.querySelector("#pennyMessages").textContent,
+    calls:window.__pennyRequests,
+    sharedKey:sessionStorage.getItem("jobas:openrouter:key:session"),
+    selected:document.querySelector("#pennyProviderMode").value
+  }))()`);
+  check("PENNY_FREE_ROUTE",pennyReply.text.includes("Hola desde Penny gratis")&&pennyReply.calls.length===1&&pennyReply.calls[0].url==="https://openrouter.ai/api/v1/chat/completions"&&pennyReply.calls[0].body.model==="openrouter/free"&&pennyReply.selected==="openrouter"&&pennyReply.sharedKey==="sk-or-mocked-only");
+  await cdp.eval('document.querySelector("#pennyDisconnectOpenRouter").click()');
+  const disconnected=await cdp.eval(`({
+    openrouterKey:sessionStorage.getItem("jobas:openrouter:key:session"),
+    localKey:localStorage.getItem("jobas:openrouter:key:local"),
+    coachStatus:document.querySelector("#coachProviderStatus").textContent,
+    pennyStatus:document.querySelector("#pennyProviderStatus").textContent
+  })`);
+  check("PENNY_COACH_SHARED_DISCONNECT",!disconnected.openrouterKey&&!disconnected.localKey&&/No conectada/.test(disconnected.coachStatus)&&/no conectado/i.test(disconnected.pennyStatus));
+  await cdp.eval('(()=>{const mode=document.querySelector("#pennyProviderMode");mode.value="huggingface";mode.dispatchEvent(new Event("change",{bubbles:true}))})()');
+  check("PENNY_HF_OPTIONAL",await cdp.eval('!document.querySelector("#pennyHfSettings").hidden && /Hugging Face/.test(document.querySelector("#pennyProviderStatus").textContent)'));
 
   await cdp.send("Emulation.setDeviceMetricsOverride",{width:390,height:844,deviceScaleFactor:1,mobile:true,screenWidth:390,screenHeight:844});
   await cdp.eval('document.querySelector(\'[data-window-open="profile"]\').click()');
@@ -261,6 +295,6 @@ try{
 const required=[
   "PUBLIC_BROWSE_NO_PROFILE","PROFILE_CREATE","PROFILE_LOCAL_ONLY","FAVORITE","SAVE_SEARCH",
   "APPLICATION_TRACKING","COACH_DISCONNECTED_STATE","NOTES_LOCAL","PAINT_READY","GAME_READY","PENNY_COMPACT",
-  "MOBILE_390","MOBILE_360","DESKTOP_1440","CONSOLE_ERRORS"
+  "PENNY_FREE_ROUTE","PENNY_COACH_SHARED_DISCONNECT","PENNY_HF_OPTIONAL","MOBILE_390","MOBILE_360","DESKTOP_1440","CONSOLE_ERRORS"
 ];
 if(required.some(x=>results.get(x)!==true))process.exitCode=1;

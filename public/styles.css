@@ -342,6 +342,11 @@ textarea{resize:vertical}
 .penny-window{width:min(360px,calc(100vw - 24px));height:min(420px,calc(100dvh - 96px));right:12px;bottom:48px;top:auto;left:auto;transform:none}
 .penny-provider{display:grid;grid-template-columns:42px minmax(0,1fr);gap:6px;align-items:center;padding:6px;border-bottom:1px solid #888}
 .penny-provider small{display:block;color:#444;font-size:10px}
+.penny-connection{display:flex;align-items:end;gap:7px;flex-wrap:wrap;padding:6px;border-bottom:1px solid #999}
+.penny-connection label{display:grid;gap:3px;font-size:11px;font-weight:bold;flex:1 1 190px}
+.penny-connection select{max-width:100%;min-height:28px}
+.penny-connect-actions{display:flex;gap:5px;flex-wrap:wrap}
+
 .penny-avatar{width:36px;height:36px;object-fit:contain;mix-blend-mode:multiply}
 .penny-model-label{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:7px;padding:0 7px 7px;font-size:11px;font-weight:700}
 .penny-messages{flex:1;min-height:180px;overflow:auto;padding:9px;background:#fff}
