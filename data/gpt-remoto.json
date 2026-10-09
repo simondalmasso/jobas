@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "lane": "REMOTO",
-  "updatedAt": "2026-10-01",
+  "updatedAt": "2026-10-09T13:09:33.496Z",
   "purpose": "Curated remote radar input for JOBAS. Records are factual source-backed opportunities; personal fit is computed only in the browser from the user's local profile.",
   "findingSchema": {
     "id": "stable string",
@@ -40,34 +40,6 @@
   ],
   "findings": [
     {
-      "id": "morean-ai-operations-specialist",
-      "title": "AI Operations Specialist",
-      "company": "MOREAN",
-      "location": "Remote · Argentina",
-      "description": "Implementación y adopción de IA, automatización y analytics para Operations; dashboards, documentación, capacitación y mejora de procesos.",
-      "category": "operations",
-      "sourceName": "Viterbit / MOREAN Careers",
-      "sourceUrl": "https://morean.viterbit.net/ai-operations-specialist-lMwLh2xTQYUV/",
-      "applyUrl": "https://morean.viterbit.site/ai-operations-specialist-lMwLh2xTQYUV/apply/",
-      "publishedAt": null,
-      "verifiedAt": "2026-09-23T14:11:36-03:00",
-      "active": true,
-      "argentinaEligible": true,
-      "workerFee": false,
-      "salary": {
-        "raw": "No publicado",
-        "monthlyMin": null,
-        "monthlyMax": null,
-        "currency": "USD"
-      },
-      "scamRisk": "low",
-      "evidence": [
-        "https://morean.viterbit.net/ai-operations-specialist-lMwLh2xTQYUV/",
-        "https://morean.viterbit.site/ai-operations-specialist-lMwLh2xTQYUV/apply/",
-        "https://ar.linkedin.com/jobs/view/ai-operations-specialist-at-morean-4468038382"
-      ]
-    },
-    {
       "id": "backblaze-ai-workflow-engineer-latam",
       "title": "AI Workflow Engineer | LATAM",
       "company": "Backblaze",
@@ -78,7 +50,7 @@
       "sourceUrl": "https://job-boards.greenhouse.io/backblaze/jobs/5287532008",
       "applyUrl": "https://job-boards.greenhouse.io/backblaze/jobs/5287532008",
       "publishedAt": null,
-      "verifiedAt": "2026-09-23T14:11:36-03:00",
+      "verifiedAt": "2026-10-09T13:09:33.496Z",
       "active": true,
       "argentinaEligible": true,
       "workerFee": false,
@@ -104,7 +76,7 @@
       "sourceUrl": "https://www.linkedin.com/jobs/view/4469760535/",
       "applyUrl": "https://www.linkedin.com/jobs/view/4469760535/",
       "publishedAt": "2026-09-24T00:00:00-03:00",
-      "verifiedAt": "2026-09-25T21:39:00-03:00",
+      "verifiedAt": "2026-10-09T13:09:33.496Z",
       "active": true,
       "argentinaEligible": true,
       "workerFee": false,
@@ -132,7 +104,7 @@
       "sourceUrl": "https://jobs.lever.co/RyzLabs/38fca784-bc93-4e71-ab96-f512a2baae57",
       "applyUrl": "https://jobs.lever.co/RyzLabs/38fca784-bc93-4e71-ab96-f512a2baae57",
       "publishedAt": null,
-      "verifiedAt": "2026-09-23T14:11:36-03:00",
+      "verifiedAt": "2026-10-09T13:09:33.496Z",
       "active": true,
       "argentinaEligible": true,
       "workerFee": false,
@@ -148,44 +120,17 @@
       ]
     },
     {
-      "id": "ruvixx-marketing-operations-assistant",
-      "title": "Marketing Operations Assistant",
-      "company": "Ruvixx",
-      "location": "Remote · LATAM (Argentina listada)",
-      "description": "Marketing Ops con CRM, automatización, data audits, dashboards, seguimiento de pipeline, ClickUp y SOPs.",
-      "category": "ecommerce-crm",
-      "sourceName": "Breezy / Ruvixx",
-      "sourceUrl": "https://ruvixx.breezy.hr/p/6fa6c030f858-marketing-operations-assistant-argentina-listed-for-platform-purposes",
-      "applyUrl": "https://ruvixx.breezy.hr/p/6fa6c030f858-marketing-operations-assistant-argentina-listed-for-platform-purposes/apply",
-      "publishedAt": null,
-      "verifiedAt": "2026-09-23T14:11:36-03:00",
-      "active": true,
-      "argentinaEligible": true,
-      "workerFee": false,
-      "salary": {
-        "raw": "USD 800/mes durante trial de 3 meses; hasta USD 1.200/mes después",
-        "monthlyMin": 800,
-        "monthlyMax": 1200,
-        "currency": "USD"
-      },
-      "scamRisk": "low",
-      "evidence": [
-        "https://ruvixx.breezy.hr/p/6fa6c030f858-marketing-operations-assistant-argentina-listed-for-platform-purposes",
-        "https://ruvixx.breezy.hr/p/6fa6c030f858-marketing-operations-assistant-argentina-listed-for-platform-purposes/apply"
-      ]
-    },
-    {
       "id": "rehire-paid-media-growth-specialist",
       "title": "Paid Media & Growth Specialist",
       "company": "Rehire",
       "location": "Remote · Argentina",
-      "description": "Paid Media, growth, SEO/GEO, contenido, web básica, IA aplicada y reporting de performance para marca de viajes.",
+      "description": "Paid media, growth, SEO/GEO, piezas creativas, IA y landing pages para servicios de viajes. Contractor remoto Argentina; el cuerpo dice part-time aunque encabezado ATS dice full-time.",
       "category": "marketing",
       "sourceName": "Ashby / Rehire",
       "sourceUrl": "https://jobs.ashbyhq.com/rehire/d82d6d43-e8b2-401f-8c76-71647a7f7fa6",
       "applyUrl": "https://jobs.ashbyhq.com/rehire/d82d6d43-e8b2-401f-8c76-71647a7f7fa6",
       "publishedAt": "2026-08-24T00:00:00-03:00",
-      "verifiedAt": "2026-09-23T14:11:36-03:00",
+      "verifiedAt": "2026-10-09T13:09:33.496Z",
       "active": true,
       "argentinaEligible": true,
       "workerFee": false,
@@ -211,7 +156,7 @@
       "sourceUrl": "https://jobs.ashbyhq.com/scale%20army%20careers/57191548-3ef0-4f80-9b92-3685d63facc0",
       "applyUrl": "https://jobs.ashbyhq.com/scale%20army%20careers/57191548-3ef0-4f80-9b92-3685d63facc0",
       "publishedAt": "2026-07-13T00:00:00-03:00",
-      "verifiedAt": "2026-09-23T14:11:36-03:00",
+      "verifiedAt": "2026-10-09T13:09:33.496Z",
       "active": true,
       "argentinaEligible": true,
       "workerFee": false,
@@ -231,13 +176,13 @@
       "title": "Growth Marketing Analyst Semi-Senior",
       "company": "Evox",
       "location": "100% remoto · Argentina",
-      "description": "Growth experimentation, paid media, análisis de embudo, reportería y optimización basada en métricas.",
+      "description": "Growth marketing para startups: experimentos, medios pagos, funnel, A/B testing, CRM y automatización. 100% remoto desde Argentina; remuneración a convenir.",
       "category": "marketing",
       "sourceName": "Evox Careers",
-      "sourceUrl": "https://careers.evox.com.uy/es/jobs/growth-marketing-analyst-semi-senior-1057c07e",
-      "applyUrl": "https://careers.evox.com.uy/es/jobs/growth-marketing-analyst-semi-senior-1057c07e",
+      "sourceUrl": "https://careers.evox.com.uy/jobs/growth-marketing-analyst-semi-senior-1057c07e-1057c07e",
+      "applyUrl": "https://careers.evox.com.uy/jobs/growth-marketing-analyst-semi-senior-1057c07e-1057c07e",
       "publishedAt": "2026-08-14T00:00:00-03:00",
-      "verifiedAt": "2026-09-23T14:11:36-03:00",
+      "verifiedAt": "2026-10-09T13:09:33.496Z",
       "active": true,
       "argentinaEligible": true,
       "workerFee": false,
@@ -249,21 +194,22 @@
       },
       "scamRisk": "low",
       "evidence": [
-        "https://careers.evox.com.uy/es/jobs/growth-marketing-analyst-semi-senior-1057c07e"
+        "https://careers.evox.com.uy/jobs/growth-marketing-analyst-semi-senior-1057c07e-1057c07e",
+        "https://careers.evox.com.uy/jobs"
       ]
     },
     {
       "id": "universia-argentina-analista-marketing-digital",
       "title": "Analista de Marketing Digital",
       "company": "Universia Argentina",
-      "location": "Greater Buenos Aires · modalidad remota no confirmada",
-      "description": "Administración de shop y sitios web, SEO/GEO, campañas en Google Ads, Meta Ads, LinkedIn Ads y TikTok Ads, y producción de piezas gráficas/audiovisuales.",
+      "location": "Buenos Aires y alrededores · modalidad remota desde Santa Fe NO confirmada",
+      "description": "Sitios/shop, SEO/GEO, Ads y piezas audiovisuales. Postulación visible en LinkedIn, pero no está probado que permita trabajo remoto desde Santa Fe.",
       "category": "marketing",
       "sourceName": "LinkedIn / Universia Argentina",
       "sourceUrl": "https://www.linkedin.com/jobs/view/4469930750/",
       "applyUrl": "https://www.linkedin.com/jobs/view/4469930750/",
       "publishedAt": "2026-09-24T00:00:00-03:00",
-      "verifiedAt": "2026-09-25T21:39:00-03:00",
+      "verifiedAt": "2026-10-09T13:09:33.496Z",
       "active": true,
       "argentinaEligible": true,
       "workerFee": false,
@@ -279,33 +225,6 @@
       ]
     },
     {
-      "id": "thesoul-social-media-platform-operations-specialist-latam",
-      "title": "Social Media Platform Operations Specialist (LATAM)",
-      "company": "TheSoul Group",
-      "location": "Remote · Argentina / Brasil / Chile / Colombia / México / Uruguay",
-      "description": "Operaciones de Meta/YouTube, onboarding, troubleshooting, monetización, reconciliaciones, reporting y documentación operativa.",
-      "category": "operations",
-      "sourceName": "Workable / TheSoul Group",
-      "sourceUrl": "https://apply.workable.com/thesoul-publishing-1/j/072F943753/",
-      "applyUrl": "https://apply.workable.com/thesoul-publishing-1/j/072F943753/",
-      "publishedAt": null,
-      "verifiedAt": "2026-09-23T14:11:36-03:00",
-      "active": true,
-      "argentinaEligible": true,
-      "workerFee": false,
-      "salary": {
-        "raw": "No publicado",
-        "monthlyMin": null,
-        "monthlyMax": null,
-        "currency": "USD"
-      },
-      "scamRisk": "low",
-      "evidence": [
-        "https://apply.workable.com/thesoul-publishing-1/j/072F943753/",
-        "https://stillopen.work/job/169184-thesoul-group-social-media-platform-operations-specialist-latam"
-      ]
-    },
-    {
       "id": "tgtc-growth-acquisition-marketing-manager",
       "title": "Growth & Acquisition Marketing Manager",
       "company": "The Global Talent Co.",
@@ -316,7 +235,7 @@
       "sourceUrl": "https://jobs.ashbyhq.com/the-global-talent-co/d0c6584b-0905-4830-b891-2c1915abf2e2",
       "applyUrl": "https://jobs.ashbyhq.com/the-global-talent-co/d0c6584b-0905-4830-b891-2c1915abf2e2",
       "publishedAt": "2026-09-05T00:00:00-03:00",
-      "verifiedAt": "2026-09-23T14:11:36-03:00",
+      "verifiedAt": "2026-10-09T13:09:33.496Z",
       "active": true,
       "argentinaEligible": true,
       "workerFee": false,
@@ -343,7 +262,7 @@
       "sourceUrl": "https://jobs.ashbyhq.com/anyone-ai/ea7b9c45-d0f4-4873-8877-963c297c3478",
       "applyUrl": "https://jobs.ashbyhq.com/anyone-ai/ea7b9c45-d0f4-4873-8877-963c297c3478",
       "publishedAt": "2026-07-08T00:00:00-03:00",
-      "verifiedAt": "2026-09-23T14:11:36-03:00",
+      "verifiedAt": "2026-10-09T13:09:33.496Z",
       "active": true,
       "argentinaEligible": true,
       "workerFee": false,
@@ -369,7 +288,7 @@
       "sourceUrl": "https://apply.workable.com/remote-talent-latam/j/18C9B03C78/apply/",
       "applyUrl": "https://apply.workable.com/remote-talent-latam/j/18C9B03C78/apply/",
       "publishedAt": "2026-09-17T00:00:00-03:00",
-      "verifiedAt": "2026-09-23T14:11:36-03:00",
+      "verifiedAt": "2026-10-09T13:09:33.496Z",
       "active": true,
       "argentinaEligible": true,
       "workerFee": false,
@@ -389,26 +308,26 @@
       "id": "wing-digital-marketing-assistant-latam",
       "title": "Digital Marketing Assistant (Latin America)",
       "company": "Wing Assistant",
-      "location": "Remote · Argentina",
-      "description": "Campañas digitales, KPIs, contenidos, SEO/keywords, reporting y soporte administrativo de marketing.",
+      "location": "Remote · Argentina (vacante específica)",
+      "description": "Campañas, redes, contenido, SEO, contactos, KPIs y reporting; inglés escrito y hablado B2+, horario de EE.UU. y disponibilidad para turno nocturno.",
       "category": "marketing",
       "sourceName": "Lever / Wing Assistant",
-      "sourceUrl": "https://jobs.lever.co/getwingapp/b2175bd2-2524-454c-a58f-9c4a3c4c1452",
-      "applyUrl": "https://jobs.lever.co/getwingapp/b2175bd2-2524-454c-a58f-9c4a3c4c1452",
+      "sourceUrl": "https://jobs.lever.co/getwingapp/7fe13ce6-2490-4d98-85cd-77ebfd6b5ee0",
+      "applyUrl": "https://jobs.lever.co/getwingapp/7fe13ce6-2490-4d98-85cd-77ebfd6b5ee0",
       "publishedAt": null,
-      "verifiedAt": "2026-09-23T14:11:36-03:00",
+      "verifiedAt": "2026-10-09T13:09:33.496Z",
       "active": true,
       "argentinaEligible": true,
       "workerFee": false,
       "salary": {
-        "raw": "No publicado en el ATS primario actual",
-        "monthlyMin": null,
-        "monthlyMax": null,
+        "raw": "USD 1,400–2,500/mes según nivel; montos máximos por seniority indicados en ATS",
+        "monthlyMin": 1400,
+        "monthlyMax": 2500,
         "currency": "USD"
       },
       "scamRisk": "low",
       "evidence": [
-        "https://jobs.lever.co/getwingapp/b2175bd2-2524-454c-a58f-9c4a3c4c1452",
+        "https://jobs.lever.co/getwingapp/7fe13ce6-2490-4d98-85cd-77ebfd6b5ee0",
         "https://jobs.lever.co/getwingapp?location=Argentina"
       ]
     },
@@ -423,7 +342,7 @@
       "sourceUrl": "https://jobs.lever.co/padsplit/2acd0cdd-75df-4ecd-8a0c-f5b6ee199067",
       "applyUrl": "https://jobs.lever.co/padsplit/2acd0cdd-75df-4ecd-8a0c-f5b6ee199067/apply",
       "publishedAt": null,
-      "verifiedAt": "2026-09-23T14:11:36-03:00",
+      "verifiedAt": "2026-10-09T13:09:33.496Z",
       "active": true,
       "argentinaEligible": true,
       "workerFee": false,
@@ -450,7 +369,7 @@
       "sourceUrl": "https://jobs.ashbyhq.com/ujv/3ffa4b1d-d9f5-4c75-a778-8007b71df80b",
       "applyUrl": "https://jobs.ashbyhq.com/ujv/3ffa4b1d-d9f5-4c75-a778-8007b71df80b",
       "publishedAt": null,
-      "verifiedAt": "2026-09-23T14:11:36-03:00",
+      "verifiedAt": "2026-10-09T13:09:33.496Z",
       "active": true,
       "argentinaEligible": true,
       "workerFee": false,
@@ -476,7 +395,7 @@
       "sourceUrl": "https://jobs.lever.co/chipping-concrete/9814756b-88b6-48c2-b2f9-a86dc340defc",
       "applyUrl": "https://jobs.lever.co/chipping-concrete/9814756b-88b6-48c2-b2f9-a86dc340defc",
       "publishedAt": null,
-      "verifiedAt": "2026-09-23T14:11:36-03:00",
+      "verifiedAt": "2026-10-09T13:09:33.496Z",
       "active": true,
       "argentinaEligible": true,
       "workerFee": false,
@@ -502,12 +421,12 @@
       "sourceUrl": "https://veta-virtual-inc.breezy.hr/p/0d3e3643dcae-ecommerce-paid-media-manager",
       "applyUrl": "https://veta-virtual-inc.breezy.hr/p/0d3e3643dcae-ecommerce-paid-media-manager",
       "publishedAt": "2026-09-02T00:00:00-03:00",
-      "verifiedAt": "2026-09-25T21:39:00-03:00",
+      "verifiedAt": "2026-10-09T13:09:33.496Z",
       "active": true,
       "argentinaEligible": true,
       "workerFee": false,
       "salary": {
-        "raw": "Competitive Base + Significant Performance Pay in USD",
+        "raw": "Competitive Base + Significant Performance Pay in USD (monto no publicado)",
         "monthlyMin": null,
         "monthlyMax": null,
         "currency": "USD"
@@ -516,6 +435,162 @@
       "evidence": [
         "https://veta-virtual-inc.breezy.hr/p/0d3e3643dcae-ecommerce-paid-media-manager",
         "https://www.linkedin.com/jobs/view/4461391448/"
+      ]
+    },
+    {
+      "id": "scale-army-revenue-operations-analyst-a2fe42e7",
+      "title": "Revenue Operations Analyst",
+      "company": "Scale Army Careers",
+      "location": "Remoto · Argentina / LATAM · horario de EE.UU.",
+      "description": "RevOps, HubSpot CRM, lifecycle/pipeline, lead routing, reporting, data quality, SOPs y automatización. Pide 2–3+ años en operaciones y dominio avanzado de HubSpot.",
+      "category": "operations",
+      "sourceName": "Ashby / Scale Army Careers",
+      "sourceUrl": "https://jobs.ashbyhq.com/Scale%20Army%20Careers/a2fe42e7-85b8-47ce-accb-f7a4c9114f3c",
+      "applyUrl": "https://jobs.ashbyhq.com/Scale%20Army%20Careers/a2fe42e7-85b8-47ce-accb-f7a4c9114f3c",
+      "publishedAt": null,
+      "verifiedAt": "2026-10-09T13:09:33.496Z",
+      "active": true,
+      "argentinaEligible": true,
+      "workerFee": false,
+      "salary": {
+        "raw": "USD 1,800–2,500/mes, compensación final según experiencia y ubicación",
+        "monthlyMin": 1800,
+        "monthlyMax": 2500,
+        "currency": "USD"
+      },
+      "scamRisk": "low",
+      "evidence": [
+        "https://jobs.ashbyhq.com/Scale%20Army%20Careers/a2fe42e7-85b8-47ce-accb-f7a4c9114f3c"
+      ]
+    },
+    {
+      "id": "scale-army-ai-native-growth-marketing-strategist-07d70251",
+      "title": "AI-Native Growth Marketing Strategist",
+      "company": "Scale Army Careers",
+      "location": "Remoto · Argentina/LATAM · PST · 30 horas semanales",
+      "description": "Marketing de crecimiento, investigación de audiencias, análisis de campañas, dashboards y flujos con IA para dos apps; solicita 3+ años de marketing y uso práctico de IA más allá de prompting básico.",
+      "category": "marketing",
+      "sourceName": "Ashby / Scale Army Careers",
+      "sourceUrl": "https://jobs.ashbyhq.com/scale%20army%20careers/07d70251-ff00-42be-bc43-80c558b6298b",
+      "applyUrl": "https://jobs.ashbyhq.com/scale%20army%20careers/07d70251-ff00-42be-bc43-80c558b6298b",
+      "publishedAt": null,
+      "verifiedAt": "2026-10-09T13:09:33.496Z",
+      "active": true,
+      "argentinaEligible": true,
+      "workerFee": false,
+      "salary": {
+        "raw": "USD 1,700/mes (según experiencia y ubicación)",
+        "monthlyMin": 1700,
+        "monthlyMax": 1700,
+        "currency": "USD"
+      },
+      "scamRisk": "low",
+      "evidence": [
+        "https://jobs.ashbyhq.com/scale%20army%20careers/07d70251-ff00-42be-bc43-80c558b6298b"
+      ]
+    },
+    {
+      "id": "tgtc-podcast-manager-d5eb2c46",
+      "title": "Podcast Manager",
+      "company": "The Global Talent Co.",
+      "location": "100% remoto · Argentina / LATAM · 40 h/semana",
+      "description": "Coordinar agenda de invitados, clientes, producción audiovisual, editores, entregas y publicación; uso operativo de herramientas de IA. Requiere 3+ años en producción/coordinación/clientes o afines e inglés B2.",
+      "category": "content-social",
+      "sourceName": "Ashby / The Global Talent Co.",
+      "sourceUrl": "https://jobs.ashbyhq.com/the-global-talent-co/d5eb2c46-0b42-4aa3-93ce-5f47569635fe",
+      "applyUrl": "https://jobs.ashbyhq.com/the-global-talent-co/d5eb2c46-0b42-4aa3-93ce-5f47569635fe",
+      "publishedAt": null,
+      "verifiedAt": "2026-10-09T13:09:33.496Z",
+      "active": true,
+      "argentinaEligible": true,
+      "workerFee": false,
+      "salary": {
+        "raw": "No publicado",
+        "monthlyMin": null,
+        "monthlyMax": null,
+        "currency": "USD"
+      },
+      "scamRisk": "low",
+      "evidence": [
+        "https://jobs.ashbyhq.com/the-global-talent-co/d5eb2c46-0b42-4aa3-93ce-5f47569635fe"
+      ]
+    },
+    {
+      "id": "tgtc-video-editor-47d62bde",
+      "title": "Video Editor",
+      "company": "The Global Talent Co.",
+      "location": "100% remoto · Argentina / LATAM · 40 h/semana",
+      "description": "Producción y edición de podcasts, videos largos y clips para redes; Adobe Premiere, narración visual y contenido comercial. Exige 4+ años audiovisuales, experiencia práctica en podcasts y B2 inglés.",
+      "category": "content-social",
+      "sourceName": "Ashby / The Global Talent Co.",
+      "sourceUrl": "https://jobs.ashbyhq.com/the-global-talent-co/47d62bde-bf06-4989-bbba-6011ad985484/",
+      "applyUrl": "https://jobs.ashbyhq.com/the-global-talent-co/47d62bde-bf06-4989-bbba-6011ad985484/",
+      "publishedAt": null,
+      "verifiedAt": "2026-10-09T13:09:33.496Z",
+      "active": true,
+      "argentinaEligible": true,
+      "workerFee": false,
+      "salary": {
+        "raw": "No publicado",
+        "monthlyMin": null,
+        "monthlyMax": null,
+        "currency": "USD"
+      },
+      "scamRisk": "low",
+      "evidence": [
+        "https://jobs.ashbyhq.com/the-global-talent-co/47d62bde-bf06-4989-bbba-6011ad985484/"
+      ]
+    },
+    {
+      "id": "scale-army-marketing-growth-specialist-ed9be0d0",
+      "title": "Marketing & Growth Specialist",
+      "company": "Scale Army Careers",
+      "location": "Remoto · Argentina / LATAM · horario de EE.UU.",
+      "description": "Gestionar estrategia y ejecución de marketing multicanal para marketplace de subastas; paid media, contenido, email/SMS, adquisición, métricas. Requiere ownership completo y ejecución hands-on.",
+      "category": "marketing",
+      "sourceName": "Ashby / Scale Army Careers",
+      "sourceUrl": "https://jobs.ashbyhq.com/scale%20army%20careers/ed9be0d0-7d00-4579-be32-d9c69dea5537",
+      "applyUrl": "https://jobs.ashbyhq.com/scale%20army%20careers/ed9be0d0-7d00-4579-be32-d9c69dea5537",
+      "publishedAt": "2026-08-31T00:00:00-03:00",
+      "verifiedAt": "2026-10-09T13:09:33.496Z",
+      "active": true,
+      "argentinaEligible": true,
+      "workerFee": false,
+      "salary": {
+        "raw": "USD 2,730–3,000/mes, sujeto a experiencia y ubicación",
+        "monthlyMin": 2730,
+        "monthlyMax": 3000,
+        "currency": "USD"
+      },
+      "scamRisk": "low",
+      "evidence": [
+        "https://jobs.ashbyhq.com/scale%20army%20careers/ed9be0d0-7d00-4579-be32-d9c69dea5537"
+      ]
+    },
+    {
+      "id": "kiwi-product-manager-4473557189",
+      "title": "Product Manager",
+      "company": "Kiwi Financial",
+      "location": "100% remoto · Argentina / Colombia / República Dominicana",
+      "description": "Discovery, prioridades, producto digital, métricas y coordinación Engineering/Design/Operations. Requiere experiencia demostrable como Product Manager hasta lanzamiento y medición; fintech deseable.",
+      "category": "other",
+      "sourceName": "Ashby / Kiwi Financial",
+      "sourceUrl": "https://jobs.ashbyhq.com/kiwi/de692be1-acc5-4f92-8ca1-b087ceb42864",
+      "applyUrl": "https://jobs.ashbyhq.com/kiwi/de692be1-acc5-4f92-8ca1-b087ceb42864",
+      "publishedAt": null,
+      "verifiedAt": "2026-10-09T13:09:33.496Z",
+      "active": true,
+      "argentinaEligible": true,
+      "workerFee": false,
+      "salary": {
+        "raw": "No publicado",
+        "monthlyMin": null,
+        "monthlyMax": null,
+        "currency": "USD"
+      },
+      "scamRisk": "low",
+      "evidence": [
+        "https://jobs.ashbyhq.com/kiwi/de692be1-acc5-4f92-8ca1-b087ceb42864"
       ]
     }
   ]
