@@ -1,3 +1,4 @@
+import { sendCoachMessage } from "./coach.js";
 const HF_CHAT="https://router.huggingface.co/v1/chat/completions";
 const SESSION_KEY="jobas:hf:key:session";
 const LOCAL_KEY="jobas:hf:key:local";
@@ -37,7 +38,13 @@ export function buildPennySystemPrompt({profile={},jobs=[]}={}){
   ].join("\n");
 }
 
-export async function sendPennyMessage({token,model="google/gemma-2-2b-it:cheapest",messages,fetchImpl=globalThis.fetch}){
+export async function sendPennyMessage({token,provider="huggingface",model="openai/gpt-oss-120b:cheapest",messages,fetchImpl=globalThis.fetch}){
+  if(provider==="openrouter"){
+    // Share the user-authorized credential with Coach; fixed free router only.
+    // Do not send requests to JOBAS Worker or silently fall back to billable models.
+    return sendCoachMessage({apiKey:token,model:"openrouter/free",messages,fetchImpl});
+  }
+  if(provider!=="huggingface")throw new Error("UNKNOWN_AI_PROVIDER");
   if(!token)throw new Error("HF_NOT_CONNECTED");
   const r=await fetchImpl(HF_CHAT,{
     method:"POST",

@@ -24,6 +24,7 @@ const SPEECH=createSpeechController();
 const PENNY_CREDENTIALS=createPennyCredentialStore();
 const PROGRESS_KEY="jobas:in-progress:v1";
 const NOTES_KEY="jobas:notes:v1";
+const OPENROUTER_RETURN_KEY="jobas:openrouter:return-window";
 
 const state={
   jobs:[],
@@ -444,12 +445,31 @@ function readFileDataUrl(file){
 }
 
 
+function pennyProvider(){return $("#pennyProviderMode").value==="huggingface"?"huggingface":"openrouter";}
 function renderPennyProvider(){
-  const connected=Boolean(PENNY_CREDENTIALS.get());
-  $("#pennyProviderStatus").textContent=connected
-    ?"Hugging Face conectado con credencial del usuario. Llamadas directas desde este navegador."
-    :"Conectá tu cuenta/créditos de Hugging Face. JOBAS no intermedia estas llamadas.";
-  $("#pennyDisconnect").disabled=!connected;
+  const provider=pennyProvider();
+  const openrouter=provider==="openrouter";
+  const connected=Boolean(openrouter?CREDENTIALS.get():PENNY_CREDENTIALS.get());
+  $("#pennyProviderStatus").textContent=openrouter
+    ?connected
+      ?"OpenRouter conectado · openrouter/free (gratis sujeto a límites). Solicitud directa desde el navegador."
+      :"OpenRouter no conectado. Conectá tu cuenta; Coach y Penny comparten la credencial."
+    :connected
+      ?"Hugging Face conectado · consumo según los créditos de tu cuenta. Solicitud directa."
+      :"Hugging Face no conectado. Requiere un token propio.";
+  $("#pennyConnectOpenRouter").hidden=!openrouter||connected;
+  $("#pennyDisconnectOpenRouter").hidden=!openrouter||!connected;
+  $("#pennyHfSettings").hidden=openrouter;
+  $("#pennyDisconnect").disabled=!PENNY_CREDENTIALS.get();
+}
+async function connectOpenRouter(returnWindow="coach"){
+  try{
+    sessionStorage.setItem(OPENROUTER_RETURN_KEY,returnWindow);
+    await startOpenRouterOAuth();
+  }catch(e){
+    sessionStorage.removeItem(OPENROUTER_RETURN_KEY);
+    toast("No se pudo iniciar OpenRouter: "+e.message,true);
+  }
 }
 function pennyMessage(role,text){
   const el=document.createElement("div");
@@ -459,8 +479,13 @@ function pennyMessage(role,text){
   $("#pennyMessages").scrollTop=$("#pennyMessages").scrollHeight;
 }
 async function sendPenny(text){
-  const token=PENNY_CREDENTIALS.get();
-  if(!token){openWindow("penny");toast("Conectá tu cuenta de Hugging Face primero.",true);return;}
+  const provider=pennyProvider();
+  const token=provider==="openrouter"?CREDENTIALS.get():PENNY_CREDENTIALS.get();
+  if(!token){
+    openWindow("penny");
+    toast(provider==="openrouter"?"Conectá OpenRouter para usar la IA gratis.":"Conectá tu token Hugging Face primero.",true);
+    return;
+  }
   const userText=String(text||"").trim();
   if(!userText)return;
   const system=buildPennySystemPrompt({profile:state.profile,jobs:filtered().slice(0,6)});
@@ -468,18 +493,27 @@ async function sendPenny(text){
   pennyMessage("user",userText);
   $("#pennyInput").value="";
   $("#pennySend").disabled=true;
-  $("#pennyProviderStatus").textContent="Pensando con tu cuenta…";
+  $("#pennyProviderStatus").textContent="Consultando directamente tu proveedor…";
   try{
     const out=await sendPennyMessage({
-      token,
-      model:$("#pennyModel").value.trim()||"google/gemma-2-2b-it:cheapest",
+      provider,token,
+      model:provider==="huggingface"?($("#pennyModel").value.trim()||"openai/gpt-oss-120b:cheapest"):"openrouter/free",
       messages:[{role:"system",content:system},...state.pennyHistory.slice(-10)]
     });
     state.pennyHistory.push({role:"assistant",content:out.content});
     pennyMessage("assistant",out.content);
   }catch(e){
-    pennyMessage("assistant","Error: "+e.message);
-    toast("Penny no pudo consultar Hugging Face: "+e.message,true);
+    const message=String(e.message||e);
+    const hint=/429|quota|rate.?limit/i.test(message)
+      ?"Se alcanzó el cupo del proveedor. Probá más tarde; JOBAS no cambia a un modelo pago."
+      :/401|403|invalid.?key|unauthoriz/i.test(message)
+        ?"Clave rechazada o sin permisos. Volvé a conectar tu cuenta."
+        :/Failed to fetch|network|CORS|abort/i.test(message)
+          ?"No se pudo contactar al proveedor desde este navegador. Revisá la conexión."
+          :message;
+    state.pennyHistory.pop();
+    pennyMessage("assistant","Error: "+hint);
+    toast("Penny: "+hint,true);
   }finally{
     $("#pennySend").disabled=false;
     renderPennyProvider();
@@ -539,13 +573,20 @@ async function loadFeed(){
 
 async function handleOAuthReturn(){
   if(!new URL(location.href).searchParams.get("code"))return;
+  const target=sessionStorage.getItem(OPENROUTER_RETURN_KEY)==="penny"?"penny":"coach";
   try{
     await finishOpenRouterOAuth();
     renderCoachProvider();
-    openWindow("coach");
-    toast("OpenRouter conectado. El Coach usa tu cuenta.");
+    renderPennyProvider();
+    openWindow(target);
+    toast("OpenRouter conectado. Penny y Coach pueden usar openrouter/free.");
   }catch(e){
+    openWindow(target);
+    const status=target==="penny"?"#pennyProviderStatus":"#coachProviderStatus";
+    $(status).textContent="Error al conectar: "+e.message;
     toast("No pude completar la conexión OpenRouter: "+e.message,true);
+  }finally{
+    sessionStorage.removeItem(OPENROUTER_RETURN_KEY);
   }
 }
 
@@ -630,12 +671,12 @@ function wireEvents(){
   $("#addFolder").onclick=()=>{const name=$("#newFolderName").value.trim();if(!name)return;MEMORY.addFolder(name);$("#newFolderName").value="";renderFolders();};
   $("#foldersList").addEventListener("click",e=>{const card=e.target.closest("[data-folder-id]");if(!card)return;if(e.target.closest("[data-remove-folder]")){MEMORY.removeFolder(card.dataset.folderId);renderFolders();}});
 
-  $("#coachConnect").onclick=()=>startOpenRouterOAuth();
-  $("#coachDisconnect").onclick=()=>{CREDENTIALS.clear();state.coachHistory=[];renderCoachProvider();toast("Cuenta IA desconectada de este navegador.");};
+  $("#coachConnect").onclick=()=>connectOpenRouter("coach");
+  $("#coachDisconnect").onclick=()=>{CREDENTIALS.clear();state.coachHistory=[];state.pennyHistory=[];renderCoachProvider();renderPennyProvider();toast("OpenRouter desconectado de Penny y Coach.");};
   $("#coachUseKey").onclick=()=>{
     const key=$("#coachKeyInput").value.trim();
     if(!key){toast("Pegá una API key propia.",true);return;}
-    CREDENTIALS.set(key,$("#coachRemember").checked);$("#coachKeyInput").value="";renderCoachProvider();toast("Key guardada solo en este navegador.");
+    CREDENTIALS.set(key,$("#coachRemember").checked);$("#coachKeyInput").value="";renderCoachProvider();renderPennyProvider();toast("Key guardada solo en este navegador.");
   };
   $("#coachSend").onclick=()=>sendCoach($("#coachInput").value);
   $("#coachStart").onclick=()=>sendCoach($("#coachMode").value==="mock"?"Comenzá la entrevista. Hacé una sola pregunta por vez y esperá mi respuesta.":"Dame una consigna breve para practicar una respuesta de entrevista.");
@@ -650,6 +691,13 @@ function wireEvents(){
     });
   };
 
+  $("#pennyProviderMode").onchange=()=>{state.pennyHistory=[];renderPennyProvider();};
+  $("#pennyConnectOpenRouter").onclick=()=>connectOpenRouter("penny");
+  $("#pennyDisconnectOpenRouter").onclick=()=>{
+    CREDENTIALS.clear();state.coachHistory=[];state.pennyHistory=[];
+    renderCoachProvider();renderPennyProvider();
+    toast("OpenRouter desconectado de Penny y Coach.");
+  };
   $("#pennyUseKey").onclick=()=>{
     const key=$("#pennyKeyInput").value.trim();
     if(!key){toast("Pegá un token de Hugging Face.",true);return;}

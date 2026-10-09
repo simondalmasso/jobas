@@ -35,3 +35,35 @@ test("CSP permite solo el router de Hugging Face requerido por Penny",()=>{
  assert.match(headers,/connect-src[^\n]*https:\/\/router\.huggingface\.co/);
  assert.doesNotMatch(headers,/connect-src[^\n]*\*/);
 });
+
+test("Penny can reuse OpenRouter free router directly, without the Worker",async()=>{
+  const calls=[];
+  const fetchImpl=async(url,options)=>{
+    calls.push({url:String(url),headers:options.headers,body:JSON.parse(options.body)});
+    return{ok:true,json:async()=>({choices:[{message:{content:"Hola desde modelo gratis"}}]})};
+  };
+  const out=await sendPennyMessage({provider:"openrouter",token:"sk-or-user",messages:[{role:"user",content:"Hola"}],fetchImpl});
+  assert.equal(out.content,"Hola desde modelo gratis");
+  assert.equal(calls.length,1);
+  assert.equal(calls[0].url,"https://openrouter.ai/api/v1/chat/completions");
+  assert.equal(calls[0].body.model,"openrouter/free");
+  assert.equal(calls[0].headers.Authorization,"Bearer sk-or-user");
+  assert.doesNotMatch(calls[0].url,/workers\.dev|web\.app/);
+});
+
+test("Penny free route never silently switches to a paid model on API errors",async()=>{
+  const calls=[];
+  const fetchImpl=async(url,options)=>{
+    calls.push(JSON.parse(options.body));
+    return {ok:false,status:429,json:async()=>({error:{message:"Quota exceeded"}})};
+  };
+  await assert.rejects(sendPennyMessage({provider:"openrouter",token:"sk-or-user",messages:[{role:"user",content:"Hola"}],fetchImpl}),/Quota exceeded/);
+  assert.equal(calls.length,1);
+  assert.equal(calls[0].model,"openrouter/free");
+});
+
+test("Penny does not make network requests if chosen provider is disconnected",async()=>{
+  let called=0;
+  await assert.rejects(sendPennyMessage({provider:"openrouter",token:"",messages:[],fetchImpl:async()=>{called++}}),/OPENROUTER_NOT_CONNECTED/);
+  assert.equal(called,0);
+});

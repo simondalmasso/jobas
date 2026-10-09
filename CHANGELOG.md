@@ -4,6 +4,16 @@ All notable product changes to JOBAS are documented here.
 
 ## Unreleased
 
+## 1.1.2 — candidate (Penny provider integration)
+
+- Penny uses the same user-owned OpenRouter connection as Coach, with `openrouter/free` as its non-billable default text-model router. It never silently falls back to paid models.
+- Hugging Face remains explicitly selectable with a separate user token; any HF usage follows that provider's own credit policy.
+- Browser OAuth redirects return to the assistant that initiated connection; disconnecting OpenRouter invalidates the shared browser credential for Penny and Coach.
+- Adds browser-simulated provider tests, a separate production status check, privacy wording and responsive Penny connection controls.
+- No job feed, Cloudflare AI proxy, Worker inference requests, database, paid cloud service, or additional runtime backend.
+
+Release only after reviewed PR, exact-head CI, public version preview, authorized deploy and live smoke gates.
+
 ## 1.1.1 — 2026-10-09
 
 ### Quality and reliability
