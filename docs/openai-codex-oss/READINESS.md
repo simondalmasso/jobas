@@ -3,24 +3,26 @@
 LAST_CHECK=2026-10-09
 OSS_SUBMISSION=GO_FOR_OWNER_SUBMISSION
 APPLICATION_STATUS=NOT_SUBMITTED
-RELEASE=v1.1.1
-RELEASE_COMMIT=38d303297f2e776027c0e3aaafe1fadac4ea9eb0
-PRODUCTION_WORKER_VERSION=51d205cd-a4d2-4448-953f-960cea8d1775
+RELEASE=v1.1.2
+RELEASE_COMMIT=a7dedb672674f0513621fef247e561deda00b354
+PRODUCTION_WORKER_VERSION=d53a54a2-b70e-4e89-a3fc-6bfd696ff533
 RELEASE_PRODUCTION_ACCEPTANCE=PASS
-CANONICAL_REPOSITORY=https://github.com/simondalmasso/jobas
+CANONICAL_REPOSITORY=https://github.com/simondalmasso/jobas-latam-job-search
 
 ## Verifiable evidence
 
 - **Public MIT repository**, primary maintainer `simondalmasso`; no claim of widespread adoption or established usage metrics.
-- **Release:** [JOBAS v1.1.1](https://github.com/simondalmasso/jobas/releases/tag/v1.1.1) is published (not draft/prerelease). Its annotated tag points to commit `38d303297f2e776027c0e3aaafe1fadac4ea9eb0`.
-- **CI:** [main release-commit verify](https://github.com/simondalmasso/jobas/actions/runs/37916326760) passed. Local `npm ci`, `npm run verify`, and `npm audit` passed; the release-candidate test suite had 75 passing Node tests.
-- **Cloudflare:** Worker version `51d205cd-a4d2-4448-953f-960cea8d1775` was deployed at 100% and tested against live production, including 1440px desktop and 390px/360px mobile Chromium, zero console errors, local/remote radar, browser-local profile and saved state, and public read-only MCP. Feed and health agreed at **342** during the release verification; four compatible LOCAL opportunities rendered and no `&amp;` query separators remained.
+- **Release:** [JOBAS v1.1.2](https://github.com/simondalmasso/jobas-latam-job-search/releases/tag/v1.1.2) is published (not draft/prerelease). Its annotated tag points to commit `a7dedb672674f0513621fef247e561deda00b354`.
+- **CI:** [main release-commit verify](https://github.com/simondalmasso/jobas-latam-job-search/actions/runs/37961659852) passed. Local `npm ci`, `npm run verify`, and `npm audit` passed; the release-candidate test suite had 78 passing Node tests.
+- **Cloudflare:** Worker version `d53a54a2-b70e-4e89-a3fc-6bfd696ff533` was deployed at 100% and tested against live production, including 1440px desktop and 390px/360px mobile Chromium, zero console errors, local/remote radar, browser-local profile and saved state, and public read-only MCP. Feed and health agreed at **345** during the v1.1.2 release verification; four compatible LOCAL opportunities rendered and no `&amp;` query separators remained.
 - **Feed evidence:** [46-link deterministic sample](FEED_SAMPLE_2026-10-09.json) across 10 sources had 31 visible listing-text matches, 2 HTTP-reachable but unconfirmed listings, and 13 blocked/inaccessible endpoints; a transport success is never asserted to prove a vacancy is actively recruiting.
 - **Privacy and boundaries:** user profiles, CV and saved state are browser-local; optional user-owned OpenRouter AI is browser-to-provider (not through JOBAS Worker); the Worker has no privileged application-submission tool.
 
-## Current release identity vs newer main
+## Release identity and subsequent commits
 
-`v1.1.1` and the verified production deployment correspond to the **release commit above**. A later commit on `main` updated only `data/gpt-remoto.json` (curated remote-source data). Changes to data/docs after the release do **not** move the release tag or retroactively alter the deployed release artifact. Do not claim that current `main` is byte-identical to v1.1.1 production until any later changes are separately deployed and verified.
+`v1.1.2` is an immutable tag pinned to release commit `a7dedb672674f0513621fef247e561deda00b354`. The deployed Cloudflare Worker version `d53a54a2-b70e-4e89-a3fc-6bfd696ff533` serves the verified v1.1.2 browser assets; the previous v1.1.1 version remains available for rollback. A later documentation-only commit on `main` does not change the release SHA or production artifact.
+
+**Penny provider caveat:** OpenRouter's `openrouter/free` endpoint is called directly from the user's browser after explicit OpenRouter authorization, with no intermediary Cloudflare inference call. A mocked provider reply passed UI regression tests, but an authenticated live model reply using the owner's credentials has **not** been observed. Free-model access remains subject to provider/account limits; Hugging Face is opt-in with separate credits.
 
 ## Explicit limitations
 

@@ -4,7 +4,7 @@ All notable product changes to JOBAS are documented here.
 
 ## Unreleased
 
-## 1.1.2 — candidate (Penny provider integration)
+## 1.1.2 — 2026-10-09 (Penny provider integration)
 
 - Penny uses the same user-owned OpenRouter connection as Coach, with `openrouter/free` as its non-billable default text-model router. It never silently falls back to paid models.
 - Hugging Face remains explicitly selectable with a separate user token; any HF usage follows that provider's own credit policy.
@@ -12,7 +12,7 @@ All notable product changes to JOBAS are documented here.
 - Adds browser-simulated provider tests, a separate production status check, privacy wording and responsive Penny connection controls.
 - No job feed, Cloudflare AI proxy, Worker inference requests, database, paid cloud service, or additional runtime backend.
 
-Release only after reviewed PR, exact-head CI, public version preview, authorized deploy and live smoke gates.
+Published as [v1.1.2](https://github.com/simondalmasso/jobas-latam-job-search/releases/tag/v1.1.2), commit `a7dedb672674f0513621fef247e561deda00b354`. Exact-commit CI, Cloudflare version preview and live production Chromium gates passed. Authenticated user-owned provider inference was not executed during release qualification.
 
 ## 1.1.1 — 2026-10-09
 
@@ -30,7 +30,7 @@ Release only after reviewed PR, exact-head CI, public version preview, authorize
 - added a separate non-mocked browser test against production or a local Cloudflare preview, with real public source data, no provider keys and no application submission;
 - updated OSS readiness, privacy and contributor instructions with explicit HOLD criteria.
 
-Published as [v1.1.1](https://github.com/simondalmasso/jobas/releases/tag/v1.1.1) from commit `38d303297f2e776027c0e3aaafe1fadac4ea9eb0`; Cloudflare Worker version `51d205cd-a4d2-4448-953f-960cea8d1775` passed production acceptance after the feed refresh. Individual job availability and provider-backed BYOK flows were not exhaustively verified.
+Published as [v1.1.1](https://github.com/simondalmasso/jobas-latam-job-search/releases/tag/v1.1.1) from commit `38d303297f2e776027c0e3aaafe1fadac4ea9eb0`; Cloudflare Worker version `51d205cd-a4d2-4448-953f-960cea8d1775` passed production acceptance after the feed refresh. Individual job availability and provider-backed BYOK flows were not exhaustively verified.
 
 ## 1.1.0 — 2026-10-03
 
