@@ -57,6 +57,19 @@
 - Source freshness and each individual posting's ongoing availability remain incompletely verified.
 - Production has *not* been changed. Local preview is not a public Cloudflare deployed artifact, and no claim of exact SHA-to-production parity is made.
 
+## Operating cost (code-based estimate, not a billing audit)
+
+The Worker configuration schedules one `15 10 * * *` cron daily. The declared source registry makes 8 upstream source requests per successful refresh: approximately 240 upstream adapter requests and 30 KV writes over a 30-day month **at the planned cadence**. Actual redirects, retries, cold-start refreshes, user traffic, MCP use, storage, and provider policies can change usage. Local preview traffic is excluded from this estimate.
+
+Cloudflare's published **Free** quota includes 100,000 Workers requests per day, 100,000 KV reads per day, 1,000 KV writes per day and 1 GB KV storage. Thus the base design could operate for **USD 0 incremental recurring platform cost if the account is on Free and stays within all limits**; this is *not* a confirmed account bill and does not guarantee all external source services have no cost. The Workers Paid plan has a published minimum charge of **USD 5/month**. No paid integration, token or subscription was enabled by this audit.
+
+Sources (Cloudflare official):
+- https://developers.cloudflare.com/workers/platform/limits/
+- https://developers.cloudflare.com/kv/platform/limits/
+- https://developers.cloudflare.com/workers/platform/pricing/
+
+**Actual `RECURRING_COST_USD`: UNKNOWN** until the authenticated Cloudflare dashboard billing/usage is checked. Do not substitute the Free plan estimate for a receipt.
+
 ## Acceptance contract
 
 ```text
