@@ -118,10 +118,24 @@ try{
   await sleep(200);
   check("LIVE_SEARCH_AND_FOLDER",await cdp.eval('JSON.parse(localStorage.getItem("jobas:searches:v1")||"[]").length===1 && JSON.parse(localStorage.getItem("jobas:folders:v1")||"[]").length===1'));
   await cdp.eval('location.reload()');
-  await sleep(1500);
+  await sleep(500);
+  // On a Cloudflare cold preview the async KV feed or image can be slower than a fixed sleep.
+  let readyFeed=false;
+  for(let i=0;i<55;i++){
+    readyFeed=await cdp.eval('document.querySelectorAll("#feed .job").length>0');
+    if(readyFeed)break;
+    await sleep(200);
+  }
+  check("LIVE_FEED_RELOAD_SETTLED",readyFeed);
   check("LIVE_RELOAD_PERSISTENCE",await cdp.eval('JSON.parse(localStorage.getItem("jobas:profile:v1")||"null")?.name==="Product QA" && JSON.parse(localStorage.getItem("jobas:favorites:v1")||"[]").length===1 && JSON.parse(localStorage.getItem("jobas:in-progress:v1")||"[]").length===1'));
   await cdp.eval('document.querySelector("#actionCoach").click();document.querySelector("#pennyLauncher").click()');
-  await sleep(100);
+  let readyImage=false;
+  for(let i=0;i<45;i++){
+    readyImage=await cdp.eval('(()=>{const img=document.querySelector(".penny-avatar");return !document.querySelector("#pennyWindow").hidden&&img.complete&&img.naturalWidth>0})()');
+    if(readyImage)break;
+    await sleep(200);
+  }
+  check("LIVE_PENNY_IMAGE_SETTLED",readyImage);
   check("LIVE_AI_DISCONNECTED",await cdp.eval('document.querySelector("#coachProviderStatus").textContent.includes("No conectada") && !sessionStorage.getItem("jobas:openrouter:key:session") && !localStorage.getItem("jobas:openrouter:key:local")'));
   check("LIVE_PENNY_PRESENT",await cdp.eval('!document.querySelector("#pennyWindow").hidden && document.querySelector(".penny-avatar").naturalWidth>0'));
   check("LIVE_PENNY_OPENROUTER_READY",await cdp.eval('document.querySelector("#pennyProviderMode").value==="openrouter" && /OpenRouter/.test(document.querySelector("#pennyProviderStatus").textContent) && !document.querySelector("#pennyConnectOpenRouter").hidden && document.querySelector("#pennyHfSettings").hidden'));
