@@ -45,6 +45,14 @@ Live, non-mocked production acceptance (opt-in; requires Chrome and internet):
 npm run test:live-browser
 ```
 
+Source-link sample (explicit/manual; requires network, scans public URLs, and never treats HTTP 200 as proof a job is open):
+
+```bash
+node scripts/audit-live-feed.mjs
+```
+
+It writes a dated JSON evidence report under `docs/openai-codex-oss/` with stable SHA-256 selection and bounded source requests. Configure `JOBAS_FEED_ORIGIN` and `JOBAS_FEED_REPORT` to inspect another public feed or select a different report path. It is intentionally excluded from automated CI to avoid third-party rate limits.
+
 This uses an isolated disposable browser profile and never submits job applications or sends model-provider credentials. The public production command can intentionally fail if a release-only bug remains; evaluate a new change against an exact-head preview before authorizing a deploy. Do not use test data to claim live vacancy availability.
 
 ## Project invariants

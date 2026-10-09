@@ -27,7 +27,7 @@ Canonical repository: https://github.com/simondalmasso/jobas
 
 A passing mocked CI browser test is not sufficient to declare the public feed current or every outbound job link valid. Likewise a source adapter returning successfully is not proof every listed vacancy is still open.
 
-The 2026-10-09 audit identified a live mismatch between `/api/health` (320) and `/api/feed` (342), RFC-822 RSS dates not normalized, some outdated/undated entries, and dev-tool dependency advisories. The isolated fix branch addresses these defects and passed a local Wrangler preview against real source fetches; they remain **unreleased** until reviewed, approved and deployed. Do not represent branch-only fixes as production behavior.
+The 2026-10-09 audit identified a live mismatch between `/api/health` (320) and `/api/feed` (342), RFC-822 RSS dates not normalized, some outdated/undated entries, and dev-tool dependency advisories. The isolated fix branch addresses these defects and passed both local Wrangler and Cloudflare Remote Preview browser checks against actual public feed data. A deterministic 46-link audit records 31 listing-text matches, 2 generic HTTP 200 and 13 inaccessible links, without asserting vacancies remain open. The 14 HTML-escaped WeRemoto URLs in the existing KV snapshot also require a source refresh after release. All fixes remain **unreleased** until reviewed, approved and deployed. Do not represent branch-only fixes as production behavior.
 
 ## Repeatable verification
 

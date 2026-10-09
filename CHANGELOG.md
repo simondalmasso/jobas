@@ -12,6 +12,7 @@ All notable product changes to JOBAS are documented here.
 - normalized RFC-822 RSS publication dates, preserved unknown/old vacancy status, and surfaced visible provenance/freshness cautions;
 - preserved the last good public feed with an explicit stale warning if all automated upstream sources fail;
 - corrected missing salary normalization and explicit Argentina exclusions;
+- corrected HTML-escaped WeRemoto application query-string separators (the public KV feed still needs its next source refresh after deployment);
 - upgraded Wrangler development tooling to remediate reported dependency advisories.
 
 ### Verification and documentation

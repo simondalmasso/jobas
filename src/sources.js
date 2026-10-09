@@ -22,7 +22,7 @@ export const DISCOVERY_SOURCES=[
   {name:"Jobfound",url:"https://jobfound.org/",note:"Agregador; verificar ubicación y enlace final.",workerFee:null}
 ];
 export function cleanHtml(x=""){return String(x).replace(/<script[\s\S]*?<\/script>/gi," ").replace(/<style[\s\S]*?<\/style>/gi," ").replace(/<[^>]+>/g," ").replace(/&nbsp;|&#160;/g," ").replace(/&amp;/g,"&").replace(/&#39;|&apos;/g,"'").replace(/&quot;/g,'"').replace(/&ndash;|&#8211;/g,"–").replace(/&mdash;|&#8212;/g,"—").replace(/\s+/g," ").trim();}
-function safeUrl(x="",base){try{const u=new URL(x,base);return u.protocol==="https:"?u.href:"";}catch{return"";}}
+export function safeUrl(x="",base){try{const raw=String(x).replace(/&(?:amp|#0*38|#x0*26);/gi,"&");const u=new URL(raw,base);return u.protocol==="https:"?u.href:"";}catch{return"";}}
 async function get(url,type="json"){const r=await fetch(url,{headers:{"user-agent":UA,"accept":type==="json"?"application/json":"text/html,application/rss+xml,text/xml"}});if(!r.ok)throw new Error(`${r.status} ${r.statusText}`);return type==="json"?r.json():r.text();}
 export function normalizePublicationDate(value){
   if(!value)return null;
