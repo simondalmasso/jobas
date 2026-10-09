@@ -88,7 +88,7 @@ function chromePath(){
   return candidates.find(fs.existsSync)||"";
 }
 async function waitForCdp(){
-  for(let i=0;i<80;i++){
+  for(let i=0;i<(process.env.CI?320:80);i++){
     try{
       const r=await fetch("http://"+HOST+":"+CDP_PORT+"/json/version");
       if(r.ok)return r.json();
@@ -155,6 +155,7 @@ const chrome=spawn(executable,[
   "--remote-debugging-port="+CDP_PORT,
   "--user-data-dir="+userData,
   "--disable-gpu",
+  "--disable-dev-shm-usage",
   "--no-first-run",
   "--no-default-browser-check",
   "--no-sandbox",
