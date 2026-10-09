@@ -4,7 +4,7 @@ All notable product changes to JOBAS are documented here.
 
 ## Unreleased
 
-## 1.1.1 — candidate, release approval pending
+## 1.1.1 — 2026-10-09
 
 ### Quality and reliability
 - corrected full merged feed count in `/api/health` (including curated entries);
@@ -12,7 +12,7 @@ All notable product changes to JOBAS are documented here.
 - normalized RFC-822 RSS publication dates, preserved unknown/old vacancy status, and surfaced visible provenance/freshness cautions;
 - preserved the last good public feed with an explicit stale warning if all automated upstream sources fail;
 - corrected missing salary normalization and explicit Argentina exclusions;
-- corrected HTML-escaped WeRemoto application query-string separators (the public KV feed still needs its next source refresh after deployment);
+- corrected HTML-escaped WeRemoto application query-string separators (production KV refreshed on 2026-10-09);
 - upgraded Wrangler development tooling to remediate reported dependency advisories.
 
 ### Verification and documentation
@@ -20,7 +20,7 @@ All notable product changes to JOBAS are documented here.
 - added a separate non-mocked browser test against production or a local Cloudflare preview, with real public source data, no provider keys and no application submission;
 - updated OSS readiness, privacy and contributor instructions with explicit HOLD criteria.
 
-This candidate is **not released** or deployed. Revalidate final CI, public source availability and exact-artifact production behavior before approving merge/deployment/tag.
+Published as [v1.1.1](https://github.com/simondalmasso/jobas/releases/tag/v1.1.1) from commit `38d303297f2e776027c0e3aaafe1fadac4ea9eb0`; Cloudflare Worker version `51d205cd-a4d2-4448-953f-960cea8d1775` passed production acceptance after the feed refresh. Individual job availability and provider-backed BYOK flows were not exhaustively verified.
 
 ## 1.1.0 — 2026-10-03
 
